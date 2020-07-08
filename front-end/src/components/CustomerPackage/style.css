@@ -1,0 +1,58 @@
+.customer-package{
+    margin: 15px 0px;
+    margin-bottom: 20px;
+    padding: 20px 10px;
+    border-radius: 5px;
+}
+
+.customer-package-item{
+    padding:  20px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #dadada;
+}
+
+.customer-package-item:last-of-type{
+    border-bottom: none;
+}
+
+.package-search{
+    margin-top: 10px;
+}
+
+.customer-package-item-doctor{
+    display: flex;
+    align-items: center;
+}
+
+.doctor-info{
+    margin-left: 10px;
+}
+
+
+.customer-package-item-status , .package-highlight{
+  
+    color: #18A9FF;
+}
+
+.customer-package-item-status {
+    margin-left: 10px;
+    font-size: 18px;
+}
+
+.small-text{
+    font-size: .75rem;
+    line-height: .9375rem;
+    word-wrap: break-word;
+    color: rgba(0,0,0,.54);
+}
+
+.hhs-border-delivery {
+    height: .1875rem;
+    width: 100%;
+    background-position-x: -1.875rem;
+    background-size: 7.25rem .1875rem;
+    background-image: repeating-linear-gradient(45deg,#6fa6d6,#6fa6d6 33px,transparent 0,transparent 41px,#f18d9b 0,#f18d9b 74px,transparent 0,transparent 82px);
+}

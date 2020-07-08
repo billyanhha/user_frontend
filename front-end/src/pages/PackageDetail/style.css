@@ -1,0 +1,29 @@
+.package-service-description{
+    margin: 20px 20px 20px 0px;
+    padding: 10px 7px;
+    border-radius: 5px;
+    padding: 10px;
+    color: #595959;
+    background-color: #fff;
+    position: relative;
+}
+
+.package-service-description-chosen{
+    transition: all .3s ease-in-out;
+}
+
+
+
+.package-service-description-list{
+    max-height: 500px;
+    overflow: auto;
+    scroll-behavior: smooth;
+}
+
+.package-service-small, .package-service-description-note{
+    font-size: 13px;
+}
+
+.package-service-description-note{
+    margin:  10px 0;
+}

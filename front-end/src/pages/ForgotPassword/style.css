@@ -1,0 +1,180 @@
+.recovery {
+    background: url('../../assest/image/404-Background.png') center;
+    background-size: cover;
+    min-height: 100vh;
+    width: 100vw;
+    max-width: 100vw;
+}
+
+.OTP-status {
+    margin-top: 30px;
+}
+
+.recovery-wrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 100%;
+    min-height: 85vh;
+}
+
+.recovery-form {
+    width: 40%;
+    margin: 0 auto;
+    padding: 40px 60px 0 60px;
+    background-color: #FFF;
+    border-radius: 20px;
+    box-shadow: 0 0 8px 0.5px #eeeeee;
+}
+
+.recovery-form h2 {
+    font-weight: 600;
+    font-size: 2rem;
+}
+
+.recovery-form-custom {
+    margin-top: 20px;
+}
+
+.recovery-form-field {
+    margin: 40px 0px;
+}
+
+.recovery-form-submit {
+    text-align: center;
+}
+
+.recovery-button {
+    padding: 10px 0px;
+    width: 200px;
+    color: #FFF;
+    font-weight: bold;
+    background-color: #00BC9A;
+    border: 1px solid transparent;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.1s ease-in;
+    outline: none;
+}
+
+.recovery-button-disabled{
+    cursor: default;
+    pointer-events: none;
+    opacity: 0.5;
+}
+
+.recovery-button:hover {
+    background-color: #FFF;
+    border: 1px solid #00BC9A;
+    color: #00BC9A;
+}
+
+.recovery-button-done {
+    margin-top: 20px;
+    padding: 5px 0px;
+    width: 120px;
+    background-color: #FFF;
+    border: 1px solid #00BC9A;
+    border-radius: 10px;
+    font-weight: bold;
+    color: #00BC9A;
+    cursor: pointer;
+    transition: all 0.1s ease-in;
+    outline: none;
+}
+
+.recovery-button-done:hover {
+    background-color: #00BC9A;
+    border: 1px solid #FFF;
+    color: #FFF;
+}
+
+.ant-steps-item-process .ant-steps-item-icon {
+    background: #00BC9A !important;
+    border-color: #00BC9A !important;
+}
+
+.ant-steps-item-finish .ant-steps-item-icon {
+    border-color: #00BC9A !important;
+}
+
+.ant-steps-finish-icon {
+    color: #00BC9A !important;
+}
+
+.ant-steps-item-finish .ant-steps-item-container .ant-steps-item-content .ant-steps-item-title::after {
+    background-color: #00BC9A !important;
+}
+
+.ant-result-success .ant-result-icon .anticon {
+    color: #00bc6e !important;
+}
+
+@media screen and (max-width: 1600px) {
+    .recovery-form {
+        width: 50%;
+    }
+}
+
+/* HD monitor & older TV, Wacom */
+@media screen and (max-width: 1366px) {
+    .recovery-form {
+        width: 60%;
+    }
+}
+
+/* Ipad Pro, Tablet, Wacom, Monitor */
+@media screen and (max-width: 1280px) {}
+
+/* Ipad Pro, Tablet, Phone */
+@media screen and (max-width: 1024px) {
+    .recovery {
+        background: url('../../assest/image/404-Background.png') left repeat-y;
+        background-size: cover;
+    }
+
+    .recovery-form {
+        width: 70%;
+    }
+}
+
+/* Ipad */
+@media screen and (max-width: 800px) {
+    .recovery-form {
+        width: 80%;
+    }
+}
+
+/* Iphone */
+@media screen and (max-width: 600px) {
+    .recovery {
+        background: none;
+    }
+
+    .recovery-form h2 {
+        font-size: 1.8rem;
+    }
+
+    .recovery-form {
+        padding: 10% 30px;
+        width: 100%;
+        box-shadow: none;
+    }
+}
+
+/* Smaller phone */
+@media screen and (max-width: 320px) {
+    .recovery-form {
+        padding: 8% 30px;
+        width: 100%;
+        box-shadow: none;
+    }
+
+    .recovery-form h2 {
+        font-size: 1.5rem;
+    }
+
+    .register-div-login-suggest {
+        margin: 10px 0;
+    }
+}

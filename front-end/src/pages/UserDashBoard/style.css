@@ -1,0 +1,45 @@
+.dashboard-wrapper {
+    padding: 50px 10%;
+    background-color: #FAFAFA;
+}
+
+.dashboard-wrapper-tab {
+    background-color: #fff;
+    box-shadow: 0 0 8px 0.5px #dadada;
+    min-height: calc(100vh - 200px);
+    padding: 0px 24px;
+}
+
+.dashboard-component-header {
+    margin-left: 20px;
+    font-size: 2rem;
+}
+
+#rc-tabs-0-panel-2 {
+    padding: 0;
+}
+
+@media screen and (max-width: 1600px) {}
+
+/* HD monitor & older TV, Wacom */
+@media screen and (max-width: 1366px) {}
+
+/* Ipad Pro, Tablet, Wacom, Monitor */
+@media screen and (max-width: 1280px) {}
+
+/* Ipad Pro, Tablet, Phone */
+@media screen and (max-width: 1024px) {}
+
+/* Ipad */
+@media screen and (max-width: 800px) {}
+
+/* Phone */
+@media screen and (max-width: 600px) {
+    .dashboard-component-header {
+        margin: 0 0 20px 0;
+        font-size: 1.5rem;
+    }
+}
+
+/* Smaller phone */
+@media screen and (max-width: 320px) {}

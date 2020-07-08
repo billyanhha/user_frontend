@@ -1,0 +1,22 @@
+.footer{
+    background-color :#00BC9A;
+    padding: 2% calc(10% + 10px);
+    color: #fff;
+    font-size: 13px;
+    font-weight: 400;
+}
+
+.footer-logo{
+    font-size: 30px;
+    font-weight: 600;
+}
+
+.footer-link{
+    color: #fff;
+    transition: all .2s ease-in-out;
+}
+
+.footer-link:hover{
+    color: #fff; 
+    /* #160B38 */
+}

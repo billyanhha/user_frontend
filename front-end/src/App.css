@@ -1,0 +1,358 @@
+/*  ☆☆☆☆☆
+    Front-end Squad: Plz pay attention and consider about font-weight, font-size, high-constast colors.
+    For better UX:
+        Customize the properties so that even the elderly can read them.
+        And of course, FRIENDLY LANGUAGE for Vietnamese users. (Click → Nhấn, ,...)
+        If possible, we should use: vh, vw, em, rem, % instead of px.
+        
+    Happy coding. Thank you!
+*/
+body {
+    font-family: 'Open Sans', sans-serif !important;
+    font-weight: 600;
+    /* Easy to read → Semi-bold by default */
+    /* background-color: #F8F9FA !important; */
+}
+
+/* #00BC9A */
+
+.default-container {
+    padding: 0 10%;
+}
+
+.loading-bar {
+    background-color: #00BC9A;
+    height: 2px;
+}
+
+.primary-color {
+    color: #00BC9A !important;
+}
+
+.default-div {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 100vh;
+}
+
+/* backup first style*/
+/* .fancyButton {
+    background-color: #00BC9A;
+    padding: 10px 30px !important;
+    color: #fff;
+    font-weight: bold;
+    border-radius: 15px;
+    border-bottom-right-radius: 5px;
+    border: none;
+    outline: none;
+    cursor: pointer;
+} */
+
+.fancyButton {
+    padding: 10px 30px !important;
+    border-radius: 10px;
+    border-bottom-right-radius: 0px;
+    border: solid 0.1px #00BC9A;
+    outline: none;
+
+    background-color: #FFF;
+    color: #00BC9A;
+    font-weight: bold;
+
+    transition: all .15s ease-in-out
+}
+
+.fancyButton:hover {
+    background-color: #00BC9A;
+    color: #fff;
+    cursor: pointer;
+}
+
+.fancyButton-background {
+    padding: 10px 30px !important;
+    border-radius: 10px;
+    border-bottom-right-radius: 0px;
+    border: solid 0.1px #00BC9A;
+    outline: none;
+
+    background-color: #00BC9A;
+    color: #FFF;
+    font-weight: bold;
+
+    transition: all .15s ease-in-out
+}
+
+.fancyButton-background:hover {
+    background-color: #fff;
+    color: #00BC9A;
+    cursor: pointer;
+}
+
+
+.primary-dot {
+    margin: 0 5px;
+}
+
+.form-field {
+    width: 350px;
+    margin: 20px 0px;
+}
+
+.label {
+    font-size: 12px;
+    color: #A6A6A6;
+}
+
+.form-field-input {
+    width: 100%;
+    border: none;
+    border-bottom: 1px solid #DADADA;
+    transition: all .2s ease-in-out
+}
+
+.form-field-input:focus {
+    outline: none;
+    border-bottom: 1px solid #00BC9A;
+    caret-color: #00BC9A;
+}
+
+.default-button {
+    background-color: #00BC9A;
+    border: none;
+    width: 100%;
+    color: #fff;
+    font-weight: bold;
+    border-radius: 10px;
+    padding: 10px 0px;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: all 0.3s ease 0s;
+    box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
+    outline: none;
+}
+
+.disable-button {
+    cursor: no-drop;
+    background-color: #00BC9A;
+    opacity: 0.5;
+    border: none;
+    width: 100%;
+    color: #fff;
+    font-weight: bold;
+    border-radius: 10px;
+    padding: 10px 0px;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: all 0.3s ease 0s;
+    box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
+    outline: none;
+}
+
+/* 
+.default-outline-button{
+    border: 1px solid #fff;;
+    width: 100%;
+    color: #fff;
+    font-weight: bold;
+    border-radius: 10px;
+    padding: 10px 0px;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: all 0.3s ease 0s;
+    outline: none;
+} */
+
+.default-button:hover {
+    transform: translateY(-5px);
+    box-shadow: 0px 10px 20px #707070;
+
+}
+
+.default-button:focus {
+    transform: translateY(-2px);
+    box-shadow: 0px 6px 20px #707070;
+}
+
+.error-text {
+    color: red;
+    transition: all 0.5s ease-in-out
+}
+
+.seperator {
+    width: 70px;
+    height: 8px;
+    margin-top: 10px;
+    border-radius: 10px;
+    background-color: #00BC9A;
+}
+
+.link-button {
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    background-color: #00BC9A;
+    color: #fff;
+    font-weight: bold;
+    padding: 10px 100px;
+    box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease-in-out 0s;
+}
+
+
+
+.link-button:hover {
+    color: #fff;
+    transform: translateY(-7px);
+    box-shadow: 0px 15px 20px #707070;
+
+}
+
+.link-button:focus {
+    color: #fff;
+    transform: translateY(-4px);
+    box-shadow: 0px 9px 20px #707070;
+}
+
+.disable-button {
+    cursor: no-drop;
+    background-color: #00BC9A;
+    opacity: 0.5;
+    border: none;
+    width: 100%;
+    color: #fff;
+    font-weight: bold;
+    border-radius: 10px;
+    padding: 10px 0px;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: all 0.3s ease 0s;
+    box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
+    outline: none;
+}
+
+.submit-btn,
+.submit-btn-outline,
+.disalbe-submit-btn {
+    background-color: #1890FF;
+    outline: none;
+    border: none;
+    color: #fff;
+    padding: 10px 30px;
+    border-radius: 3px;
+    transition: all .3s ease-in-out;
+}
+
+.disalbe-submit-btn {
+    opacity: 0.5;
+    cursor: progress;
+}
+
+.submit-btn:hover,
+.submit-btn-outline:hover {
+    box-shadow: 0px 5px 5px #707070;
+
+}
+
+.submit-btn-outline {
+    background-color: #fff;
+    color: #1890FF;
+    transition: all .3s ease-in-out;
+    border: 1px solid #1890FF;
+    margin-left: 10px;
+}
+
+/* 
+.default-outline-button{
+    border: 1px solid #fff;;
+    width: 100%;
+    color: #fff;
+    font-weight: bold;
+    border-radius: 10px;
+    padding: 10px 0px;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: all 0.3s ease 0s;
+    outline: none;
+} */
+
+.default-button:hover {
+    transform: translateY(-5px);
+    box-shadow: 0px 10px 20px #707070;
+
+}
+
+.default-button:focus {
+    transform: translateY(-2px);
+    box-shadow: 0px 6px 20px #707070;
+}
+
+.error-text {
+    color: red;
+    transition: all 0.5s ease-in-out
+}
+
+.seperator {
+    width: 70px;
+    height: 8px;
+    margin-top: 10px;
+    border-radius: 10px;
+    background-color: #00BC9A;
+}
+
+.link-button {
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    background-color: #00BC9A;
+    color: #fff;
+    font-weight: bold;
+    padding: 10px 100px;
+    box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease-in-out 0s;
+}
+
+.link-button:hover {
+    color: #fff;
+    transform: translateY(-7px);
+    box-shadow: 0px 15px 20px #707070;
+
+}
+
+.link-button:focus {
+    color: #fff;
+    transform: translateY(-4px);
+    box-shadow: 0px 9px 20px #707070;
+}
+
+.hightlight {
+    color: #00BC9A;
+}
+
+
+/* ============= Style for Scrollbar applied globally ============= */
+::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar {
+    width: 12px;
+}
+
+::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    background-image: -webkit-gradient(linear,
+            left bottom,
+            left top,
+            color-stop(0.44, rgb(70, 241, 210)),
+            color-stop(0.72, rgb(28, 206, 173)),
+            color-stop(0.86, rgb(0, 223, 182)));
+            /* color-stop(0.44, rgb(122, 153, 217)),
+            color-stop(0.72, rgb(73, 125, 189)),
+            color-stop(0.86, rgb(28, 58, 148))); */
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #00bc9999;
+}

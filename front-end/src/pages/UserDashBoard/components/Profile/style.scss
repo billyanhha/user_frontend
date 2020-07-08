@@ -1,0 +1,326 @@
+@import "../../library";
+
+/// Another technique for responsive: Eduardo Bouças’s, Landon Schropp’s.
+///
+///  @example Breakpoints
+///
+/// fHD Monitor, TV
+$monitor-fHD: 1600px;
+///
+/// HD Monitor
+$monitor-HD: 1366px;
+///
+/// Ipad Pro, Tablet, old Monitor
+$ipad: 1024px;
+///
+/// Small Tablet, Phone
+$phablet: 768px;
+///
+/// Smaller phone
+$phone: 360px;
+///
+///
+
+.profile-content {
+    width: 100%;
+    overflow: auto;
+
+    .profile-form {
+        display: flex;
+        align-items: center;
+        form {
+            width: 100%;
+
+            &:not(:focus-within) {
+                button {
+                    pointer-events: none;
+                    cursor: default;
+                    opacity: 0.5;
+                }
+            }
+        }
+
+        .profile-form-update {
+            display: flex;
+            align-items: center;
+            justify-content: space-evenly;
+
+            // .profile-info {
+            // }
+
+            .main-form {
+                width: 50%;
+
+                .profile-indentify {
+                    display: flex;
+                    justify-content: space-between;
+
+                    .indentify-item {
+                        width: 200px;
+                        
+                        @include breakpoint(tablet) {
+                            width: 150px;
+                        }
+
+                        @include breakpoint(phablet) {
+                            width: 120px;
+                        }
+                        @include breakpoint(phone) {
+                            width: 100px;
+                        }
+                    }
+                }
+
+                .profile-form-end {
+                    margin: 40px auto;
+                    text-align: center;
+                    @include breakpoint(monitor) {
+                        margin-bottom: 20px;
+                    }
+                }
+
+                @include breakpoint(phablet) {
+                    margin: 0 20px;
+                }
+
+                @include breakpoint(phone) {
+                    width: 100%;
+                    margin: 0;
+                }
+            }
+
+            @include breakpoint(phone) {
+                flex-flow: column wrap;
+            }
+        }
+    }
+
+    .profile-chart {
+        margin: 40px auto;
+        padding: 20px;
+        width: 100%;
+        min-height: 20vh;
+
+        background-color: $fly-color;
+        border-top: 1px solid $light-gray;
+    }
+}
+
+.profile-avatar {
+    position: relative;
+    width: 250px;
+    height: 250px;
+    border-radius: 20px;
+    box-shadow: 0 0 8px 2px $light-gray;
+    margin: auto;
+    &:hover {
+        #Avatar-icon {
+            border: none;
+            box-shadow: 0 0 8px 2px $light-gray;
+        }
+    }
+
+    @include breakpoint(phablet) {
+        width: 200px;
+        height: 200px;
+    }
+}
+
+.avatar-wrapper {
+    max-width: 100%;
+    max-height: 100%;
+    border-radius: 20px;
+    overflow: hidden;
+}
+
+#Avatar-profile {
+    border-radius: 10px;
+    max-width: 100%;
+    vertical-align: middle;
+}
+
+#Avatar-icon {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 30px;
+    height: 30px;
+    background-color: white;
+    box-shadow: none;
+    border: 2px solid $theme-color;
+    border-radius: 50%;
+    transform: translate(10%, 20%);
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+}
+
+.drop-zone-custom {
+    width: 400px;
+    height: 400px;
+}
+
+.profile-form-label {
+    color: $gray;
+    margin-top: 10px;
+    margin-bottom: 5px;
+    font-size: 0.8rem;
+}
+
+.profile-form-input {
+    font-size: 1rem;
+    font-weight: bold;
+    width: 100%;
+    border: none;
+    border-bottom: 2px solid $light-gray;
+    padding: 5px 10px;
+    transition: all 0.2s ease-in-out;
+    outline: none;
+}
+
+.profile-form-input::placeholder {
+    /* Chrome, Firefox, Opera, Safari 10.1+ */
+    color: $light-gray;
+}
+
+.profile-form-input:focus {
+    border: none;
+    border-radius: 0;
+    border-bottom: 2px solid $theme-color;
+    caret-color: $theme-color;
+    outline: none;
+}
+
+.avatar-editor {
+    margin-top: 20px;
+
+    .avatar-editor-zone {
+        display: table;
+        width: 80%;
+        height: 300px;
+        margin: 0 auto;
+        text-align: center;
+
+        .avatar-crop {
+            width: 100%;
+            height: 100%;
+        }
+
+        .avatar-editor-preview {
+            border-radius: 20px;
+        }
+    }
+
+    .avatar-editor-upload {
+        display: table;
+        padding-top: 40px;
+        width: 80%;
+        margin: 0 auto;
+        text-align: center;
+        margin-top: -30px;
+    }
+
+    .avatar-editor-submit {
+        margin-top: 20px;
+        text-align: right;
+
+        .avatar-button-preview {
+            &:hover {
+                cursor: pointer;
+                color: $theme-color;
+            }
+        }
+
+        button {
+            background-color: white;
+            color: $theme-color;
+            font-weight: bold;
+            border: 2px solid $theme-color;
+            border-radius: 10px;
+            width: 100px;
+            height: 30px;
+            transition: all 0.1s ease-in-out;
+            outline: none;
+
+            &:hover {
+                background-color: $theme-color;
+                cursor: pointer;
+                color: white;
+            }
+        }
+    }
+}
+
+.custom-display-flex {
+    display: flex;
+    justify-content: space-between;
+}
+
+.avatar-editor-message {
+    display: table-cell;
+    vertical-align: middle;
+
+    *:hover {
+        cursor: pointer;
+        color: $theme-color;
+    }
+
+    .anticon-picture {
+        svg {
+            width: 50px;
+            height: 50px;
+        }
+    }
+}
+
+.css-yk16xz-control {
+    border-color: $light-gray !important;
+    &:hover {
+        border-color: $theme-color !important;
+        cursor: pointer;
+    }
+}
+.css-2613qy-menu {
+    background-color: $theme-color !important;
+}
+.react-datepicker-wrapper {
+    width: 100%;
+}
+
+.react-datepicker {
+    width: 100%;
+}
+
+.react-datepicker__month-container {
+    font-family: "Open Sans", sans-serif !important;
+    width: 100%;
+}
+
+.react-datepicker__input-container {
+    input {
+        font-size: 1rem;
+        font-weight: bold;
+        width: 100%;
+        height: 38px;
+        border: 1px solid $light-gray;
+        border-radius: 5px;
+        padding-left: 10px;
+        outline: none;
+        cursor: pointer;
+
+        &:focus {
+            border: 2px solid $theme-color !important;
+            padding-left: 9px;
+        }
+    }
+}
+
+.react-datepicker__day--selected {
+    background-color: $theme-color !important;
+}
+
+.upload-disable-button {
+    color: $light-gray !important;
+    border: 2px solid $light-gray !important;
+    pointer-events: none;
+}

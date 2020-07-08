@@ -1,0 +1,128 @@
+@import "../../library";
+
+.setting-wrapper {
+    width: 100%;
+    padding: 20px;
+
+    .setting-cover {
+        width: 100%;
+        height: 200px;
+        margin-bottom: 20px;
+
+        border-radius: 30px;
+        // background: nth($cover-color, random(length($cover-color)));
+    }
+
+    .setting-content {
+        width: 100%;
+
+        .setting-classify {
+            width: 100%;
+            padding: 40px;
+            padding-bottom: 0px;
+
+            .setting-content-header {
+                margin: 20px 0;
+                font-size: 1rem;
+                color: $gray;
+            }
+
+            .setting-element {
+                width: 100%;
+                padding: 10px 0;
+                display: flex;
+                justify-content: space-between;
+
+                font-size: 1rem;
+                font-weight: 500;
+                border-bottom: 1px solid $fly-color;
+
+                .setting-element-name {
+                    font-size: 1.2rem;
+                    flex: 1;
+                }
+
+                .setting-element-value {
+                    flex: 1;
+                }
+
+                .setting-element-action {
+                    flex: 1;
+                    color: $theme-color;
+                    text-align: right;
+
+                    &:hover::before {
+                        content: "✎";
+                    }
+
+                    &:hover {
+                        cursor: pointer;
+                    }
+                }
+
+                &:last-child {
+                    border: none;
+                }
+            }
+        }
+    }
+}
+.setting-back-button-disabled {
+    border: solid 1px $light-gray !important;
+    color: $light-gray !important;
+    width: fit-content !important;
+    &:hover {
+        background-color: white !important;
+        cursor: default;
+    }
+}
+.custom-display-flex {
+    display: flex;
+    justify-content: space-between;
+}
+
+.setting-submit {
+    margin-top: 20px;
+    text-align: right;
+
+    button {
+        background-color: white;
+        color: $theme-color;
+        font-weight: bold;
+        border: 1px solid $theme-color;
+        border-radius: 10px;
+        width: 100px;
+        height: 30px;
+        transition: all 0.1s ease-in-out;
+        outline: none;
+
+        &:hover {
+            background-color: $theme-color;
+            cursor: pointer;
+            color: white;
+        }
+    }
+}
+
+.prevButton {
+    width: fit-content !important;
+}
+
+.setting-cover-1 {
+    background: nth($cover-color, 1);
+}
+.setting-cover-2 {
+    background: nth($cover-color, 2);
+}
+.setting-cover-3 {
+    background: nth($cover-color, 3);
+}
+.setting-cover-4 {
+    background: nth($cover-color, 4);
+}
+.setting-cover-5 {
+    background: nth($cover-color, 5);
+}
+.setting-cover-6 {
+    background: nth($cover-color, 6);
+}

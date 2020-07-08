@@ -1,0 +1,129 @@
+.top-menu {
+    padding: 1% 10%;
+    user-select: none;
+    position: sticky;
+    top: 0;
+    box-shadow: 0 1px 2px -1px #ccc;
+    background-color: #fff;
+    z-index: 2;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+
+
+.nav-userInfo-user-name > span{
+    color: #000;
+}
+
+
+
+
+.top-menu > .right > * {
+    margin: 0px 15px
+}
+
+
+.top-menu > .left > *, .top-menu > .right > * {
+    padding: 11.4px;
+    display: inline-block;
+    text-align: center;
+    min-width: 50px;
+}
+
+.nav-user-div{
+    margin-right: 1px;
+    padding: 11.4px 0 !important;
+}
+
+.top-menu *:hover{
+    cursor: pointer;
+}
+
+.clear-fix {
+    clear: both;
+}
+
+.top-menu .top-menu-icon {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    padding: 10px;
+    font-size: 20px;
+    display: none;
+}
+
+.top-menu-item {
+    color: #000;
+    transition: all .3s ease-in-out;
+}
+
+.top-menu-item:hover {
+    color: #00BC9A;
+    border-bottom: 1px solid #00BC9A;
+}
+.link-active{
+    color: #00BC9A;
+    border-bottom: 1px solid #00BC9A;
+
+}
+
+
+.top-menu-lead {
+    padding: 10px;
+    display: inline-block;
+    font-size: 18px;
+}
+
+
+@media screen and (max-width: 1000px) {
+
+    .top-menu {
+        padding: 40px 20px 20px 20px;
+        max-height: 0;
+        overflow: hidden;
+        flex-direction: row-reverse;
+    }
+
+    .top-menu > .left, .top-menu > .right {
+        display: none;
+    }
+
+
+    .top-menu-icon {
+        display: block !important;
+    }
+
+    .top-menu.toggled {
+        padding: 60px 0 0 0;
+        max-height: 1500px;
+        transition: max-height 1s ease-in-out;
+    }
+
+    .top-menu.toggled > .left {
+        border-bottom: 1px solid black;
+        margin: 15px 0 0 0 ;
+    }
+
+    .top-menu.toggled *:not(.top-menu-lead):not(.top-menu-icon) {
+        display: block !important;
+        text-align: right;
+        margin: 10px;
+        
+    }
+    .top-menu-lead {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        float: none;
+    }
+
+    .buttonNav {
+        margin: 10px 0px;
+    }
+
+}
+

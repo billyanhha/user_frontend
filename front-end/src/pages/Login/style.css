@@ -1,0 +1,90 @@
+.login{
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    justify-content: space-between;
+    background-image: url('../../assest/image/background-login.png');
+    background-position: center center;
+    background-size: cover;
+    background-repeat: none; 
+}
+
+.login-div{
+    min-height: calc(100vh - 150px);
+    padding: 5% 10%;
+    background-image: url('../../assest/image/login.svg');
+    background-repeat: no-repeat;
+    background-size: 70%;
+    background-position-x: 350px;
+}
+
+.login-div-form {
+    width: 100%;
+    padding: 10px;
+}
+
+.login-div-signup-suggest{
+    font-size: 12px;
+    color: #A6A6A6;
+    text-align: center;
+}
+
+.form-field-phone{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    border-bottom: 1px solid #DADADA;
+    transition: all .2s ease-in-out
+}
+
+
+.form-field-phone:focus {
+    border-bottom: 1px solid #00BC9A;
+
+}
+
+
+.form-field-phone > input{
+    width: 100%;
+    border: none;
+    border-bottom: 1px solid #DADADA;
+    transition: all .2s ease-in-out
+}
+
+.form-field-phone > input:focus{
+    outline: none;
+    caret-color: #00BC9A;
+}
+
+
+.form-field-phone:focus > input {
+    border-bottom: none;
+
+}
+
+.form-field-phone > input {
+    border-bottom: none;
+}
+
+.form-field-phone-label{
+    width: 30px;
+}
+
+@media screen and (max-width: 800px) {
+    .login-div{
+        background-image: url('');
+    }
+    .login-div-form{
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+    .form-field{
+        width: 300px;
+    }
+
+}
+
+

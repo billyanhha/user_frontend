@@ -1,0 +1,48 @@
+.nomatch-background {
+    background-image: url('../../assest/image/background-login.png');
+    background-position: center center;
+    background-size: cover;
+    background-repeat: none;
+}
+
+.nomatch{
+    min-height: calc(100vh);
+    padding: 5% 10%;
+    background-image: url('../../assest/image/404.png');
+    background-repeat: no-repeat;
+    background-size: 40%;
+    background-position-x: 100%;
+    background-position-y: 20%;
+}
+
+.nomatch-inside{
+    max-width: 50%;
+    padding: 10px;
+}
+
+.nomatch-backbutton {
+    outline: none;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    background-color: #00BC9A;
+    color: #fff;
+    font-weight: bold;
+    width: 200px;
+    padding: 10px 100px;
+}
+
+.nomatch-backbutton:hover{
+    color: #fff;
+}
+
+@media screen and (max-width: 800px) {
+    .nomatch{
+        background-image: url('');
+    }
+    .nomatch-inside{
+        max-width: 100%;
+    }
+}
+
+

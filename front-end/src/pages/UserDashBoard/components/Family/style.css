@@ -1,0 +1,65 @@
+.dashboard-family {
+    width: 100%;
+    /* padding: 0 20px; */
+}
+
+.member-info {
+    width: 100%;
+    height: fit-content;
+}
+
+.all-members {
+    padding: 10px;
+    margin-bottom: 40px;
+    display: grid;
+    place-items: center;
+    text-align: center;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    column-gap: 20px;
+    row-gap: 40px;
+}
+
+.family-member {
+    width: 250px;
+    box-shadow: 0 0 5px 2px #f0f0f0;
+    border-radius: 10px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: 0.2s ease-in;
+}
+
+.family-member:hover {
+    box-shadow: 0 0 10px 3px #DADADA;
+}
+
+.add-member {
+    height: 200px;
+    width: 200px;
+}
+
+.add-member .add-member-icon {
+    margin-top: 20px;
+}
+
+.family-avatar-wrapper {
+    max-width: 100%;
+    height: 200px;
+    overflow: hidden;
+    border-bottom: 0.5px solid #f0f0f0;
+}
+
+#family-avatar-profile {
+    max-width: 100%;
+}
+
+@media screen and (max-width: 1600px) {
+    .family-member {
+        width: 200px;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .all-members {
+        column-gap: 0;
+    }
+}
