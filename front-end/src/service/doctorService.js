@@ -24,7 +24,7 @@ doctorService.getDoctorForHome = () => new Promise((reslove, reject) => {
         params: {
             itemsPage: 3,
             page: 1,
-            sort: 'rating',
+            sort: 'average_rating',
             order: 'desc'
 
         }

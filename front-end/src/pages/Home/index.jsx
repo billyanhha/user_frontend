@@ -68,7 +68,7 @@ const Home = (props) => {
                             {value?.fullname}
                         </div>
                         <center>
-                            <Rate className="doctor-rate" disabled value={value?.total_rating / value?.rating_count} />
+                            <Rate className="doctor-rate" disabled value={value?.average_rating} />
                         </center>
                     </div>
                 </Link>
@@ -158,7 +158,7 @@ const Home = (props) => {
                 </div>
                 <div className="home-contain">
                     <div className="home-title">
-                        Đội ngữ bác sĩ tận tâm
+                        Đội ngũ bác sĩ tận tâm
                     </div>
                     <div className="seperator " />
                     <div className="home-list">
