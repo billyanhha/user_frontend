@@ -48,20 +48,34 @@ doctorService.getDoctorQuery = (query) => new Promise((reslove, reject) => {
         .catch(err => reject(err))
 });
 
-doctorService.getDoctorDetail = async (id) => {
+doctorService.getDoctorDetail = async (data) => {
     try {
+        const id = data?.doctorId;
         const result = await doctorService.getDoctorNormalDetail(id);;        
         const languages = await doctorService.getDoctorLanguage(id);
         const degrees = await doctorService.getDoctorDegree(id);
         const experiences = await doctorService.getDoctorExperience(id);
+        const ratings = await doctorService.getDoctorRating(data);
 
-        const data = {...result , ...languages , ...degrees, ...experiences};
-        return data;
+        const resultData = {...result , ...languages , ...degrees, ...experiences, ...ratings};
+        return resultData;
     } catch (err) {
         throw err;
     }
 
 }
+
+doctorService.getDoctorRating = (data) => new Promise((reslove, reject) => {
+    const query = `/api/doctor/${data?.doctorId}/ratings`
+    axios.get(query, {
+        params: {
+            itemsPage: 3,
+            page: data?.pageRatingNum
+        }
+    })
+        .then(result => reslove(result.data))
+        .catch(err => reject(err))
+})
 
 doctorService.getDoctorExperience = (id) => new Promise((reslove, reject) => {
     const query = '/api/doctor/' + id + '/experiences'

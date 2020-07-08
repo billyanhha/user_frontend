@@ -29,6 +29,7 @@ function* watchQueryDoctorWorker(action) {
             yield put(queryDoctorSuccessful(result?.doctors));
         }
     } catch (error) {
+        message.error(error?.response?.data?.err)
         console.log(error);
     } finally {
         yield put(closeLoading());
@@ -43,6 +44,7 @@ function* watchNextQueryDoctorWorker(action) {
             yield put(nextQueryDoctorSuccessful(result?.doctors));
         }
     } catch (error) {
+        message.error(error?.response?.data?.err)
         console.log(error);
     } finally {
         yield put(closeLoading());
@@ -51,12 +53,13 @@ function* watchNextQueryDoctorWorker(action) {
 
 function* watchGetDoctorDetailWorker(action) {
     try {
-        yield put(openLoading());
-        const result = yield doctorService.getDoctorDetail(action.id);
+        yield put(openLoading());        
+        const result = yield doctorService.getDoctorDetail(action.data);
         if (!_.isEmpty(result)) {
             yield put(getDoctorDetailSuccessful(result));
         }
     } catch (error) {
+        message.error(error?.response?.data?.err)
         console.log(error);
     } finally {
         yield put(closeLoading());

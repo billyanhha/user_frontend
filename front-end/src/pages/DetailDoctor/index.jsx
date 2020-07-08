@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import Navbar from '../../components/Navbar';
 import Footer from '../../components/Footer';
@@ -8,7 +8,7 @@ import detailLanguages from "../../assest/image/Doctor_detail_Languages.png";
 import detailLicense from "../../assest/image/Doctor_detail_license.png";
 
 import "./style.css"
-import { Timeline, Rate } from 'antd';
+import { Timeline, Rate, Pagination, Spin } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import { getDoctorDetail } from '../../redux/doctor';
 import { saveBookingDoctor } from '../../redux/booking';
@@ -16,20 +16,43 @@ import { saveBookingDoctor } from '../../redux/booking';
 const DetailDoctor = (props) => {
 
     const dispatch = useDispatch();
+    const { isLoad } = useSelector(state => state.ui);
     const { doctorDetail } = useSelector(state => state.doctor);
+    const [currentPage, setcurrentPage] = useState(1);
     const doctorId = props.match.params.id;
 
 
     useEffect(() => {
 
         window.scrollTo(0, 0) // make sure div in top
-        dispatch(getDoctorDetail(doctorId))
+        let data = {}
+        data.doctorId = doctorId;
+        data.pageRatingNum = currentPage
+        dispatch(getDoctorDetail(data))
 
     }, []);
+
+    const onPageNumberChange = (pageNum) => {
+        let data = {}
+        data.pageRatingNum = pageNum
+        data.doctorId = doctorId;
+        dispatch(getDoctorDetail(data))
+    }
+
 
     const renderExperience = doctorDetail?.doctorExperience?.map((value, index) => {
         return (
             <Timeline.Item key={value.id}>{value?.content}</Timeline.Item>
+        )
+    });
+
+    const renderRating = doctorDetail?.ratings?.map((value, index) => {
+        return (
+            <div className="doctor_rating_item" key={value.id}>
+                <h3>{value?.patient_name}</h3>
+                <Rate className="doctor-rate" disabled value={value?.star} />
+                <h4><i>{value?.comment}</i></h4>
+            </div>
         )
     });
 
@@ -79,6 +102,7 @@ const DetailDoctor = (props) => {
     return (
         <div className="default-div">
             <Navbar />
+            <Spin spinning = {isLoad}>
             <div className="doctor">
                 <div className="detail-contain detail-main-about">
                     <div className="doctor-avatar"
@@ -87,7 +111,7 @@ const DetailDoctor = (props) => {
                     </div>
                     <div className="detail-content">
                         <div className="detail-title">
-                            BS . {doctorDetail?.doctor?.fullname } <Rate className="doctor-rate" disabled value={doctorDetail?.doctor?.average_rating} />
+                            BS . {doctorDetail?.doctor?.fullname} <Rate className="doctor-rate" disabled value={doctorDetail?.doctor?.average_rating} />
 
                         </div>
                         <div className="seperator" />
@@ -157,7 +181,29 @@ const DetailDoctor = (props) => {
                         </Timeline>
                     </div>
                 </div>
+                <div className="detail-contain doctor-infor-div">
+                    <div className="detail-title">
+                        Đánh giá
+                    </div>
+                    <div className="seperator" />
+                    <br />
+                    <h3>Bác sĩ có <span className="highlight">{doctorDetail?.ratings?.length} </span> đánh giá</h3>
+                    <div className="doctor-experiece">
+                        {renderRating}
+                        <br/>
+                        {
+                            doctorDetail?.ratings?.length &&
+                            <Pagination
+                                onChange={onPageNumberChange}
+                                current={currentPage}
+                                pageSize={3}
+                                total={doctorDetail?.ratings?.length} showSizeChanger={false} />
+                        }
+
+                    </div>
+                </div>
             </div>
+            </Spin>
             <Footer />
         </div>
     )

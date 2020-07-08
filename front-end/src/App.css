@@ -63,6 +63,11 @@ body {
     transition: all .15s ease-in-out
 }
 
+.highlight{
+    color: #00BC9A;
+
+}
+
 .fancyButton:hover {
     background-color: #00BC9A;
     color: #fff;

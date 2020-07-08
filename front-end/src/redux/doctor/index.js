@@ -51,10 +51,10 @@ export const nextQueryDoctorSuccessful = (doctors) => {
     }
 }
 
-export const getDoctorDetail = (id) => {    
+export const getDoctorDetail = (data) => {    
     return {
         type: GET_DOCTOR_DETAIL,
-        id
+        data
     }
 }
 
