@@ -51,7 +51,7 @@ doctorService.getDoctorQuery = (query) => new Promise((reslove, reject) => {
 doctorService.getDoctorDetail = async (data) => {
     try {
         const id = data?.doctorId;
-        const result = await doctorService.getDoctorNormalDetail(id);;        
+        const result = await doctorService.getDoctorlDetailWithRating(id);;        
         const languages = await doctorService.getDoctorLanguage(id);
         const degrees = await doctorService.getDoctorDegree(id);
         const experiences = await doctorService.getDoctorExperience(id);
@@ -86,6 +86,13 @@ doctorService.getDoctorExperience = (id) => new Promise((reslove, reject) => {
 
 doctorService.getDoctorNormalDetail = (id) => new Promise((reslove, reject) => {
     const query = '/api/doctor/' + id
+    axios.get(query)
+        .then(result => reslove(result.data))
+        .catch(err => reject(err))
+})
+
+doctorService.getDoctorlDetailWithRating = (id) => new Promise((reslove, reject) => {
+    const query = '/api/doctor/' + id +'?rating=true'
     axios.get(query)
         .then(result => reslove(result.data))
         .catch(err => reject(err))

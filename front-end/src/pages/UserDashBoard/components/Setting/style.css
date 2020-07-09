@@ -29,6 +29,25 @@
   border-radius: 30px;
 }
 
+@media (max-width: 768px) {
+  .setting-wrapper .setting-cover {
+    height: 150px;
+    border-radius: 20px;
+  }
+}
+
+@media (max-width: 640px) {
+  .setting-wrapper .setting-cover {
+    height: 100px;
+  }
+}
+
+@media (max-width: 320px) {
+  .setting-wrapper .setting-cover {
+    display: none;
+  }
+}
+
 .setting-wrapper .setting-content {
   width: 100%;
 }
@@ -43,6 +62,12 @@
   margin: 20px 0;
   font-size: 1rem;
   color: #888888;
+}
+
+@media (max-width: 640px) {
+  .setting-wrapper .setting-content .setting-classify .setting-content-header {
+    font-size: 0.9rem;
+  }
 }
 
 .setting-wrapper .setting-content .setting-classify .setting-element {
@@ -66,10 +91,25 @@
           flex: 1;
 }
 
+@media (max-width: 640px) {
+  .setting-wrapper .setting-content .setting-classify .setting-element .setting-element-name {
+    font-size: 0.9rem;
+  }
+}
+
 .setting-wrapper .setting-content .setting-classify .setting-element .setting-element-value {
   -webkit-box-flex: 1;
       -ms-flex: 1;
           flex: 1;
+}
+
+@media (max-width: 640px) {
+  .setting-wrapper .setting-content .setting-classify .setting-element .setting-element-value {
+    text-align: center;
+    -webkit-box-flex: 1.5;
+        -ms-flex: 1.5;
+            flex: 1.5;
+  }
 }
 
 .setting-wrapper .setting-content .setting-classify .setting-element .setting-element-action {
@@ -88,8 +128,32 @@
   cursor: pointer;
 }
 
+@media (max-width: 320px) {
+  .setting-wrapper .setting-content .setting-classify .setting-element .setting-element-action {
+    font-size: 0.8rem;
+  }
+}
+
 .setting-wrapper .setting-content .setting-classify .setting-element:last-child {
   border: none;
+}
+
+@media (max-width: 1024px) {
+  .setting-wrapper .setting-content .setting-classify {
+    padding: 20px;
+  }
+}
+
+@media (max-width: 640px) {
+  .setting-wrapper .setting-content .setting-classify {
+    padding: 0;
+  }
+}
+
+@media (max-width: 1024px) {
+  .setting-wrapper {
+    padding: 0 10px 20px 10px;
+  }
 }
 
 .setting-back-button-disabled {
