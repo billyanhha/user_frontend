@@ -462,6 +462,7 @@ const Profile = (props) => {
 
             {/* Chart for health detail */}
             <div className="profile-chart">Component Chart info (for each patient with props contain: patient_id)</div>
+            {/* <Chart patiend_id={id}/> */}
         </div>
     )
 }
