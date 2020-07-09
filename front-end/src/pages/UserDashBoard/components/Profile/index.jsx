@@ -456,7 +456,7 @@ const Profile = (props) => {
                 </form>
             </div>
 
-            <div className="profile-progress-header">Tiến độ các gói gần đây</div>
+            {/* <div className="profile-progress-header">Tiến độ các gói gần đây</div>
             <div className="profile-progress">
                 <div className="each-package">
                     <Progress percent={66.67} status="active" format={() => '2/3'} />
@@ -467,7 +467,7 @@ const Profile = (props) => {
                 <div className="each-package">
                     <Progress percent={66.67} status="active" format={(progress) => progress}/>
                 </div>
-            </div>
+            </div> */}
 
             {/* Chart for health detail */}
             <div className="profile-chart">Component Chart info (for each patient with props contain: patient_id)</div>
