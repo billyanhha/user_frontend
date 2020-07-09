@@ -80,20 +80,18 @@ const Family = () => {
 
     useEffect(() => {
         if (uploadStatus) {
+            setShouldAppear(false);         // comment this line to stay in current screen after hit edit button. (Notes: its cause avatar won't change)
+            getDependent();
             dispatch(resetUploadStatus());
-            // setShouldAppear(false)
         }
 
         if (createStatus) {
             dispatch(createDependentSuccessful(false));
-            setShouldAppear(false)
+            setNeedCreate(false);
+            setShouldAppear(false);
         }
         getDependent()
     }, [uploadStatus, createStatus]);
-
-    useEffect(() => {
-        console.log(shouldAppear)
-    }, [shouldAppear])
 
     useEffect(() => {
         if (currentUser?.customer_id === undefined || token === '') {

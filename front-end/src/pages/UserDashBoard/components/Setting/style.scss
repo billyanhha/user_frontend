@@ -11,6 +11,17 @@
 
         border-radius: 30px;
         // background: nth($cover-color, random(length($cover-color)));
+        @include breakpoint(phablet) {
+            height: 150px;
+            border-radius: 20px;
+        }
+        @include breakpoint(phone) {
+            height: 100px;
+        }
+
+        @include breakpoint(phone_smaller) {
+            display: none;
+        }
     }
 
     .setting-content {
@@ -25,6 +36,10 @@
                 margin: 20px 0;
                 font-size: 1rem;
                 color: $gray;
+
+                @include breakpoint(phone) {
+                    font-size: 0.9rem;
+                }
             }
 
             .setting-element {
@@ -40,10 +55,19 @@
                 .setting-element-name {
                     font-size: 1.2rem;
                     flex: 1;
+
+                    @include breakpoint(phone) {
+                        font-size: 0.9rem;
+                    }
                 }
 
                 .setting-element-value {
                     flex: 1;
+
+                    @include breakpoint(phone) {
+                        text-align: center;
+                        flex: 1.5;
+                    }
                 }
 
                 .setting-element-action {
@@ -58,13 +82,27 @@
                     &:hover {
                         cursor: pointer;
                     }
+                    @include breakpoint(phone_smaller) {
+                        font-size: 0.8rem;
+                    }
                 }
 
                 &:last-child {
                     border: none;
                 }
             }
+
+            @include breakpoint(tablet) {
+                padding: 20px;
+            }
+            @include breakpoint(phone) {
+                padding: 0;
+            }
         }
+    }
+
+    @include breakpoint(tablet) {
+        padding: 0 10px 20px 10px;
     }
 }
 .setting-back-button-disabled {

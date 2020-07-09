@@ -3,7 +3,7 @@ import { useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { useForm, Controller, ErrorMessage } from "react-hook-form";
 import { getUserProfile, editUserProfile, editAvatar, resetUploadStatus } from '../../../../redux/user';
-import { createDependent } from '../../../../redux/patient';
+import { createDependent, getPackageProgress } from '../../../../redux/patient';
 import relationship from '../../../../configs/relationship'
 // import { useDropzone } from 'react-dropzone';
 // import Dropzone from 'react-dropzone-uploader'
@@ -11,7 +11,7 @@ import moment from 'moment';
 import AvatarEditor from 'react-avatar-editor';
 import DatePicker from "react-datepicker";  //input dob
 import Select from 'react-select';          //input gender
-import { Modal, message, Spin } from 'antd';
+import { Modal, message, Spin, Progress } from 'antd';
 import { EditTwoTone, PictureTwoTone, LoadingOutlined } from '@ant-design/icons';
 import vi from 'date-fns/locale/vi'
 
@@ -30,6 +30,7 @@ const Profile = (props) => {
     const token = useSelector(state => state.auth.token);
 
     let dependentInfo = props.dependentInfo;
+    // const [dependentInfo, setDependentInfo] = useState(props.dependentInfo)
     const [createNew, setCreateNew] = useState(props.createNew);
 
     const [profileInfo, setProfileInfo] = useState(null);
@@ -129,7 +130,6 @@ const Profile = (props) => {
             // const canvasRaw = avatarRef.getImage();
             // const canvasScaled = avatarRef.getImageScaledToCanvas();    //Crop to 250x250 px
             if (createNew) {
-                console.log("vào")
                 setCreateAvatar([avatarRef.getImageScaledToCanvas(), avatarRef.getImageScaledToCanvas().toDataURL()]);
                 setAvatarVisible(false);
             } else {
@@ -174,9 +174,6 @@ const Profile = (props) => {
             history.push("/login");
         }
     }
-    useEffect(() => {
-        console.log(avatarImg)
-    }, [avatarImg])
 
     useEffect(() => {
         if (!dependentInfo) {
@@ -233,6 +230,7 @@ const Profile = (props) => {
     useEffect(() => {
         if (currentUser?.customer_id != undefined) {
             getProfile();
+            dispatch(getPackageProgress(token, currentUser?.customer_id));
         }
 
         //Clean state on Unmount this component
@@ -252,7 +250,7 @@ const Profile = (props) => {
                             <div className="profile-avatar">
                                 <div className="avatar-wrapper">
                                     {createNew
-                                        ? <img id="Avatar-profile" src={createAvatar?.[1] ?? DefaultAvatar } alt="Avatar" />
+                                        ? <img id="Avatar-profile" src={createAvatar?.[1] ?? DefaultAvatar} alt="Avatar" />
                                         : <img id="Avatar-profile" src={profileInfo?.avatarurl} alt="Avatar" />
                                     }
                                 </div>
@@ -450,14 +448,25 @@ const Profile = (props) => {
                                     </ErrorMessage>
                                 </>
                                 : ""}
-
                             <div className="profile-form-end">
                                 <button disabled={isLoad} className={"recovery-button " + !isLoad ?? "recovery-button-disabled"} type="submit">{isLoad ? <LoadingOutlined /> : ""} {createNew ? " Thêm người thân" : " Cập nhật thông tin"}</button>
                             </div>
                         </div>
-
                     </div>
                 </form>
+            </div>
+
+            <div className="profile-progress-header">Tiến độ các gói gần đây</div>
+            <div className="profile-progress">
+                <div className="each-package">
+                    <Progress percent={66.67} status="active" format={() => '2/3'} />
+                </div>
+                <div className="each-package">
+                    <Progress percent={66.67} status="active"  />
+                </div>
+                <div className="each-package">
+                    <Progress percent={66.67} status="active" format={(progress) => progress}/>
+                </div>
             </div>
 
             {/* Chart for health detail */}
