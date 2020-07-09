@@ -95,7 +95,7 @@ const BookingDoctor = () => {
                 </div>
             </div>
             <div className="doctors-select-fullname">
-                {doctor?.fullname && (<Rate disabled value={doctor?.total_rating / doctor?.rating_count} />)}
+                {doctor?.fullname && (<Rate disabled value={doctor?.average_rating} />)}
             </div>
         </div>
     )
