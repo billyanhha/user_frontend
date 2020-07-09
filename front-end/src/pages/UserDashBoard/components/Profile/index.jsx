@@ -3,7 +3,7 @@ import { useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { useForm, Controller, ErrorMessage } from "react-hook-form";
 import { getUserProfile, editUserProfile, editAvatar, resetUploadStatus } from '../../../../redux/user';
-import { createDependent } from '../../../../redux/patient';
+import { createDependent, getPackageProgress } from '../../../../redux/patient';
 import relationship from '../../../../configs/relationship'
 // import { useDropzone } from 'react-dropzone';
 // import Dropzone from 'react-dropzone-uploader'
@@ -230,6 +230,7 @@ const Profile = (props) => {
     useEffect(() => {
         if (currentUser?.customer_id != undefined) {
             getProfile();
+            dispatch(getPackageProgress(token, currentUser?.customer_id));
         }
 
         //Clean state on Unmount this component
@@ -455,8 +456,17 @@ const Profile = (props) => {
                 </form>
             </div>
 
+            <div className="profile-progress-header">Tiến độ các gói gần đây</div>
             <div className="profile-progress">
-                <Progress percent={66.67} status="active" format={() => '2/3'} />
+                <div className="each-package">
+                    <Progress percent={66.67} status="active" format={() => '2/3'} />
+                </div>
+                <div className="each-package">
+                    <Progress percent={66.67} status="active"  />
+                </div>
+                <div className="each-package">
+                    <Progress percent={66.67} status="active" format={(progress) => progress}/>
+                </div>
             </div>
 
             {/* Chart for health detail */}

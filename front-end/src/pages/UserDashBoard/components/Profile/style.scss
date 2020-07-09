@@ -272,6 +272,29 @@ $phone: 360px;
     }
 }
 
+.profile-progress-header{
+    font-size: 1.5rem;
+}
+
+.profile-progress{
+    width: 100%;
+    height: fit-content;
+    padding-bottom: 40px;
+
+    display: grid;
+    place-items: center;
+    text-align: center;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    column-gap: 20px;
+    row-gap: 40px;
+
+    .each-package{
+        text-align: center;
+        width: 90%;
+        padding: 5px;
+    }
+}
+
 .css-yk16xz-control {
     border-color: $light-gray !important;
     &:hover {

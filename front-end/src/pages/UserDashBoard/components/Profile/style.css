@@ -319,6 +319,33 @@
   height: 50px;
 }
 
+.profile-progress-header {
+  font-size: 1.5rem;
+}
+
+.profile-progress {
+  width: 100%;
+  height: -webkit-fit-content;
+  height: -moz-fit-content;
+  height: fit-content;
+  padding-bottom: 40px;
+  display: -ms-grid;
+  display: grid;
+  place-items: center;
+  text-align: center;
+  -ms-grid-columns: (minmax(350px, 1fr))[auto-fill];
+      grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  -webkit-column-gap: 20px;
+          column-gap: 20px;
+  row-gap: 40px;
+}
+
+.profile-progress .each-package {
+  text-align: center;
+  width: 90%;
+  padding: 5px;
+}
+
 .css-yk16xz-control {
   border-color: #dadada !important;
 }

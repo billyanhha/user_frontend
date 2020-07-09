@@ -28,4 +28,17 @@ patientService.createDependent = (token, customerID, data) => new Promise((resol
         .catch(err => reject(err))
 });
 
+patientService.getPackageProgress = (token, customerID) => new Promise((resolve, reject) => {
+    const api = `/api/customer/${customerID}/package-running`;
+    axios.get(api, {
+        headers: {
+            Authorization: "Bearer " + token
+        }
+    })
+        .then(result => {
+            resolve(result.data)
+        })
+        .catch(err => reject(err))
+});
+
 export default patientService;
