@@ -3,13 +3,10 @@ import './style.css';
 import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
 import status from '../../../../configs/appointment_status';
-import { Tabs,Spin } from 'antd';
+import { Tabs, Spin } from 'antd';
 import Chart from 'react-apexcharts';
-
-
-import {
-    getAllAppointmentByPackage
-} from '../../../../redux/package';
+import { getCurrentHealth } from '../../../../redux/patient/index';
+import { HeartOutlined, LineChartOutlined, ClockCircleOutlined } from '@ant-design/icons';
 
 const ChartCurrentHealth = (props) => {
 
@@ -19,334 +16,268 @@ const ChartCurrentHealth = (props) => {
     const [pulse, setPulse] = useState([]);
     const [systolic, setSystolic] = useState([]);
     const [diastolic, setDiastolic] = useState([]);
-    const { allAppointmentByPackage } = useSelector(state => state.package);
-    const id = props.patient_id;
+    const [length, setLength] = useState([]);
+    const token = useSelector(state => state.auth.token);
+    const { currentHealth } = useSelector(state => state.patient);
 
-    const [seriesData, setSeries] = useState([]);
-    const [optionsData, setOptions] = useState({});
-    const { isLoad } = useSelector(state => state.ui);
 
-    const { TabPane } = Tabs;
 
-    useEffect(()=>{
-        dispatch(getAllAppointmentByPackage(id));
-    },[]);
+    const [seriesData1, setSeries1] = useState([]);
+    const [seriesData2, setSeries2] = useState([]);
 
-    function callback(key) {
-    }
+    const [optionsData1, setOptions1] = useState({});
+    const [optionsData2, setOptions2] = useState({});
 
-    const pressureConfig = (systolic, diastolic) => {
-        let result = "";
-        if (systolic <= 90 && diastolic <= 60) {
-            result = "Huyết áp thấp : chỉ số huyết áp tâm thu < 90 mmHg và/hoặc huyết áp tâm trương < 60 mmHg.";
-        } else
-            if (systolic >= 91 && systolic <= 120 && diastolic >= 61 && diastolic <= 80) {
-                result = "Huyết áp tối ưu";
-            } else
-                if (systolic >= 121 && systolic <= 129 && diastolic >= 81 && diastolic <= 84) {
-                    result = "Huyết áp bình thường: Huyết áp tâm thu từ 90 mmHg đến 129 mmHg. Huyết áp tâm trương: Từ 60 mmHg đến 84 mmHg";
-                } else
-                    if (systolic >= 131 && systolic <= 139 && diastolic >= 85 && diastolic <= 89) {
-                        result = "Huyết áp bình thường cao: Huyết áp tâm thu 130-139 mmHg và/hoặc huyết áp tâm trương 85-89 mmHg.";
-                    } else
-                        if (systolic >= 140 && systolic <= 159 && diastolic >= 90 && diastolic <= 99) {
-                            result = "Tăng huyết áp độ 1 (Tăng huyết áp nhẹ: Huyết áp tâm thu 140-159 mmHg và/hoặc huyết áp tâm trương 90-99 mmHg.";
-                        } else
-                            if (systolic >= 160 && systolic <= 179 && diastolic >= 100 && diastolic <= 109) {
-                                result = "Tăng huyết áp độ 2 (Tăng huyết áp nặng): Huyết áp tâm thu 160-179 mmHg và/hoặc huyết áp tâm trương 100-109 mmHg.";
-                            } else
-                                if (systolic >= 180 && diastolic >= 110) {
-                                    result = "Tăng huyết áp độ 3 (Tăng huyết áp cao): Huyết áp tâm thu ≥ 180 mmHg và/hoặc huyết áp tâm trương ≥ 110 mmHg.";
-                                } else
-                                    if (systolic >= 140 && diastolic <= 90) {
-                                        result = "Tăng huyết áp tâm thu đơn độc: Huyết áp tâm thu ≥ 140 mmHg và huyết áp tâm trương < 90 mmHg.";
-                                    }
-        return result;
-    }
 
-    const getAnalysis = (appointments) => {
-        let systolic = 0;
-        let diastolic = 0;
-        let result1 = pressureConfig(appointments[0]?.systolic, appointments[0]?.diastolic);
-        for (let i = 0; i < appointments?.length; i++) {
-            if (appointments[i]?.status_id === status.done) {
-                systolic = appointments[i]?.systolic;
-                diastolic = appointments[i]?.diastolic;
-            }
-        }
-        let result2 = "";
-        result2 = systolic !== 0 ? pressureConfig(systolic, diastolic) : "";
-        return (
-            <div>
-                {appointments[0]?.systolic && appointments[0]?.diastolic && (<h3>Huyết áp ban đầu:</h3>)}
-                <p>{result1}</p>
-                {systolic !== 0 && diastolic !== 0 && (<h3>Huyết áp hiện tại:</h3>)}
-                <p>{result2}</p>
-            </div>
-        )
-    }
+    // console.log(props.patient_id);
+    // console.log(currentHealth);
+    useEffect(() => {
+        dispatch(getCurrentHealth(token, props.patient_id));
+    }, []);
 
-    const formatDateTime = (dateValue) => {
-        dateValue = dateValue?.split("-");
-        dateValue = dateValue?.[2] + "-" + dateValue?.[1] + "-" + dateValue?.[0];
-        return dateValue;
-    }
 
     useEffect(() => {
-        let dataSet = allAppointmentByPackage;
-        console.log(dataSet);
-        let length = dataSet?.length;
-        let tem = [];
-        let pulse = [];
         let systolic = [];
         let diastolic = [];
-        let arr = [];
-        for (let i = 0; i < length; i++) {
-            let k = i + 1;
-            tem[i] = dataSet[i]?.temperature;
-            pulse[i] = dataSet[i]?.pulse;
-            systolic[i] = dataSet[i]?.systolic;
-            diastolic[i] = dataSet[i]?.diastolic;
-            arr[i] = formatDateTime(dataSet[i]?.date) + " " + config(dataSet[i]?.slot_id);
+        let temperature = [];
+        let pulse = [];
+        let length = 0;
+        let data = [];
+
+        //Only get 4 newest
+        if(currentHealth?.result?.length > 4){
+            data = currentHealth?.result?.slice(currentHealth?.result?.length-4,currentHealth?.result?.length);
+        }else{
+            data = currentHealth?.result;
         }
-        console.log(arr);
-        setListAppointment(arr);
-        setTemperature(tem);
+        let initialize = data?.filter((appointment, key) => {
+            systolic[length] = appointment.systolic;
+            diastolic[length] = appointment.diastolic;
+            pulse[length] = appointment.pulse;
+            temperature[length] = appointment.temperature;
+            length++;
+            return appointment;
+        });
+
+
         setSystolic(systolic);
         setDiastolic(diastolic);
         setPulse(pulse);
+        setTemperature(temperature);
+        setLength(length);
 
-        let series = [{
-            name: 'Huyết áp tâm trương',
-            type: 'column',
-            data: diastolic
-        }, {
-            name: 'Huyết áp tâm thu',
-            type: 'column',
+        let series1 = [{
+            name: 'Systolic',
             data: systolic
-        }, {
-            name: 'Nhịp tim',
-            type: 'line',
-            data: pulse
-        }, {
-            name: 'Nhiệt độ',
-            type: 'line',
-            data: tem
-        }]
-
-        setSeries(series);
-        
-        let options = {
-
+        }];
+        setSeries1(series1);
+        let optionsTest1 = {
             chart: {
-                height: 600,
-                type: 'column',
-                stacked: false
+                height: 200,
+                type: 'line',
+                background: '#000',
+                selection: {
+                    enabled: false
+                },
+                zoom: {
+                    enabled: false
+                },
+                toolbar: {
+                    show: false
+                },
             },
-            dataLabels: {
-                enabled: false,
-                style: {
-                    fontSize: '14px',
-                    fontFamily: 'Helvetica, Arial, sans-serif',
-                    fontWeight: 'bold',
-                }
-
-            },
-            fill: {
-                colors: ['#ff7b50', '#643969', 'rgba(252, 3, 3, 0.8)', '#1f8ffc']
-            },
-            colors: ['#ff7b50', '#643969', 'rgba(252, 3, 3, 0.8)', '#1f8ffc'],
-            stroke: {
-                width: [1, 1, 4, 2]
-            },
-            title: {
-                text: 'Biểu đồ số liệu kết quả của cuộc hẹn',
-                align: 'left',
-                offsetX: 300,
-                style: {
-                    fontSize: '20px'
-                }
-            },
-
-            xaxis: {
-                categories: arr,
+            grid: {
                 show: true,
+                borderColor: '#90A4AE',
+                strokeDashArray: 5,
+                xaxis: {
+                    lines: {
+                        show: true
+                    }
+                },
+            },
+            stroke: {
+                width: 3,
+                curve: 'smooth',
+                lineCap: 'butt',
+            },
+            xaxis: {
                 labels: {
-
-                    maxHeight: 200,
+                    show: false
+                },
+                axisBorder: {
+                    show: false
                 }
             },
-            yaxis: [
-                {
-                    seriesName: 'Diatolic',
-                    min:0,
-                    max:200,
-                    tickAmount: 10,
-                    opposite: false,
-                    axisTicks: {
-                        show: true,
-                    },
-                    axisBorder: {
-                        show: true,
-                        color: '#ff7b50'
-                    },
-                    labels: {
-                        style: {
-                            colors: '#ff7b50'
-                        }
-                    },
-                    title: {
-                        text: "Huyết áp tâm trương",
-                        style: {
-                            color: '#ff7b50'
-                        }
-                    },
-                    tooltip: {
-                        enabled: true
-                    }
-                },
-                {
-                    seriesName: 'Systolic',
-                    min:0,
-                    max:200,
-                    tickAmount: 10,
-                    opposite: false,
-                    axisTicks: {
-                        show: true,
-                    },
-                    axisBorder: {
-                        show: true,
-                        color: '#643969'
-                    },
-                    labels: {
-                        style: {
-                            colors: '#643969'
-                        }
-                    },
-                    title: {
-                        text: "Huyết áp tâm thu",
-                        style: {
-                            color: '#643969'
-                        }
-                    },
-                },
-                {
-                    seriesName: 'Pulse',
-                    opposite: true,
-                    tickAmount: 4,
-                    axisTicks: {
-                        show: true,
-
-                    },
-                    axisBorder: {
-                        show: true,
-                        color: 'rgba(252, 3, 3, 0.8)'
-                    },
-                    labels: {
-                        style: {
-                            colors: 'rgba(252, 3, 3, 0.8)',
-                        },
-                        offsetX: -15,
-                        rotate: 0,
-                    },axisBorder: {
-                        show: true,
-                        color: 'rgba(252, 3, 3, 0.8)',
-                        offsetX: -5,
-                        offsetY: 0
-                    },
-                    axisTicks: {
-                        show: true,
-                        borderType: 'solid',
-                        offsetX: 15,
-                        offsetY: 0
-                    },
-                    title: {
-                        text: "Nhịp tim",
-                        style: {
-                            color: 'rgba(252, 3, 3, 0.8)',
-                        }
-                    }
-                },
-                {
-                    seriesName: 'Temperature',
-                    opposite: true,
-                    tickAmount:15,
-                    axisTicks: {
-                        show: true,
-                    },
-                    axisBorder: {
-                        show: true,
-                        color: '#1f8ffc'
-                    },
-                    labels: {
-                        style: {
-                            colors: '#1f8ffc',
-                        },
-                        offsetX: -15,
-                        rotate: 0,
-                    },axisBorder: {
-                        show: true,
-                        color: '#1f8ffc',
-                        offsetX: -5,
-                        offsetY: 0
-                    },
-                    axisTicks: {
-                        show: true,
-                        borderType: 'solid',
-                        offsetX: 20,
-                        offsetY: 0
-                    },
-                    title: {
-                        text: "Nhiệt độ",
-                        style: {
-                            color: '#1f8ffc',
-                        }
-                    }
-                },
-            ],
-            tooltip: {
-                fixed: {
-                    enabled: true,
-                    position: 'topLeft', // topRight, topLeft, bottomRight, bottomLeft
-                },
+            colors: ['#f44336'],
+            fill: {
+                type: 'solid',
             },
-            legend: {
-                fontWeight: 400,
-                labels: {
-                    colors: ['#000', '#000', '#000', '#000'],
-                    useSeriesColors: false
-                },
-                markers: {
-                    fillColors: ['#ff7b50', '#643969', 'rgba(252, 3, 3, 0.8)', '#1f8ffc']
+            markers: {
+                size: 4,
+                colors: ["#000"],
+                strokeColors: "#f44336",
+                strokeWidth: 2,
+                hover: {
+                    size: 7,
                 }
-            },
+            }, yaxis: {
+                tickAmount: 3,
+                labels: {
+                    show: true,
+                    align: 'right',
+                    minWidth: 0,
+                    maxWidth: 160,
+                    style: {
+                        colors: '#e4e2e2',
+                        fontSize: '15px',
+                        fontFamily: 'Helvetica, Arial, sans-serif',
+                        fontWeight: 1000,
+                        cssClass: 'apexcharts-yaxis-label',
+                    },
+                }
+            }
+
         };
-        setOptions(options);
-    }, [allAppointmentByPackage]);
+        setOptions1(optionsTest1);
+
+        let series2 = [{
+            name: 'Diastolic',
+            data: diastolic
+        }];
+        setSeries2(series2);
+        let optionsTest2 = {
+            chart: {
+                height: 180,
+                type: 'line',
+                background: '#fff',
+                selection: {
+                    enabled: false
+                },
+                zoom: {
+                    enabled: false
+                },
+                toolbar: {
+                    show: false
+                },
+            },
+            grid: {
+                show: true,
+                borderColor: '#90A4AE',
+                strokeDashArray: 5,
+                xaxis: {
+                    lines: {
+                        show: true
+                    }
+                },
+            },
+            stroke: {
+                width: 3,
+                curve: 'smooth',
+                lineCap: 'butt',
+            },
+            xaxis: {
+                labels: {
+                    show: false
+                },
+                axisBorder: {
+                    show: false
+                }
+            },
+            colors: ['#8d0491'],
+            fill: {
+                type: 'solid',
+            },
+            markers: {
+                size: 4,
+                colors: ["#fff"],
+                strokeColors: "#8d0491",
+                strokeWidth: 2,
+                hover: {
+                    size: 7,
+                }
+            }, yaxis: {
+                tickAmount: 3,
+                labels: {
+                    show: true,
+                    align: 'right',
+                    minWidth: 0,
+                    maxWidth: 160,
+                    style: {
+                        colors: '#e4e2e2',
+                        fontSize: '15px',
+                        fontFamily: 'Helvetica, Arial, sans-serif',
+                        fontWeight: 1000,
+                        cssClass: 'apexcharts-yaxis-label',
+                    },
+                }
+            }
+
+        };
+        setOptions2(optionsTest2);
+
+    }, [currentHealth]);
 
     return (
-        <div className="chart-div">
-            <Spin size="large" spinning={isLoad}  >
-                <div className="lineChart-div">
+        <div >
+            <div className="chart-content-div">
+                <div className="systolic-div">
+                    <div className="systolic-content-div">
+                        <div style={{ display: 'flex' }}>
+                            <div className="systolic-name-div">Huyết áp tâm thu</div>
+                            <div className="systolic-icon-div"><HeartOutlined /></div>
+                        </div>
+                        <div className="systolic-data-div">{systolic[length - 1]}</div><span>mmHg</span>
+                    </div>
                     <Chart
-                        options={optionsData}
-                        series={seriesData}
-                        height="450"
-                        width="100%"
+                        options={optionsData2}
+                        series={seriesData1}
+                        type="line"
+                        height="300px"
+                        width='75%'
                     />
                 </div>
-                <div className="barChart-div">
+                <div className="diastolic-div">
+                    <div className="diastolic-content-div">
+                        <div style={{ display: 'flex' }}>
+                            <div className="diastolic-name-div">Huyết áp tâm trương</div>
+                            <div className="diastolic-icon-div"><HeartOutlined /></div>
+                        </div>
+                        <div className="diastolic-data-div">{diastolic[length - 1]}</div><span>mmHg</span>
+                    </div>
+                    <Chart
+                        options={optionsData2}
+                        series={seriesData2}
+                        type="line"
+                        height="300px"
+                        width='75%'
+                    />
+                </div>
+                <div className="pulse-tem-div">
+                    <div className="pulse-div">
+                        <div className="pulse-content-div">
+                            <div style={{ display: 'flex' }}>
+                                <div className="pulse-name-div">Nhịp tim</div>
+                                <div className="pulse-icon-div"><LineChartOutlined /></div>
+                            </div>
+                            <div className="pulse-data-div">{pulse[length - 1]}</div><span>BPM</span>
+                        </div>
 
-                    <div className="tab-change-div">
-                        <Tabs defaultActiveKey="1" onChange={callback}>
-                            <TabPane tab="Phân tích thông tin" key="1">
-                                {getAnalysis(allAppointmentByPackage)}
-                            </TabPane>
-                            
-                        </Tabs>
+                    </div>
+                    <div className="temperature-div">
+                        <div className="temperature-content-div">
+                            <div style={{ display: 'flex' }}>
+                                <div className="temperature-name-div">Nhiệt độ</div>
+                                <div className="temperature-icon-div"><ClockCircleOutlined /></div>
+                            </div>
+                            <div className="temperature-data-div">{temperature[length - 1]}</div><span>kgs</span>
+                        </div>
+
                     </div>
                 </div>
-            </Spin>
+            </div>
+
+
         </div>
     );
 };

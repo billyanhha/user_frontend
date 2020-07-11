@@ -1,0 +1,218 @@
+/* .systolic-div{
+    padding-top: 10px;
+    background: #000;
+    max-width:400px;
+    max-height: 400px;
+    min-width:200px;
+    min-height: 400px;
+    overflow:hidden;
+    border-radius: 20px;
+}
+
+.systolic-content-div{
+    color: #fff;
+    margin-left: 20px;
+}
+
+.systolic-name-div{
+    color: #fff;
+    font-size: 25px;
+    width: 80%;
+}
+
+.systolic-data-div{
+    color: #fff;
+    font-size: 40px;
+    font-weight: 200;
+    display: inline-block;
+    margin-left: 25px;
+}
+
+.systolic-icon-div{
+    color: red;
+    font-size: 25px;
+} */
+
+.chart-content-div{
+    background: #fff;
+    justify-content: center;
+    display: flex;
+}
+
+.systolic-div{
+    padding-top: 10px;
+    background: #fff;
+    max-width:400px;
+    max-height: 420px;
+    min-width:200px;
+    min-height: 400px;
+    overflow:hidden;
+    border-radius: 20px;
+    border: 1px solid #c7c0c0;
+}
+
+.systolic-content-div{
+    color: #000;
+    margin-left: 20px;
+}
+
+.systolic-name-div{
+    color: #000;
+    font-size: 15px;
+    margin-top: 5px;
+    width: 80%;
+}
+
+.systolic-data-div{
+    color: #000;
+    font-size: 40px;
+    font-weight: 200;
+    display: inline-block;
+    margin-left: 25px;
+}
+
+.systolic-icon-div{
+    color: red;
+    font-size: 25px;
+}
+
+.diastolic-div{
+    padding-top: 10px;
+    margin-left: 50px;
+    background: #fff;
+    max-width:400px;
+    max-height: 420px;
+    min-width:200px;
+    min-height: 400px;
+    overflow:hidden;
+    border-radius: 20px;
+    border: 1px solid #c7c0c0;
+}
+
+.diastolic-content-div{
+    color: #000;
+    margin-left: 20px;
+}
+
+.diastolic-name-div{
+    color: #000;
+    font-size: 15px;
+    margin-top: 5px;
+    width: 80%;
+}
+
+.diastolic-data-div{
+    color: #000;
+    font-size: 40px;
+    font-weight: 200;
+    display: inline-block;
+    margin-left: 25px;
+}
+
+.diastolic-icon-div{
+    color: red;
+    font-size: 25px;
+}
+
+.pulse-div{
+    padding-top: 10px;
+    background: #fff;
+    overflow:hidden;
+    width: 200px;
+    height: 170px;
+    border-radius: 20px;
+    border: 1px solid #c7c0c0;
+}
+
+.pulse-content-div{
+    color: #000;
+    margin-left: 20px;
+}
+
+.pulse-name-div{
+    color: #000;
+    font-size: 15px;
+    margin-top: 5px;
+    width: 80%;
+}
+
+.pulse-data-div{
+    color: #000;
+    font-size: 40px;
+    font-weight: 200;
+    display: inline-block;
+    margin-left: 25px;
+}
+
+.pulse-icon-div{
+    color: red;
+    font-size: 25px;
+}
+
+.temperature-div{
+    padding-top: 10px;
+    background: #fff;
+    overflow: hidden;
+    width: 200px;
+    height: 170px;
+    border-radius: 20px;
+    margin-top: 80px;
+    border: 1px solid #c7c0c0;
+}
+
+.temperature-content-div{
+    color: #000;
+    margin-left: 20px;
+}
+
+.temperature-name-div{
+    color: #000;
+    font-size: 15px;
+    margin-top: 5px;
+    width: 80%;
+}
+
+.temperature-data-div{
+    color: #000;
+    font-size: 40px;
+    font-weight: 200;
+    display: inline-block;
+    margin-left: 25px;
+}
+
+.temperature-icon-div{
+    color: red;
+    font-size: 25px;
+}
+
+.pulse-tem-div{
+    display: grid;
+    margin-left: 50px; 
+}
+
+@media screen and (max-width: 780px) {
+    .chart-content-div {
+        display: inline-block;;
+        justify-content: initial;
+        margin-left: 20px;
+    }
+    .systolic-div{
+        width: 100%;
+        margin: 20px;
+    }
+    .diastolic-div{
+        margin-left: 0px;
+        margin: 20px;
+        width: 100%;
+    }
+    .pulse-tem-div {
+        margin-left: 20px;
+        width: 100%;
+    }
+    .pulse-div {   
+        width: 100%;
+    }
+    .temperature-div{
+        width: 100%;
+    }
+}

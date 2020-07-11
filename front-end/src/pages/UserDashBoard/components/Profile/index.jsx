@@ -16,7 +16,8 @@ import { EditTwoTone, PictureTwoTone, LoadingOutlined } from '@ant-design/icons'
 import vi from 'date-fns/locale/vi'
 
 import './style.css';
-import DefaultAvatar from '../../../../assest/image/hhs-default_avatar.jpg'
+import DefaultAvatar from '../../../../assest/image/hhs-default_avatar.jpg';
+import ChartCurrentHealth from '../ChartCurrentHealth';
 
 const Profile = (props) => {
     const loadingIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
@@ -470,8 +471,9 @@ const Profile = (props) => {
             </div> */}
 
             {/* Chart for health detail */}
-            <div className="profile-chart">Component Chart info (for each patient with props contain: patient_id)</div>
-            {/* <Chart patiend_id={id}/> */}
+            <div className="profile-chart">
+                <ChartCurrentHealth patient_id={userProfile?.id} />
+            </div>
         </div>
     )
 }
