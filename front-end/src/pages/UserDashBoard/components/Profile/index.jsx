@@ -182,13 +182,12 @@ const Profile = (props) => {
             <div className="each-package-detail"><span>Bác sĩ:</span> <Link to={"/doctor/" + packages.doctor_id} target='_blank'>{packages.doctor_name}</Link></div>
             <div className="each-package-progress">
                 <div className="each-package-detail">Tiến độ gói dịch vụ:</div>
-                {packages.num_done && packages.num_total
-                    // ? <Progress percent={Math.round((packages.num_done / packages.num_total * 100 + Number.EPSILON) * 100) / 100} status="active" format={(progress) => progress + "%"} />
-                    ? <Progress percent={75} status="active" />
+                {packages.num_done && packages.num_pending
+                    ? <Progress percent={Math.round((packages.num_done / packages.num_pending * 100 + Number.EPSILON) * 100) / 100} status="active" format={(progress) => progress + "%"} />
                     : <Progress percent={100} status="exception" />
                 }
                 <div className="package-end-detail">
-                    <div className="convert-progress">{packages.num_done === packages.num_total ? "Đã hoàn thành" : `Hoàn thành ${packages.num_done / packages.num_total} số buổi`}</div>
+                    <div className="convert-progress">{packages.num_done === packages.num_pending ? "Đã hoàn thành" : packages.num_done === '0' ? "Chưa ghi nhận buổi điều dưỡng hoàn thành" : `Hoàn thành ${packages.num_done / packages.num_pending} số buổi`}</div>
                     <div className="package-show-more"><Link to={'/package/' + packages.id} target='_blank'>Chi tiết</Link></div>
                 </div>
             </div>
