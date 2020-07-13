@@ -20,6 +20,7 @@ const ChartCurrentHealth = (props) => {
     const [length, setLength] = useState([]);
     const token = useSelector(state => state.auth.token);
     const { currentHealth } = useSelector(state => state.patient);
+    const [isNoData, setIsNoData] = useState(true);
 
 
 
@@ -51,12 +52,18 @@ const ChartCurrentHealth = (props) => {
         let labels = [];
 
         //Only get 4 newest
-        if(currentHealth?.result?.length > 4){
-            data = currentHealth?.result?.slice(currentHealth?.result?.length-4,currentHealth?.result?.length);
-        }else{
+        if (currentHealth?.result?.length > 4) {
+            data = currentHealth?.result?.slice(currentHealth?.result?.length - 4, currentHealth?.result?.length);
+            setIsNoData(false);
+        } else if (currentHealth?.result?.length < 1) {
+            setIsNoData(true);
+        } else {
             data = currentHealth?.result;
+            setIsNoData(false);
         }
-        let initialize = data?.filter((appointment, key) => {
+
+
+        let initialize = data?.map((appointment, key) => {
             systolic[length] = appointment.systolic;
             diastolic[length] = appointment.diastolic;
             pulse[length] = appointment.pulse;
@@ -64,14 +71,12 @@ const ChartCurrentHealth = (props) => {
             length++;
             return appointment;
         });
-
         labels = data?.map((appointment, key) => {
-            let updated_at =  handleCreated_at(appointment?.updated_at);
+            let updated_at = handleCreated_at(appointment?.updated_at);
 
             return updated_at;
         });
 
-        console.log(labels);
 
         setSystolic(systolic);
         setDiastolic(diastolic);
@@ -99,7 +104,7 @@ const ChartCurrentHealth = (props) => {
                     show: false
                 },
             },
-            
+
             grid: {
                 show: true,
                 borderColor: '#90A4AE',
@@ -235,62 +240,69 @@ const ChartCurrentHealth = (props) => {
 
     return (
         <div >
-            <div className="chart-content-div">
-                <div className="systolic-div">
-                    <div className="systolic-content-div">
-                        <div style={{ display: 'flex' }}>
-                            <div className="systolic-name-div">Huyết áp tâm thu</div>
-                            <div className="systolic-icon-div"><HeartOutlined /></div>
-                        </div>
-                        <div className="systolic-data-div">{systolic[length - 1]}</div><span>mmHg</span>
-                    </div>
-                    <Chart
-                        options={optionsData2}
-                        series={seriesData1}
-                        type="line"
-                        height="300px"
-                        width='75%'
-                    />
-                </div>
-                <div className="diastolic-div">
-                    <div className="diastolic-content-div">
-                        <div style={{ display: 'flex' }}>
-                            <div className="diastolic-name-div">Huyết áp tâm trương</div>
-                            <div className="diastolic-icon-div"><HeartOutlined /></div>
-                        </div>
-                        <div className="diastolic-data-div">{diastolic[length - 1]}</div><span>mmHg</span>
-                    </div>
-                    <Chart
-                        options={optionsData2}
-                        series={seriesData2}
-                        type="line"
-                        height="300px"
-                        width='75%'
-                    />
-                </div>
-                <div className="pulse-tem-div">
-                    <div className="pulse-div">
-                        <div className="pulse-content-div">
-                            <div style={{ display: 'flex' }}>
-                                <div className="pulse-name-div">Nhịp tim</div>
-                                <div className="pulse-icon-div"><LineChartOutlined /></div>
-                            </div>
-                            <div className="pulse-data-div">{pulse[length - 1]}</div><span>BPM</span>
-                        </div>
+            {!isNoData ?
+                <div className="chart-content-div">
 
-                    </div>
-                    <div className="temperature-div">
-                        <div className="temperature-content-div">
+                    <div className="systolic-div">
+                        <div className="systolic-content-div">
                             <div style={{ display: 'flex' }}>
-                                <div className="temperature-name-div">Nhiệt độ</div>
-                                <div className="temperature-icon-div"><ClockCircleOutlined /></div>
+                                <div className="systolic-name-div">Huyết áp tâm thu</div>
+                                <div className="systolic-icon-div"><HeartOutlined /></div>
                             </div>
-                            <div className="temperature-data-div">{temperature[length - 1]}</div><span> Độ C</span>
+                            <div className="systolic-data-div">{systolic[length - 1]}</div><span>mmHg</span>
                         </div>
-
+                        <Chart
+                            options={optionsData2}
+                            series={seriesData1}
+                            type="line"
+                            height="300px"
+                            width='75%'
+                        />
                     </div>
-                </div>
-            </div>
+
+                    <div className="diastolic-div">
+                        <div className="diastolic-content-div">
+                            <div style={{ display: 'flex' }}>
+                                <div className="diastolic-name-div">Huyết áp tâm trương</div>
+                                <div className="diastolic-icon-div"><HeartOutlined /></div>
+                            </div>
+                            <div className="diastolic-data-div">{diastolic[length - 1]}</div><span>mmHg</span>
+                        </div>
+                        <Chart
+                            options={optionsData2}
+                            series={seriesData2}
+                            type="line"
+                            height="300px"
+                            width='75%'
+                        />
+                    </div>
+
+                    <div className="pulse-tem-div">
+                        <div className="pulse-div">
+                            <div className="pulse-content-div">
+                                <div style={{ display: 'flex' }}>
+                                    <div className="pulse-name-div">Nhịp tim</div>
+                                    <div className="pulse-icon-div"><LineChartOutlined /></div>
+                                </div>
+                                <div className="pulse-data-div">{pulse[length - 1]}</div><span>BPM</span>
+                            </div>
+
+                        </div>
+                        <div className="temperature-div">
+                            <div className="temperature-content-div">
+                                <div style={{ display: 'flex' }}>
+                                    <div className="temperature-name-div">Nhiệt độ</div>
+                                    <div className="temperature-icon-div"><ClockCircleOutlined /></div>
+                                </div>
+                                <div className="temperature-data-div">{temperature[length - 1]}</div><span> Độ C</span>
+                            </div>
+
+                        </div>
+                    </div>
+                </div> : 
+                <div>
+                    <h2>Hiện tại, bạn đang chưa trong quá trình sử dụng dịch vụ. Xin vui lòng sử dụng đặt lịch!</h2>
+                </div>}
 
 
         </div>

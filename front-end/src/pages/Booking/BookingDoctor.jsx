@@ -6,6 +6,7 @@ import { preStep, nextStep, saveBookingDoctor } from '../../redux/booking';
 import AsyncPaginate from "react-select-async-paginate";
 import doctorService from '../../service/doctorService';
 import { Rate, Button } from 'antd';
+import AddressGoogleMap from '../AddressGoogleMap';
 
 const BookingDoctor = () => {
 
@@ -13,14 +14,14 @@ const BookingDoctor = () => {
     const [doctor, setdoctor] = useState({});
     const dispatch = useDispatch();
 
-    
+
 
     useEffect(() => {
-        
-        if(doctorInfo) {
+
+        if (doctorInfo) {
             setdoctor(doctorInfo)
         }
-        
+
     }, []);
 
     if (currentStep !== 1) {
@@ -117,7 +118,7 @@ const BookingDoctor = () => {
                                 <AsyncPaginate
                                     loadOptions={loadOptions}
                                     debounceTimeout={300}
-                                    value = {{ fullname: doctor?.fullname??'', address: (doctor?.address??'') }}
+                                    value={{ fullname: doctor?.fullname ?? '', address: (doctor?.address ?? '') }}
                                     components={{ Option }} // customize menu
                                     additional={{
                                         page: 1,
@@ -126,7 +127,7 @@ const BookingDoctor = () => {
                                     getOptionLabel={({ fullname, address }) => fullname + "-" + address}
                                     defaultOptions
                                     cacheOptions
-                                    isClearable = {true}
+                                    isClearable={true}
                                     required
                                     onChange={onChange}
                                 />
@@ -137,6 +138,11 @@ const BookingDoctor = () => {
                             <div className="steps-action">
                                 <button onClick={next} className="submit-btn">Tiếp theo</button>
                                 <button onClick={prev} className="submit-btn-outline">Quay lại</button>
+                            </div>
+                        </div>
+                        <div>
+                            <div className="booking-introduction-image">
+                                <AddressGoogleMap />
                             </div>
                         </div>
                     </div>

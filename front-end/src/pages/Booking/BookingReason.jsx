@@ -10,6 +10,7 @@ import _ from "lodash"
 import { message } from "antd"
 import AddressGoogleMap from '../AddressGoogleMap';
 
+
 const BookingReason = (props) => {
 
 
@@ -145,8 +146,10 @@ const BookingReason = (props) => {
                             </form>
                         </div>
                     </div>
-                    <div className="booking-introduction-image">
-                        <AddressGoogleMap />
+                    <div>
+                        <div className="booking-introduction-image">
+                            <AddressGoogleMap />
+                        </div>
                     </div>
                 </div>
             </div>
