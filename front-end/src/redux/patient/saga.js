@@ -47,13 +47,12 @@ function* watchGetPackageProgress(action) {
         yield put(openLoading());
         if (action.customerID && action.token) {
             const result = yield patientService.getPackageProgress(action.token, action.customerID);
-            console.log(result)
-            // if (result) {
-            //     yield put(getPackageProgressSuccessful());
-            // }
+            if (result?.packages) {
+                yield put(getPackageProgressSuccessful(result?.packages));
+            }
         }
     } catch (error) {
-        message.error(error?.response?.data?.err ?? 'Hệ thống quá tải, xin thử lại sau!', 3);
+        message.error(error?.response?.data?.err ?? 'Hệ thống quá tải, không thể lấy dữ liệu tiến độ!', 3);
     } finally {
         yield put(closeLoading())
     }

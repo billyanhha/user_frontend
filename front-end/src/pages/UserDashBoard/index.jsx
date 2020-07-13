@@ -22,7 +22,7 @@ const UserDashBoard = () => {
     const { isLoad } = useSelector(state => state.ui);
     const { currentUser } = useSelector(state => state.user);
     useEffect(() => {
-        window.scroll(0, 0)
+        window.scroll(0, 0);
         if (currentUser?.customer_id === undefined) {
             history.push("/login");
             message.destroy()
@@ -36,13 +36,13 @@ const UserDashBoard = () => {
                 <Navbar />
                 <div className="dashboard-wrapper">
                     <div className="dashboard-wrapper-tab">
-                        {/* destroyInactiveTabPane is neccessary, plz don't touch it! */}
+                        {/* destroyInactiveTabPane is neccessary */}
                         <Tabs destroyInactiveTabPane>
-                            {/* <TabPane tab={<span><HeartOutlined />Các gói điều dưỡng</span>} key="1">
+                            <TabPane tab={<span><HeartOutlined />Các gói điều dưỡng</span>} key="1">
                                 <div className="dashboard-component">
                                     <UserPackage />
                                 </div>
-                            </TabPane> */}
+                            </TabPane>
                             <TabPane tab={<span><UserOutlined />Trang cá nhân</span>} key="2" active>
                                 <Profile dependentInfo={null} createNew={false} />
                             </TabPane>

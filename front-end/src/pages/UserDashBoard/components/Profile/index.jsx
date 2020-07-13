@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { useHistory } from "react-router-dom";
+import { useHistory, Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { useForm, Controller, ErrorMessage } from "react-hook-form";
 import { getUserProfile, editUserProfile, editAvatar, resetUploadStatus } from '../../../../redux/user';
@@ -15,19 +15,20 @@ import { Modal, message, Spin, Progress } from 'antd';
 import { EditTwoTone, PictureTwoTone, LoadingOutlined } from '@ant-design/icons';
 import vi from 'date-fns/locale/vi'
 
+import DefaultAvatar from '../../../../assest/image/hhs-default_avatar.jpg';
 import './style.css';
-import DefaultAvatar from '../../../../assest/image/hhs-default_avatar.jpg'
 
 const Profile = (props) => {
     const loadingIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
     const history = useHistory();
     const dispatch = useDispatch();
     const { isLoad } = useSelector(state => state.ui);
+    const token = useSelector(state => state.auth.token);
+    const { currentUser } = useSelector(state => state.user);
     const userProfile = useSelector(state => state.user.userProfile);
     const uploadStatus = useSelector(state => state.user.uploadStatus);
     const createStatus = useSelector(state => state.patient.createStatus);
-    const { currentUser } = useSelector(state => state.user);
-    const token = useSelector(state => state.auth.token);
+    const progress = useSelector(state => state.patient.packageProgress);
 
     let dependentInfo = props.dependentInfo;
     // const [dependentInfo, setDependentInfo] = useState(props.dependentInfo)
@@ -174,6 +175,29 @@ const Profile = (props) => {
             history.push("/login");
         }
     }
+
+    const renderProgress = progress?.map((packages) =>
+        <div key={packages.id} className="each-package">
+            <div className="each-package-detail each-package-detail-patient">{packages.patient_name}</div>
+            <div className="each-package-detail"><span>Bác sĩ:</span> <Link to={"/doctor/" + packages.doctor_id} target='_blank'>{packages.doctor_name}</Link></div>
+            <div className="each-package-progress">
+                <div className="each-package-detail">Tiến độ gói dịch vụ:</div>
+                {packages.num_done && packages.num_total
+                    // ? <Progress percent={Math.round((packages.num_done / packages.num_total * 100 + Number.EPSILON) * 100) / 100} status="active" format={(progress) => progress + "%"} />
+                    ? <Progress percent={75} status="active" />
+                    : <Progress percent={100} status="exception" />
+                }
+                <div className="package-end-detail">
+                    <div className="convert-progress">{packages.num_done === packages.num_total ? "Đã hoàn thành" : `Hoàn thành ${packages.num_done / packages.num_total} số buổi`}</div>
+                    <div className="package-show-more"><Link to={'/package/' + packages.id} target='_blank'>Chi tiết</Link></div>
+                </div>
+            </div>
+        </div>
+    );
+
+    useEffect(() => {
+        console.log(progress)
+    }, [progress])
 
     useEffect(() => {
         if (!dependentInfo) {
@@ -456,18 +480,17 @@ const Profile = (props) => {
                 </form>
             </div>
 
-            <div className="profile-progress-header">Tiến độ các gói gần đây</div>
-            <div className="profile-progress">
-                <div className="each-package">
-                    <Progress percent={66.67} status="active" format={() => '2/3'} />
-                </div>
-                <div className="each-package">
-                    <Progress percent={66.67} status="active"  />
-                </div>
-                <div className="each-package">
-                    <Progress percent={66.67} status="active" format={(progress) => progress}/>
-                </div>
-            </div>
+            {dependentInfo || createNew ?
+                ""
+                : <>
+                    <div className="profile-progress-header">Tiến độ các gói gần đây</div>
+                    <div className="profile-progress">
+                        {renderProgress}
+                    </div>
+                </>
+            }
+
+
 
             {/* Chart for health detail */}
             <div className="profile-chart">Component Chart info (for each patient with props contain: patient_id)</div>

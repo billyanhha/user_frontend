@@ -119,31 +119,38 @@ const UserPackage = () => {
     const renderPackageStatus = Object.keys(status).map((value, index) => {
         return (
             <TabPane tab={status[value].msg} key={status[value].id}>
-                <Search
-                    size="large"
-                    defaultValue={searchText}
-                    className="package-search"
-                    placeholder="Search theo tên bác sĩ"
-                    onChange={onSerchDebounce}
-                />
-                <CustomerPackage />
-                {
-                    !_.isEmpty(userPackage)
-                    && (
-                        <Pagination
-                            onChange={onPageNumberChange}
-                            current={curPage}
-                            pageSize={3}
-                            total={userPackage[0]?.full_count} showSizeChanger={false} />
-                    )
-                }
+                <div className="package-main-wrapper">
+                    <Search
+                        size="large"
+                        defaultValue={searchText}
+                        className="package-search"
+                        placeholder="Tìm kiếm theo tên bác sĩ"
+                        onChange={onSerchDebounce}
+                    />
+                    <CustomerPackage />
+                    {
+                        !_.isEmpty(userPackage)
+                        && (
+                            <div className="package-pagination">
+                                <Pagination
+                                    onChange={onPageNumberChange}
+                                    current={curPage}
+                                    pageSize={3}
+                                    style={{ color: '#00bc9a', borderColor: '#00bc9a' }}
+                                    total={userPackage[0]?.full_count} showSizeChanger={false}
+                                />
+                            </div>
+
+                        )
+                    }
+                </div>
             </TabPane>
         )
     })
 
     return (
         <div className="userPackage">
-            Lọc gói theo - <Dropdown overlay={menu}>
+            Lọc gói theo: <Dropdown overlay={menu}>
                 <Button>
                     {getPatientByID().fullname}  <DownOutlined />
                 </Button>
