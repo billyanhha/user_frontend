@@ -8,7 +8,8 @@ import { SAVE_DOCTOR_FOR_HOME,
     NEXT_QUERY_DOCTOR_SUCCESSFUL, 
     CLEAR_DOCTOR_LOGIN_INFO,
     GET_DOCTOR_LOGIN_SUCCESSFUL,
-    GET_DOCTOR_LOGIN} from "./action"
+    GET_DOCTOR_LOGIN,
+} from "./action"
 
 export const getDoctorForHome = () => {    
     return {
@@ -51,10 +52,10 @@ export const nextQueryDoctorSuccessful = (doctors) => {
     }
 }
 
-export const getDoctorDetail = (id) => {    
+export const getDoctorDetail = (data) => {    
     return {
         type: GET_DOCTOR_DETAIL,
-        id
+        data
     }
 }
 
@@ -86,10 +87,6 @@ export const getDoctorLoginSuccessful = (currentDoctor) => {
         currentDoctor
     }
 }
-
-
-
-
 
 
 

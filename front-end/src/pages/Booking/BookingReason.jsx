@@ -8,6 +8,7 @@ import AsyncPaginate from "react-select-async-paginate";
 import userService from '../../service/userService';
 import _ from "lodash"
 import { message } from "antd"
+import AddressGoogleMap from '../AddressGoogleMap';
 
 const BookingReason = (props) => {
 
@@ -144,7 +145,9 @@ const BookingReason = (props) => {
                             </form>
                         </div>
                     </div>
-                    <img src={bookingImage} className="booking-introduction-image" />
+                    <div className="booking-introduction-image">
+                        <AddressGoogleMap />
+                    </div>
                 </div>
             </div>
         </Animation>

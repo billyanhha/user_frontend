@@ -5,6 +5,7 @@ import { useForm, Controller, ErrorMessage } from "react-hook-form";
 import { getUserProfile, editUserProfile, editAvatar, resetUploadStatus } from '../../../../redux/user';
 import { createDependent, getPackageProgress } from '../../../../redux/patient';
 import relationship from '../../../../configs/relationship'
+import ChartCurrentHealth from '../ChartCurrentHealth';
 // import { useDropzone } from 'react-dropzone';
 // import Dropzone from 'react-dropzone-uploader'
 import moment from 'moment';
@@ -489,10 +490,10 @@ const Profile = (props) => {
                 </>
             }
 
-
-
             {/* Chart for health detail */}
-            <div className="profile-chart">Component Chart info (for each patient with props contain: patient_id)</div>
+            <div className="profile-chart">
+                <ChartCurrentHealth patient_id={userProfile?.id} />
+            </div>
         </div>
     )
 }

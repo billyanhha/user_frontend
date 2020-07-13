@@ -41,4 +41,18 @@ patientService.getPackageProgress = (token, customerID) => new Promise((resolve,
         .catch(err => reject(err))
 });
 
+
+patientService.getCurrentHealth = (token, patientID) => new Promise((resolve, reject) => {
+    const api = `/api/patient/${patientID}/current-health`;
+    axios.get(api, {
+        headers: {
+            Authorization: "Bearer " + token
+        }
+    })
+        .then(result => {
+            resolve(result.data)
+        })
+        .catch(err => reject(err))
+});
+
 export default patientService;
