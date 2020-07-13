@@ -35,7 +35,7 @@
 
 .chart-content-div{
     background: #fff;
-    justify-content: center;
+    justify-content: space-between;
     display: flex;
 }
 

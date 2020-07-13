@@ -19,11 +19,12 @@ justify-content: center;
 }
 
 .booking-introduction-image{
-    width: 50%;
+    width: 62%;
+    margin-left: 2%;
 }
 
 .booking-introduction-left{
-    width: 50%;
+    width: 35%;
 
 }
 

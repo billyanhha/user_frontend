@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import status from '../../../../configs/appointment_status';
 import { Tabs, Spin } from 'antd';
 import Chart from 'react-apexcharts';
+import moment from 'moment';
 import { getCurrentHealth } from '../../../../redux/patient/index';
 import { HeartOutlined, LineChartOutlined, ClockCircleOutlined } from '@ant-design/icons';
 
@@ -35,6 +36,9 @@ const ChartCurrentHealth = (props) => {
         dispatch(getCurrentHealth(token, props.patient_id));
     }, []);
 
+    const handleCreated_at = (value) => {
+        return moment(value).format('DD-MM-YYYY HH:mm');
+    }
 
     useEffect(() => {
         let systolic = [];
@@ -43,6 +47,8 @@ const ChartCurrentHealth = (props) => {
         let pulse = [];
         let length = 0;
         let data = [];
+
+        let labels = [];
 
         //Only get 4 newest
         if(currentHealth?.result?.length > 4){
@@ -59,6 +65,13 @@ const ChartCurrentHealth = (props) => {
             return appointment;
         });
 
+        labels = data?.map((appointment, key) => {
+            let updated_at =  handleCreated_at(appointment?.updated_at);
+
+            return updated_at;
+        });
+
+        console.log(labels);
 
         setSystolic(systolic);
         setDiastolic(diastolic);
@@ -67,7 +80,7 @@ const ChartCurrentHealth = (props) => {
         setLength(length);
 
         let series1 = [{
-            name: 'Systolic',
+            name: 'Huyết áp tâm thu',
             data: systolic
         }];
         setSeries1(series1);
@@ -86,6 +99,7 @@ const ChartCurrentHealth = (props) => {
                     show: false
                 },
             },
+            
             grid: {
                 show: true,
                 borderColor: '#90A4AE',
@@ -142,7 +156,7 @@ const ChartCurrentHealth = (props) => {
         setOptions1(optionsTest1);
 
         let series2 = [{
-            name: 'Diastolic',
+            name: 'Huyết áp tâm trương',
             data: diastolic
         }];
         setSeries2(series2);
@@ -161,6 +175,7 @@ const ChartCurrentHealth = (props) => {
                     show: false
                 },
             },
+            labels: labels,
             grid: {
                 show: true,
                 borderColor: '#90A4AE',
@@ -270,7 +285,7 @@ const ChartCurrentHealth = (props) => {
                                 <div className="temperature-name-div">Nhiệt độ</div>
                                 <div className="temperature-icon-div"><ClockCircleOutlined /></div>
                             </div>
-                            <div className="temperature-data-div">{temperature[length - 1]}</div><span>kgs</span>
+                            <div className="temperature-data-div">{temperature[length - 1]}</div><span> Độ C</span>
                         </div>
 
                     </div>
