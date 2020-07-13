@@ -44,7 +44,7 @@ const DetailDoctor = (props) => {
         return (
             <Timeline.Item key={value.id}>{value?.content}</Timeline.Item>
         )
-    });
+    })
 
     const renderRating = doctorDetail?.ratings?.map((value, index) => {
         return (
@@ -192,12 +192,12 @@ const DetailDoctor = (props) => {
                         {renderRating}
                         <br/>
                         {
-                            doctorDetail?.ratings?.length &&
+                            doctorDetail?.ratings?.length ?
                             <Pagination
                                 onChange={onPageNumberChange}
                                 current={currentPage}
                                 pageSize={3}
-                                total={doctorDetail?.ratings?.length} showSizeChanger={false} />
+                                total={doctorDetail?.ratings?.length} showSizeChanger={false} /> : ''
                         }
 
                     </div>
