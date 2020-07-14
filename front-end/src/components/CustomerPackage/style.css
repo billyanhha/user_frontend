@@ -7,6 +7,11 @@
     padding: 20px 5px;
 }
 
+.package-bad-customer {
+    font-size: 1.2rem;
+    text-align: center;
+}
+
 .cp-each-package {
     width: 100%;
     padding: 20px;
@@ -26,7 +31,8 @@
 .cp-each-package:hover .cp-package-info .create-date {
     opacity: 0.8;
 }
-.cp-each-package:hover .cp-indentify .cp-describe  {
+
+.cp-each-package:hover .cp-indentify .cp-describe {
     opacity: 1;
 }
 

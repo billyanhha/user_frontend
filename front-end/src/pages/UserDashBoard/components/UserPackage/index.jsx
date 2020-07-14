@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import "./style.css";
 import { Menu, Dropdown, Button, Tabs, Pagination } from 'antd';
 import { DownOutlined } from '@ant-design/icons';
 import { useSelector, useDispatch } from 'react-redux';
@@ -8,6 +7,8 @@ import packageStatus from "../../../../configs/packageStatus"
 import CustomerPackage from "../../../../components/CustomerPackage"
 import { Input } from 'antd';
 import _ from "lodash"
+
+import "./style.css";
 
 const { Search } = Input;
 

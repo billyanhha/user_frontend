@@ -38,11 +38,11 @@ const UserDashBoard = () => {
                     <div className="dashboard-wrapper-tab">
                         {/* destroyInactiveTabPane is neccessary */}
                         <Tabs destroyInactiveTabPane>
-                            {/* <TabPane tab={<span><HeartOutlined />Các gói điều dưỡng</span>} key="1">
+                            <TabPane tab={<span><HeartOutlined />Các gói điều dưỡng</span>} key="1">
                                 <div className="dashboard-component">
                                     <UserPackage />
                                 </div>
-                            </TabPane> */}
+                            </TabPane>
                             <TabPane tab={<span><UserOutlined />Trang cá nhân</span>} key="2" active>
                                 <Profile dependentInfo={null} createNew={false} />
                             </TabPane>

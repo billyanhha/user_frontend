@@ -29,6 +29,11 @@ body {
     color: #00BC9A !important;
 }
 
+.reject-color {
+    color: #ff6347 !important;
+    /* tomato */
+}
+
 .default-div {
     display: flex;
     flex-direction: column;

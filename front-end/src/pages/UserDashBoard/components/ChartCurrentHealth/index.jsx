@@ -1,13 +1,9 @@
 import React, { useState, useEffect, Component } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import status from '../../../../configs/appointment_status';
-import { Tabs, Spin } from 'antd';
 import Chart from 'react-apexcharts';
 import moment from 'moment';
 import { getCurrentHealth } from '../../../../redux/patient/index';
-import Icon from '@ant-design/icons';
 import { ExclamationOutlined, HeartTwoTone, HeartOutlined, LineChartOutlined, ClockCircleOutlined, FireTwoTone } from '@ant-design/icons';
-import TemperatureIcon from '../../../../assest/image/temperature.svg'
 import './style.css';
 
 const ChartCurrentHealth = (props) => {
@@ -28,8 +24,6 @@ const ChartCurrentHealth = (props) => {
     const [optionsData1, setOptions1] = useState({});
     const [optionsData2, setOptions2] = useState({});
 
-    // console.log(props.patient_id);
-    // console.log(currentHealth);
     useEffect(() => {
         dispatch(getCurrentHealth(token, props.patient_id));
     }, []);

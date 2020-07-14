@@ -110,7 +110,7 @@ const CustomerPackage = (props) => {
                     {/* <div className="cp-indentify-title">Thông tin gói</div>
                     <div>Dịch vụ: <span>Chưa lựa chọn dịch vụ</span></div> */}
                     <div>SĐT đăng kí: <span>{value?.phone}</span></div>
-                    <div className="cp-package-info-status">Tình trạng: <span className="primary-color">{value?.status_name}</span></div>
+                    <div className="cp-package-info-status">Tình trạng: <span className={value?.status_name.includes('từ chối') ? 'reject-color' : 'primary-color'}>{value?.status_name}</span></div>
                 </div>
 
                 <div className="cp-indentify cp-package-info">
@@ -124,7 +124,7 @@ const CustomerPackage = (props) => {
                 {value?.doctor_name
                     ?
                     <div className="cp-indentify cp-indentify-doctor">
-                        <div className="cp-indentify-title cp-describe">Người điều dưỡng</div>
+                        {/* <div className="cp-indentify-title cp-describe">Người điều dưỡng</div> */}
                         <div className="cp-info">
                             <div>
                                 {value?.doctor_avatarurl ?
@@ -153,10 +153,9 @@ const CustomerPackage = (props) => {
                 {/* <div className="hhs-border-delivery "></div> */}
                 {renderCustomerPackage}
             </div>
-            {_.isEmpty(userPackage) && <div>
-                <br />
-                Hiện tại không có gói dịch vụ
-                </div>}
+            {_.isEmpty(userPackage) &&
+                <div className="package-bad-customer primary-color">Hiện tại không có gói nào</div>
+            }
             <Modal
                 visible={visible}
                 title={"Đánh giá " + currentPacakge?.doctor_name}
