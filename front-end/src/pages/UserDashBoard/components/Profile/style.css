@@ -114,7 +114,6 @@
   padding: 20px;
   width: 100%;
   min-height: 20vh;
-  /* background-color: #f0f0f0; */
   border-top: 1px solid #dadada;
 }
 
@@ -324,6 +323,14 @@
   margin: 20px 0;
 }
 
+@media (max-width: 640px) {
+  .profile-progress-header {
+    padding-top: 20px;
+    padding-left: 20px;
+    border-top: 1px solid #f0f0f0;
+  }
+}
+
 .profile-progress {
   width: 100%;
   height: -webkit-fit-content;
@@ -350,6 +357,7 @@
   overflow: hidden;
   -webkit-transition: 0.2s ease-in;
   transition: 0.2s ease-in;
+  cursor: default;
 }
 
 .profile-progress .each-package:hover {

@@ -64,7 +64,6 @@ function* watchGetCurrentHealth(action) {
         yield put(openLoading());
         if (action) {
             const result = yield patientService.getCurrentHealth(action?.token, action?.patientID);
-            console.log('current health:',result);
             if (!_.isEmpty(result)) {
                 yield put(getCurrentHealthSuccessful(result));
             }

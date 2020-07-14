@@ -184,20 +184,16 @@ const Profile = (props) => {
             <div className="each-package-progress">
                 <div className="each-package-detail">Tiến độ gói dịch vụ:</div>
                 {packages.num_done && packages.num_pending
-                    ? <Progress percent={Math.round((packages.num_done / packages.num_pending * 100 + Number.EPSILON) * 100) / 100} status="active" format={(progress) => progress + "%"} />
+                    ? <Progress percent={Math.round((packages.num_pending / packages.num_done * 100 + Number.EPSILON) * 100) / 100} status="active" format={(progress) => progress + "%"} />
                     : <Progress percent={100} status="exception" />
                 }
                 <div className="package-end-detail">
-                    <div className="convert-progress">{packages.num_done === packages.num_pending ? "Đã hoàn thành" : packages.num_done === '0' ? "Chưa ghi nhận buổi điều dưỡng hoàn thành" : `Hoàn thành ${packages.num_done / packages.num_pending} số buổi`}</div>
+                    <div className="convert-progress">{packages.num_done === packages.num_pending && packages.num_done !== '0' ? "Đã hoàn thành" : packages.num_pending === '0' ? "Chưa ghi nhận hoàn thành" : `Hoàn thành ${packages.num_pending / packages.num_done} số buổi`}</div>
                     <div className="package-show-more"><Link to={'/package/' + packages.id} target='_blank'>Chi tiết</Link></div>
                 </div>
             </div>
         </div>
     );
-
-    useEffect(() => {
-        console.log(progress)
-    }, [progress])
 
     useEffect(() => {
         if (!dependentInfo) {
@@ -491,10 +487,14 @@ const Profile = (props) => {
             }
 
             {/* Chart for health detail */}
-            <div className="profile-chart">
-                <ChartCurrentHealth patient_id={userProfile?.id} />
-            </div>
-        </div>
+            {createNew ? "" : profileInfo ?
+                < div className="profile-chart">
+                    <ChartCurrentHealth patient_id={profileInfo?.id} />
+                </div>
+                : ''
+            }
+
+        </div >
     )
 }
 

@@ -1,13 +1,14 @@
 import React, { useState, useEffect, Component } from 'react';
-import './style.css';
-import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
 import status from '../../../../configs/appointment_status';
 import { Tabs, Spin } from 'antd';
 import Chart from 'react-apexcharts';
 import moment from 'moment';
 import { getCurrentHealth } from '../../../../redux/patient/index';
-import { HeartOutlined, LineChartOutlined, ClockCircleOutlined } from '@ant-design/icons';
+import Icon from '@ant-design/icons';
+import { ExclamationOutlined, HeartTwoTone, HeartOutlined, LineChartOutlined, ClockCircleOutlined, FireTwoTone } from '@ant-design/icons';
+import TemperatureIcon from '../../../../assest/image/temperature.svg'
+import './style.css';
 
 const ChartCurrentHealth = (props) => {
 
@@ -21,14 +22,11 @@ const ChartCurrentHealth = (props) => {
     const token = useSelector(state => state.auth.token);
     const { currentHealth } = useSelector(state => state.patient);
 
-
-
     const [seriesData1, setSeries1] = useState([]);
     const [seriesData2, setSeries2] = useState([]);
 
     const [optionsData1, setOptions1] = useState({});
     const [optionsData2, setOptions2] = useState({});
-
 
     // console.log(props.patient_id);
     // console.log(currentHealth);
@@ -37,7 +35,7 @@ const ChartCurrentHealth = (props) => {
     }, []);
 
     const handleCreated_at = (value) => {
-        return moment(value).format('DD-MM-YYYY HH:mm');
+        return moment(value).format('DD/MM/YYYY HH:mm');
     }
 
     useEffect(() => {
@@ -51,9 +49,9 @@ const ChartCurrentHealth = (props) => {
         let labels = [];
 
         //Only get 4 newest
-        if(currentHealth?.result?.length > 4){
-            data = currentHealth?.result?.slice(currentHealth?.result?.length-4,currentHealth?.result?.length);
-        }else{
+        if (currentHealth?.result?.length > 4) {
+            data = currentHealth?.result?.slice(currentHealth?.result?.length - 4, currentHealth?.result?.length);
+        } else {
             data = currentHealth?.result;
         }
         let initialize = data?.filter((appointment, key) => {
@@ -66,12 +64,10 @@ const ChartCurrentHealth = (props) => {
         });
 
         labels = data?.map((appointment, key) => {
-            let updated_at =  handleCreated_at(appointment?.updated_at);
+            let updated_at = handleCreated_at(appointment?.updated_at);
 
             return updated_at;
         });
-
-        console.log(labels);
 
         setSystolic(systolic);
         setDiastolic(diastolic);
@@ -99,7 +95,7 @@ const ChartCurrentHealth = (props) => {
                     show: false
                 },
             },
-            
+
             grid: {
                 show: true,
                 borderColor: '#90A4AE',
@@ -143,10 +139,10 @@ const ChartCurrentHealth = (props) => {
                     minWidth: 0,
                     maxWidth: 160,
                     style: {
-                        colors: '#e4e2e2',
-                        fontSize: '15px',
-                        fontFamily: 'Helvetica, Arial, sans-serif',
-                        fontWeight: 1000,
+                        colors: '#000',
+                        fontSize: '10px',
+                        fontFamily: 'Open Sans, sans-serif',
+                        fontWeight: 500,
                         cssClass: 'apexcharts-yaxis-label',
                     },
                 }
@@ -219,7 +215,7 @@ const ChartCurrentHealth = (props) => {
                     minWidth: 0,
                     maxWidth: 160,
                     style: {
-                        colors: '#e4e2e2',
+                        colors: '#dadada',
                         fontSize: '15px',
                         fontFamily: 'Helvetica, Arial, sans-serif',
                         fontWeight: 1000,
@@ -234,65 +230,63 @@ const ChartCurrentHealth = (props) => {
     }, [currentHealth]);
 
     return (
-        <div >
-            <div className="chart-content-div">
-                <div className="systolic-div">
-                    <div className="systolic-content-div">
-                        <div style={{ display: 'flex' }}>
-                            <div className="systolic-name-div">Huyết áp tâm thu</div>
-                            <div className="systolic-icon-div"><HeartOutlined /></div>
-                        </div>
-                        <div className="systolic-data-div">{systolic[length - 1]}</div><span>mmHg</span>
+        <div className="chart-profile-content">
+            <div className="chart-wrapper">
+                <div>
+                    <div className="chart-profile-header">
+                        <div className="chart-profile-title">Huyết áp tâm thu</div>
+                        <div className="chart-profile-icon"><HeartOutlined /></div>
                     </div>
+                    <div className="chart-profile-data">{systolic[length - 1]}<span> mmHg</span></div>
+                </div>
+                <div className="chart-profile">
                     <Chart
                         options={optionsData2}
                         series={seriesData1}
                         type="line"
-                        height="300px"
-                        width='75%'
+                        height="100%"
+                        width="90%"
                     />
                 </div>
-                <div className="diastolic-div">
-                    <div className="diastolic-content-div">
-                        <div style={{ display: 'flex' }}>
-                            <div className="diastolic-name-div">Huyết áp tâm trương</div>
-                            <div className="diastolic-icon-div"><HeartOutlined /></div>
-                        </div>
-                        <div className="diastolic-data-div">{diastolic[length - 1]}</div><span>mmHg</span>
+            </div>
+            <div className="chart-wrapper">
+                <div>
+                    <div className="chart-profile-header">
+                        <div className="chart-profile-title">Huyết áp tâm trương</div>
+                        <div className="chart-profile-icon"><HeartTwoTone twoToneColor="#ff0000" /></div>
                     </div>
+                    <div className="chart-profile-data">{diastolic[length - 1]}<span> mmHg</span></div>
+                </div>
+                <div className="chart-profile">
                     <Chart
                         options={optionsData2}
                         series={seriesData2}
                         type="line"
-                        height="300px"
-                        width='75%'
+                        height="100%"
+                        width="90%"
                     />
                 </div>
-                <div className="pulse-tem-div">
-                    <div className="pulse-div">
-                        <div className="pulse-content-div">
-                            <div style={{ display: 'flex' }}>
-                                <div className="pulse-name-div">Nhịp tim</div>
-                                <div className="pulse-icon-div"><LineChartOutlined /></div>
-                            </div>
-                            <div className="pulse-data-div">{pulse[length - 1]}</div><span>BPM</span>
-                        </div>
-
+            </div>
+            <div className="pulse-tem-div">
+                <div className="health-index-wrapper">
+                    <div className="chart-profile-header">
+                        <div className="chart-profile-title">Nhịp tim</div>
+                        <div className="chart-profile-icon"><LineChartOutlined /></div>
                     </div>
-                    <div className="temperature-div">
-                        <div className="temperature-content-div">
-                            <div style={{ display: 'flex' }}>
-                                <div className="temperature-name-div">Nhiệt độ</div>
-                                <div className="temperature-icon-div"><ClockCircleOutlined /></div>
-                            </div>
-                            <div className="temperature-data-div">{temperature[length - 1]}</div><span> Độ C</span>
-                        </div>
-
+                    <div className="chart-profile-data">{pulse[length - 1]}<span> BPM</span></div>
+                </div>
+                <span className="health-index-split"></span>
+                <div className="health-index-wrapper toggle-temperature">
+                    <div className="chart-profile-header">
+                        <div className="health-index-title">Nhiệt độ</div>
+                        {/* <div className="chart-profile-icon"><FireTwoTone  twoToneColor="#eb4034" /></div> */}
+                        <div className="chart-profile-icon"><ExclamationOutlined /></div>
+                        {/* <div className="chart-profile-icon-custom">🌡</div> */}
                     </div>
+                    <div className="chart-profile-data">{temperature[length - 1]}<span> °C</span></div>
+                    <div className="chart-profile-data-convert">{Math.round((temperature[length - 1] * 9 / 5 + 32 + Number.EPSILON) * 100) / 100}<span> °F</span><br />{Math.round((temperature[length - 1] + 273.15 + Number.EPSILON) * 100) / 100}<span> °K</span></div>
                 </div>
             </div>
-
-
         </div>
     );
 };

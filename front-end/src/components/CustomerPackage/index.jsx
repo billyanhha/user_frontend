@@ -94,7 +94,6 @@ const CustomerPackage = (props) => {
     const renderCustomerPackage = userPackage?.map(value => {
         return (
             <div key={value?.package_id} className="cp-each-package">
-                {console.log(value)}
                 {/* <div className="cp-each-package-detail"> */}
                 <div className="cp-info cp-indentify-patient">
                     <div>
