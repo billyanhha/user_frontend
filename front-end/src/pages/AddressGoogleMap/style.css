@@ -8,7 +8,7 @@ h1 {
     padding: 0;
   }
   
-  .search {
+  /* .search {
     position: absolute;
     top: 1rem;
     left: 50%;
@@ -23,7 +23,7 @@ h1 {
     font-size: 20px;
     width: 500px;
     border-radius: 30px;
-  }
+  } */
   
   .locate {
     position: absolute;

@@ -6,15 +6,23 @@ import { preStep, nextStep, saveBookingDoctor } from '../../redux/booking';
 import AsyncPaginate from "react-select-async-paginate";
 import doctorService from '../../service/doctorService';
 import { Rate, Button } from 'antd';
-import AddressGoogleMap from '../AddressGoogleMap';
+import DirectionMap from '../AddressGoogleMap/DirectionMap';
+import Geocode from "react-geocode";
+
+Geocode.setApiKey("AIzaSyCI6EYzveNjHPdKPtWuGFNhblfYECyGxvw");
+Geocode.enableDebug();
 
 const BookingDoctor = () => {
 
-    const { currentStep, doctorInfo } = useSelector(state => state.booking);
+    const { currentStep, doctorInfo,infos } = useSelector(state => state.booking);
     const [doctor, setdoctor] = useState({});
+    const [currentDoctor, setCurrentDoctor] = useState({});
+    const [ready, setReady] = useState(false);
     const dispatch = useDispatch();
 
 
+    console.log('patient Address:',infos?.position);
+    console.log('docotr address:',currentDoctor)
 
     useEffect(() => {
 
@@ -54,7 +62,19 @@ const BookingDoctor = () => {
     }
 
     const onChange = (value) => {
+        Geocode.fromAddress(value?.address).then(
+            response => {
+                const { lat, lng } = response.results[0].geometry.location;
+                console.log({lat,lng});
+                setCurrentDoctor({lat,lng});
+            },
+            error => {
+                console.error(error);
+            }
+        );
+        setReady(true);
         setdoctor(value)
+        
     }
 
     const clearDoc = () => {
@@ -140,10 +160,10 @@ const BookingDoctor = () => {
                                 <button onClick={prev} className="submit-btn-outline">Quay lại</button>
                             </div>
                         </div>
-                        <div>
-                            <div className="booking-introduction-image">
-                                <AddressGoogleMap />
-                            </div>
+
+                        <div className="booking-introduction-image">
+
+                           
                         </div>
                     </div>
                 </div>

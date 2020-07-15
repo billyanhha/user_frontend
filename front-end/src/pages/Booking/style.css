@@ -194,7 +194,22 @@ justify-content: center;
         margin-left: 0 !important;
         margin-top: 20px!important;
     }
-
-
 }
 
+.search-map-div{
+    background: #fff;
+    width: 100%;
+    margin: 20px 0px;
+}
+.combobox-map-div{
+    background: #fff;
+    width: 100%;
+}
+
+.input-map-div{
+    background-color: #fff;
+    width: 100%;
+    border: none;
+    border-bottom: 1px solid #DADADA;
+    transition: all .2s ease-in-out;
+}
