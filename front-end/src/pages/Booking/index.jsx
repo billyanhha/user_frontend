@@ -24,7 +24,7 @@ const libraries = ["geometry,drawing,places"];
 const Booking = () => {
 
     const { currentStep } = useSelector(state => state.booking);
-    const steps = ["Các thông tin cơ bản", "Chọn bác sĩ", "Chọn lịch", "Xác nhận"];
+    const steps = ["Các thông tin cơ bản", "Chọn lịch", "Xác nhận"];
     const dispatch = useDispatch();
 
     const mapRef = useRef();
@@ -60,7 +60,7 @@ const Booking = () => {
                 </div>
                 <Fragment>
                     <BookingReason mapRef={mapRef} onMapLoad={onMapLoad}/>
-                    <BookingDoctor />
+                    {/* <BookingDoctor /> */}
                     <BookingCalendar />
                     <BookingConfirm />
                 </Fragment>

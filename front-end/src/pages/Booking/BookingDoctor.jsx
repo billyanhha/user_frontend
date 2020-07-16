@@ -14,15 +14,12 @@ Geocode.enableDebug();
 
 const BookingDoctor = () => {
 
-    const { currentStep, doctorInfo,infos } = useSelector(state => state.booking);
+    const { currentStep, doctorInfo, } = useSelector(state => state.booking);
     const [doctor, setdoctor] = useState({});
     const [currentDoctor, setCurrentDoctor] = useState({});
     const [ready, setReady] = useState(false);
     const dispatch = useDispatch();
 
-
-    console.log('patient Address:',infos?.position);
-    console.log('docotr address:',currentDoctor)
 
     useEffect(() => {
 

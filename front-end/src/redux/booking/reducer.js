@@ -22,7 +22,6 @@ export const bookingReducer = (state = initialState, action) => {
             return state
         }
         case SAVE_BOOKING_INFO : {
-            console.log('action ne',action.infos);
             state = {...state , infos: action.infos};
             return state
         }

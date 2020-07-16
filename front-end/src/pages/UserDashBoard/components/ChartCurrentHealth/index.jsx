@@ -47,9 +47,9 @@ const ChartCurrentHealth = (props) => {
         if (currentHealth?.result?.length > 4) {
             data = currentHealth?.result?.slice(currentHealth?.result?.length - 4, currentHealth?.result?.length);
 
-        //     setIsNoData(false);
-        // } else if (currentHealth?.result?.length < 1) {
-        //     setIsNoData(true);
+            setIsNoData(false);
+        } else if (currentHealth?.result?.length < 1) {
+            setIsNoData(true);
 
         } else {
             data = currentHealth?.result;
@@ -195,6 +195,9 @@ const ChartCurrentHealth = (props) => {
                 },
                 axisBorder: {
                     show: false
+                },
+                tooltip:{
+                    enabled:false
                 }
             },
             colors: ['#8d0491'],
@@ -224,7 +227,22 @@ const ChartCurrentHealth = (props) => {
                         cssClass: 'apexcharts-yaxis-label',
                     },
                 }
-            }
+            },
+            tooltip: {
+                fixed: {
+                  enabled: true,
+                  position: 'topLeft', // topRight, topLeft, bottomRight, bottomLeft
+                  offsetY: 30,
+                  offsetX: 60,
+                  x:{
+                      show: false
+                  },
+                  marker:{
+                      show:false
+                  },
+                  shared: false
+                },
+              }
 
         };
         setOptions2(optionsTest2);
@@ -233,130 +251,70 @@ const ChartCurrentHealth = (props) => {
 
     return (
 
-        // <div >
-        //     {!isNoData ?
-        //         <div className="chart-content-div">
-
-        //             <div className="systolic-div">
-        //                 <div className="systolic-content-div">
-        //                     <div style={{ display: 'flex' }}>
-        //                         <div className="systolic-name-div">Huyết áp tâm thu</div>
-        //                         <div className="systolic-icon-div"><HeartOutlined /></div>
-        //                     </div>
-        //                     <div className="systolic-data-div">{systolic[length - 1]}</div><span>mmHg</span>
-        //                 </div>
-        //                 <Chart
-        //                     options={optionsData2}
-        //                     series={seriesData1}
-        //                     type="line"
-        //                     height="300px"
-        //                     width='75%'
-        //                 />
-        //             </div>
-
-        //             <div className="diastolic-div">
-        //                 <div className="diastolic-content-div">
-        //                     <div style={{ display: 'flex' }}>
-        //                         <div className="diastolic-name-div">Huyết áp tâm trương</div>
-        //                         <div className="diastolic-icon-div"><HeartOutlined /></div>
-        //                     </div>
-        //                     <div className="diastolic-data-div">{diastolic[length - 1]}</div><span>mmHg</span>
-        //                 </div>
-        //                 <Chart
-        //                     options={optionsData2}
-        //                     series={seriesData2}
-        //                     type="line"
-        //                     height="300px"
-        //                     width='75%'
-        //                 />
-        //             </div>
-
-        //             <div className="pulse-tem-div">
-        //                 <div className="pulse-div">
-        //                     <div className="pulse-content-div">
-        //                         <div style={{ display: 'flex' }}>
-        //                             <div className="pulse-name-div">Nhịp tim</div>
-        //                             <div className="pulse-icon-div"><LineChartOutlined /></div>
-        //                         </div>
-        //                         <div className="pulse-data-div">{pulse[length - 1]}</div><span>BPM</span>
-        //                     </div>
-
-        //                 </div>
-        //                 <div className="temperature-div">
-        //                     <div className="temperature-content-div">
-        //                         <div style={{ display: 'flex' }}>
-        //                             <div className="temperature-name-div">Nhiệt độ</div>
-        //                             <div className="temperature-icon-div"><ClockCircleOutlined /></div>
-        //                         </div>
-        //                         <div className="temperature-data-div">{temperature[length - 1]}</div><span> Độ C</span>
-        //                     </div>
-
-        //                 </div>
-        //             </div>
-        //         </div> : 
-        //         <div>
-        //             <h2>Hiện tại, bạn đang chưa trong quá trình sử dụng dịch vụ. Xin vui lòng sử dụng đặt lịch!</h2>
-        //         </div>}
-
-
-
-        <div className="chart-profile-content">
-            <div className="chart-wrapper">
+        <div >
+            {!isNoData ?
+                <div className="chart-profile-content">
+                    <div className="chart-wrapper">
+                        <div>
+                            <div className="chart-profile-header">
+                                <div className="chart-profile-title">Huyết áp tâm thu</div>
+                                <div className="chart-profile-icon"><HeartOutlined /></div>
+                            </div>
+                            <div className="chart-profile-data">{systolic[length - 1]}<span> mmHg</span></div>
+                        </div>
+                        <div className="chart-profile">
+                            <Chart
+                                options={optionsData2}
+                                series={seriesData1}
+                                type="line"
+                                height="100%"
+                                width="90%"
+                            />
+                        </div>
+                    </div>
+                    <div className="chart-wrapper">
+                        <div>
+                            <div className="chart-profile-header">
+                                <div className="chart-profile-title">Huyết áp tâm trương</div>
+                                <div className="chart-profile-icon"><HeartTwoTone twoToneColor="#ff0000" /></div>
+                            </div>
+                            <div className="chart-profile-data">{diastolic[length - 1]}<span> mmHg</span></div>
+                        </div>
+                        <div className="chart-profile">
+                            <Chart
+                                options={optionsData2}
+                                series={seriesData2}
+                                type="line"
+                                height="100%"
+                                width="90%"
+                            />
+                        </div>
+                    </div>
+                    <div className="pulse-tem-div">
+                        <div className="health-index-wrapper">
+                            <div className="chart-profile-header">
+                                <div className="chart-profile-title">Nhịp tim</div>
+                                <div className="chart-profile-icon"><LineChartOutlined /></div>
+                            </div>
+                            <div className="chart-profile-data">{pulse[length - 1]}<span> BPM</span></div>
+                        </div>
+                        <span className="health-index-split"></span>
+                        <div className="health-index-wrapper toggle-temperature">
+                            <div className="chart-profile-header">
+                                <div className="health-index-title">Nhiệt độ</div>
+                                {/* <div className="chart-profile-icon"><FireTwoTone  twoToneColor="#eb4034" /></div> */}
+                                <div className="chart-profile-icon"><ExclamationOutlined /></div>
+                                {/* <div className="chart-profile-icon-custom">🌡</div> */}
+                            </div>
+                            <div className="chart-profile-data">{temperature[length - 1]}<span> °C</span></div>
+                            <div className="chart-profile-data-convert">{Math.round((temperature[length - 1] * 9 / 5 + 32 + Number.EPSILON) * 100) / 100}<span> °F</span><br />{Math.round((temperature[length - 1] + 273.15 + Number.EPSILON) * 100) / 100}<span> °K</span></div>
+                        </div>
+                    </div>
+                </div> :
                 <div>
-                    <div className="chart-profile-header">
-                        <div className="chart-profile-title">Huyết áp tâm thu</div>
-                        <div className="chart-profile-icon"><HeartOutlined /></div>
-                    </div>
-                    <div className="chart-profile-data">{systolic[length - 1]}<span> mmHg</span></div>
-                </div>
-                <div className="chart-profile">
-                    <Chart
-                        options={optionsData2}
-                        series={seriesData1}
-                        type="line"
-                        height="100%"
-                        width="90%"
-                    />
-                </div>
-            </div>
-            <div className="chart-wrapper">
-                <div>
-                    <div className="chart-profile-header">
-                        <div className="chart-profile-title">Huyết áp tâm trương</div>
-                        <div className="chart-profile-icon"><HeartTwoTone twoToneColor="#ff0000" /></div>
-                    </div>
-                    <div className="chart-profile-data">{diastolic[length - 1]}<span> mmHg</span></div>
-                </div>
-                <div className="chart-profile">
-                    <Chart
-                        options={optionsData2}
-                        series={seriesData2}
-                        type="line"
-                        height="100%"
-                        width="90%"
-                    />
-                </div>
-            </div>
-            <div className="pulse-tem-div">
-                <div className="health-index-wrapper">
-                    <div className="chart-profile-header">
-                        <div className="chart-profile-title">Nhịp tim</div>
-                        <div className="chart-profile-icon"><LineChartOutlined /></div>
-                    </div>
-                    <div className="chart-profile-data">{pulse[length - 1]}<span> BPM</span></div>
-                </div>
-                <span className="health-index-split"></span>
-                <div className="health-index-wrapper toggle-temperature">
-                    <div className="chart-profile-header">
-                        <div className="health-index-title">Nhiệt độ</div>
-                        {/* <div className="chart-profile-icon"><FireTwoTone  twoToneColor="#eb4034" /></div> */}
-                        <div className="chart-profile-icon"><ExclamationOutlined /></div>
-                        {/* <div className="chart-profile-icon-custom">🌡</div> */}
-                    </div>
-                    <div className="chart-profile-data">{temperature[length - 1]}<span> °C</span></div>
-                    <div className="chart-profile-data-convert">{Math.round((temperature[length - 1] * 9 / 5 + 32 + Number.EPSILON) * 100) / 100}<span> °F</span><br />{Math.round((temperature[length - 1] + 273.15 + Number.EPSILON) * 100) / 100}<span> °K</span></div>
-                </div>
-            </div>
+                    <h2>Hiện tại, bạn đang chưa trong quá trình sử dụng dịch vụ. Xin vui lòng sử dụng đặt lịch!</h2>
+                </div>}
+
         </div>
     );
 };

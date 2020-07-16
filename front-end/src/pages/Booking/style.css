@@ -24,7 +24,7 @@ justify-content: center;
 }
 
 .booking-introduction-left{
-    width: 35%;
+    width: 100%;
 }
 
 
@@ -212,4 +212,46 @@ justify-content: center;
     border: none;
     border-bottom: 1px solid #DADADA;
     transition: all .2s ease-in-out;
+}
+.locate {
+    position: absolute;
+    /* top: 1rem; */
+    background: none;
+    border: none;
+    z-index: 10;
+  }
+  .locate img {
+    width: 30px;
+    cursor: pointer;
+    border: none;
+  }
+  
+  .map-doctor-info-div{
+    width: 150px;
+    height: 200px;
+    text-align: center;
+  }
+  .map-doctor-info-div p{
+    font-size: 14px;
+    font-weight: 600;
+  }
+.map-doctor-image-div{
+  justify-content: center;
+}
+  .map-doctor-image-div img{
+    width: 125px;
+    height: 125px;
+  }
+
+.map-detail-div{
+  margin-top: 15px;
+}
+
+.locate-icon-div{
+    background: #fff;
+}
+
+.content-form-div{
+    background: #fff;
+    display: flex;
 }
