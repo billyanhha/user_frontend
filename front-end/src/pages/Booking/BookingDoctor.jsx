@@ -8,18 +8,19 @@ import doctorService from '../../service/doctorService';
 import { Rate, Button } from 'antd';
 import DirectionMap from '../AddressGoogleMap/DirectionMap';
 import Geocode from "react-geocode";
+import Map from './Map';
 
 Geocode.setApiKey("AIzaSyCI6EYzveNjHPdKPtWuGFNhblfYECyGxvw");
 Geocode.enableDebug();
 
-const BookingDoctor = () => {
+const BookingDoctor = (props) => {
 
-    const { currentStep, doctorInfo, } = useSelector(state => state.booking);
+    const { currentStep, doctorInfo, infos } = useSelector(state => state.booking);
     const [doctor, setdoctor] = useState({});
     const [currentDoctor, setCurrentDoctor] = useState({});
     const [ready, setReady] = useState(false);
+    const [visible, setVisible] = useState(false);
     const dispatch = useDispatch();
-
 
     useEffect(() => {
 
@@ -29,9 +30,38 @@ const BookingDoctor = () => {
 
     }, []);
 
+    const size = (obj) => {
+        var size = 0, key;
+        for (key in obj) {
+            if (obj.hasOwnProperty(key)) size++;
+        }
+        return size;
+    };
+
+    useEffect(()=>{
+        console.log(currentDoctor);
+        if(size(currentDoctor)>0){
+            setReady(true);
+            showModal();
+        }
+    },[currentDoctor]);
+
     if (currentStep !== 1) {
         return null;
     }
+
+    const showModal = () => {
+        setVisible(true);
+    };
+
+    const handleOk = e => {
+        setVisible(false)
+    };
+
+    const handleCancel = e => {
+        setVisible(false)
+    };
+
 
     const next = () => {
         dispatch(saveBookingDoctor(doctor));
@@ -62,21 +92,22 @@ const BookingDoctor = () => {
         Geocode.fromAddress(value?.address).then(
             response => {
                 const { lat, lng } = response.results[0].geometry.location;
-                console.log({lat,lng});
                 setCurrentDoctor({lat,lng});
             },
             error => {
                 console.error(error);
             }
         );
-        setReady(true);
-        setdoctor(value)
+        setdoctor(value);
+        
         
     }
 
     const clearDoc = () => {
-        setdoctor({})
+        setdoctor({});
+        
     }
+    
 
     const Option = (props) => {
         const option = { ...props?.data };
@@ -124,33 +155,43 @@ const BookingDoctor = () => {
             <div className="booking-contain">
                 <div className="booking-introduction">
                     <div className="booking-introduction-left">
-                        <div className="booking-step">
+                        <div className="doctor-booking-step">
                             <div className="booking-text">
                                 <span className="hightlight">2. </span> Chọn bác sĩ
                             </div>
-                            <div className="booking-guide">
-                                Bạn có thể chọn bác sĩ hoặc để chúng tôi chọn giúp bạn
-                            </div>
-                            <div className="search-doctor">
-                                <AsyncPaginate
-                                    loadOptions={loadOptions}
-                                    debounceTimeout={300}
-                                    value={{ fullname: doctor?.fullname ?? '', address: (doctor?.address ?? '') }}
-                                    components={{ Option }} // customize menu
-                                    additional={{
-                                        page: 1,
-                                    }}
-                                    placeholder={'Bác sĩ'}
-                                    getOptionLabel={({ fullname, address }) => fullname + "-" + address}
-                                    defaultOptions
-                                    cacheOptions
-                                    isClearable={true}
-                                    required
-                                    onChange={onChange}
-                                />
-                            </div>
-                            <div>
-                                {renderChooseDoctor}
+                            <div className="content-doctor-form-div">
+                                <div className="doctor-form-div">
+                                    <div className="booking-guide">
+                                        Bạn có thể chọn bác sĩ hoặc để chúng tôi chọn giúp bạn
+                                    </div>
+                                    <div className="search-doctor">
+                                        <AsyncPaginate
+                                            loadOptions={loadOptions}
+                                            debounceTimeout={300}
+                                            value={{ fullname: doctor?.fullname ?? '', address: (doctor?.address ?? '') }}
+                                            components={{ Option }} // customize menu
+                                            additional={{
+                                                page: 1,
+                                            }}
+                                            placeholder={'Bác sĩ'}
+                                            getOptionLabel={({ fullname, address }) => fullname + "-" + address}
+                                            defaultOptions
+                                            cacheOptions
+                                            isClearable={true}
+                                            required
+                                            onChange={onChange}
+                                        />
+                                    </div>
+
+                                    <div>
+                                        {renderChooseDoctor}
+                                    </div>
+
+                                </div>
+                                <div className="booking-introduction-image">
+                                    {ready && visible && <Map handleCancel={handleCancel} visible={visible} patientAddress={infos?.position} doctorAddress={currentDoctor} />}
+
+                                </div>
                             </div>
                             <div className="steps-action">
                                 <button onClick={next} className="submit-btn">Tiếp theo</button>
@@ -158,10 +199,7 @@ const BookingDoctor = () => {
                             </div>
                         </div>
 
-                        <div className="booking-introduction-image">
 
-                           
-                        </div>
                     </div>
                 </div>
             </div>
