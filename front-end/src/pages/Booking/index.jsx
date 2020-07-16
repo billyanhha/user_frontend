@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect } from 'react';
+import React, { Fragment, useEffect, useRef, useCallback } from 'react';
 import Navbar from '../../components/Navbar';
 import Footer from '../../components/Footer';
 import './style.css';
@@ -9,12 +9,32 @@ import BookingCalendar from './BookingCalendar';
 import BookingConfirm from './BookingConfirm';
 import { useSelector, useDispatch } from 'react-redux';
 import { nextStep, preStep } from '../../redux/booking';
+import {
+    useLoadScript,
+} from "@react-google-maps/api";
+import "@reach/combobox/styles.css";
+import Geocode from "react-geocode";
+
+
+Geocode.setApiKey("AIzaSyCI6EYzveNjHPdKPtWuGFNhblfYECyGxvw");
+Geocode.enableDebug();
+
+const libraries = ["geometry,drawing,places"];
 
 const Booking = () => {
 
     const { currentStep } = useSelector(state => state.booking);
     const steps = ["Các thông tin cơ bản", "Chọn bác sĩ", "Chọn lịch", "Xác nhận"];
     const dispatch = useDispatch();
+
+    const mapRef = useRef();
+    const onMapLoad = useCallback((map) => {
+        mapRef.current = map;
+    }, []);
+    const { isLoaded, loadError } = useLoadScript({
+        googleMapsApiKey: "AIzaSyCI6EYzveNjHPdKPtWuGFNhblfYECyGxvw",
+        libraries,
+    });
 
     useEffect(() => {
 
@@ -25,6 +45,10 @@ const Booking = () => {
     const renderStep = steps.map((value) => {
         return <Steps.Step key={value} title={value} />
     });
+
+
+    if (loadError) return "Error";
+    if (!isLoaded) return "Loading...";
     
     return (
         <div className="default-div">
@@ -36,7 +60,7 @@ const Booking = () => {
                 </div>
                 <Fragment>
                     <BookingReason />
-                    <BookingDoctor />
+                    <BookingDoctor mapRef={mapRef} onMapLoad={onMapLoad}/>
                     <BookingCalendar />
                     <BookingConfirm />
                 </Fragment>

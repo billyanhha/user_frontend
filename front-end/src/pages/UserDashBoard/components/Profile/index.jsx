@@ -476,6 +476,17 @@ const Profile = (props) => {
                 </form>
             </div>
 
+{/* 
+            //Chart for health detail //
+            {createNew ? "" :
+                profileInfo ?
+                    <div className="profile-chart">
+                        <ChartCurrentHealth patient_id={profileInfo?.id} />
+                    </div> : ""
+            }
+
+        </div> */}
+
             {dependentInfo || createNew ?
                 ""
                 : <>
@@ -495,6 +506,7 @@ const Profile = (props) => {
             }
 
         </div >
+
     )
 }
 
