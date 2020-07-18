@@ -51,7 +51,10 @@ const ChartCurrentHealth = (props) => {
         } else if (currentHealth?.result?.length < 1) {
             setIsNoData(true);
 
-        } else {
+        } else if (currentHealth?.result?.length == 1) {
+            data =  data.push(currentHealth?.result);
+            setIsNoData(false);
+        }else {
             data = currentHealth?.result;
             setIsNoData(false);
         }
