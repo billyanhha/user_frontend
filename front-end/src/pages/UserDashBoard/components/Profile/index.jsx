@@ -184,11 +184,16 @@ const Profile = (props) => {
             <div className="each-package-progress">
                 <div className="each-package-detail">Tiến độ gói dịch vụ:</div>
                 {packages.num_done && packages.num_pending
-                    ? <Progress percent={Math.round((packages.num_pending / packages.num_done * 100 + Number.EPSILON) * 100) / 100} status="active" format={(progress) => progress + "%"} />
+                    ? <Progress percent={Math.round((packages.num_done / (Number.parseInt(packages.num_done, 10) + Number.parseInt(packages.num_pending, 10)) * 100 + Number.EPSILON) * 100) / 100} status="active" format={(progress) => progress + "%"} />
                     : <Progress percent={100} status="exception" />
                 }
                 <div className="package-end-detail">
-                    <div className="convert-progress">{packages.num_done === packages.num_pending && packages.num_done !== '0' ? "Đã hoàn thành" : packages.num_pending === '0' ? "Chưa ghi nhận hoàn thành" : `Hoàn thành ${packages.num_pending / packages.num_done} số buổi`}</div>
+                    <div className="convert-progress">
+                        {packages.num_done === '0'
+                            ? "Chưa có ghi nhận tiến độ"
+                            : 'Hoàn thành ' + packages.num_pending + '/' + (Number.parseInt(packages.num_done, 10) + Number.parseInt(packages.num_pending, 10)) + ' số buổi'
+                        }
+                    </div>
                     <div className="package-show-more"><Link to={'/package/' + packages.id} target='_blank'>Chi tiết</Link></div>
                 </div>
             </div>
@@ -476,21 +481,13 @@ const Profile = (props) => {
                 </form>
             </div>
 
-{/* 
-            //Chart for health detail //
-            {createNew ? "" :
-                profileInfo ?
-                    <div className="profile-chart">
-                        <ChartCurrentHealth patient_id={profileInfo?.id} />
-                    </div> : ""
-            }
-
-        </div> */}
-
             {dependentInfo || createNew ?
-                ""
+                ''
                 : <>
-                    <div className="profile-progress-header">Tiến độ các gói gần đây</div>
+                    {progress
+                        ? <div className="profile-progress-header">Tiến độ các gói gần đây</div>
+                        : ''
+                    }
                     <div className="profile-progress">
                         {renderProgress}
                     </div>
@@ -504,9 +501,7 @@ const Profile = (props) => {
                 </div>
                 : ''
             }
-
         </div >
-
     )
 }
 

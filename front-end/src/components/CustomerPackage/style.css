@@ -51,6 +51,14 @@
     font-weight: bold;
 }
 
+.cp-address {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-inline-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+}
+
 .cp-indentify {
     margin: 10px 0;
 }
@@ -71,7 +79,9 @@
     font-size: 1.5rem;
     font-weight: bold;
 }
-
+.cp-indentify-service{
+height: 80px;
+}
 .cp-indentify-service span {
     font-weight: bold;
 }
@@ -101,7 +111,7 @@
 }
 
 .cp-indentify-doctor {
-    height: 85px;
+    height: 90px;
     border-top: 0.8px solid #f0f0f0;
     font-size: 0.9rem;
     padding-top: 10px;
@@ -133,3 +143,9 @@
     border-color: #00bc9a !important;
     color: #00bc9a !important;
 } */
+
+@media screen and (max-width: 980px) {
+    .cp-indentify-service{
+        height: fit-content;
+    }
+}

@@ -11,7 +11,7 @@ import DefaultAvatar from '../../assest/image/hhs-default_avatar.jpg';
 
 import './style.css'
 
-const desc = ['Rất kém', 'Kém', 'Trung Bình', 'Tốt', 'Rất Tốt'];
+const desc = ['Tệ', 'Không Hài Lòng', 'Cần Cải Thiện', 'Hài Lòng', 'Tuyệt Vời'];
 
 const { TextArea } = Input;
 
@@ -44,10 +44,10 @@ const CustomerPackage = (props) => {
                     {/* <div className="cp-indentify-title">Thông tin gói</div>
                     <div>Dịch vụ: <span>Chưa lựa chọn dịch vụ</span></div> */}
                     <div>SĐT đăng kí: <span>{value?.phone}</span></div>
-                    <div className="cp-package-info-status">Tình trạng: <span className={value?.status_name.includes('từ chối') || value?.status_name.includes('đã hủy') ? 'reject-color' : 'primary-color'}>{value?.status_name}</span></div>
+                    <div className="cp-package-info-status">Tình trạng: <span className={value?.status_name.includes('từ chối') || value?.status_name.includes('hủy') ? 'reject-color' : 'primary-color'}>{value?.status_name}</span></div>
                     {value.status_id === packageStatus.done
                         ? <div>
-                            Đánh giá gói: {value?.star && value?.star > 0 ? <Rate tooltips={desc} autoAdjustOverflow={true} value={value?.star} /> : 'Chưa đánh giá'}
+                            Đánh giá gói: {value?.star && value?.star > 0 ? <Rate tooltips={desc} disabled autoAdjustOverflow={true} value={value?.star} /> : 'Chưa đánh giá'}
                         </div>
                         : ''
                     }
@@ -74,7 +74,7 @@ const CustomerPackage = (props) => {
                             </div>
                             <div className="cp-info-content">
                                 BS.<span><Link to={`/doctor/${value?.doctor_id}`} target='_blank'>{value?.doctor_name}</Link></span>
-                                <br />Địa chỉ : <span>{value?.doctor_address}</span>
+                                <br /><span className="cp-address">Địa chỉ: {value?.doctor_address}</span>
                                 <br /><span className="primary-color"><MobileTwoTone twoToneColor="#47c7be" /> {value?.doctor_phone}</span>
                             </div>
                         </div>
