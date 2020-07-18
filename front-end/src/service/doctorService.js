@@ -112,8 +112,4 @@ doctorService.getDoctorDegree = (id) => new Promise((reslove, reject) => {
         .catch(err => reject(err))
 })
 
-
-
-
-
 export default doctorService;

@@ -18,6 +18,22 @@
     padding: 0;
 }
 
+.ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn {
+    color: #00bc9a !important;
+    font-weight: bold !important;
+}
+
+.ant-tabs-tab:hover {
+    color: #00bc9a !important;
+}
+.ant-tabs-tab:active {
+    color: #00bc9a !important;
+}
+
+.ant-tabs-ink-bar {
+    background: #00bc9a !important;
+}
+
 @media screen and (max-width: 1600px) {}
 
 /* HD monitor & older TV, Wacom */

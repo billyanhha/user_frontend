@@ -1,27 +1,117 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback, useRef } from 'react';
 import bookingImage from "../../assest/image/booking.png"
 import { useSelector, useDispatch } from 'react-redux';
 import Animation from './Animation';
-import { useForm } from 'react-hook-form';
+import { useForm, Controller } from 'react-hook-form';
 import { nextStep, saveBookingInfo } from '../../redux/booking';
 import AsyncPaginate from "react-select-async-paginate";
 import userService from '../../service/userService';
 import _ from "lodash"
 import { message } from "antd"
 
+// import AddressGoogleMap from '../AddressGoogleMap';
+
+import {
+    GoogleMap,
+    useLoadScript,
+    Marker,
+    InfoWindow,
+} from "@react-google-maps/api";
+import usePlacesAutocomplete, {
+    getGeocode,
+    getLatLng,
+} from "use-places-autocomplete";
+import {
+    Combobox,
+    ComboboxInput,
+    ComboboxPopover,
+    ComboboxList,
+    ComboboxOption,
+} from "@reach/combobox";
+import "@reach/combobox/styles.css";
+import Geocode from "react-geocode";
+
+
+
+Geocode.setApiKey("AIzaSyCI6EYzveNjHPdKPtWuGFNhblfYECyGxvw");
+Geocode.enableDebug();
+
+// const libraries = ["places"];
+const mapContainerStyle = {
+    height: '500px',
+    width: '100%',
+};
+const options = {
+    // styles: mapStyles,
+    disableDefaultUI: true,
+    zoomControl: true,
+};
+const center = {
+    lat: 21.0044514,
+    lng: 105.5122808,
+};
+
+const libraries = ["geometry,drawing,places"];
+
 const BookingReason = (props) => {
-
-
     const { register, handleSubmit, errors, control } = useForm();
     const dispatch = useDispatch();
     const { token } = useSelector(state => state.auth)
     const [patient, setpatient] = useState({});
 
-
-    // step 0
-
     const { currentStep, infos } = useSelector(state => state.booking);
     const { currentUser } = useSelector(state => state.user);
+    const [searchAddress, setSearchAddress] = useState("");
+    const [currentPosition, setCurrentPostion] = useState(center);
+
+    const { isLoaded, loadError } = useLoadScript({
+        googleMapsApiKey: "AIzaSyCI6EYzveNjHPdKPtWuGFNhblfYECyGxvw",
+        libraries,
+    });
+
+    const {
+        ready,
+        value,
+        suggestions: { status, data },
+        setValue,
+        clearSuggestions,
+    } = usePlacesAutocomplete({
+        requestOptions: {
+            location: { lat: () => 21.0044514, lng: () => 105.5122808 },
+            radius: 100 * 1000,
+        },
+    });
+
+
+    const handleInput = (e) => {
+        setValue(e.target.value);
+    };
+
+    const handleSelect = async (address) => {
+        setValue(address, false);
+        clearSuggestions();
+        try {
+            const results = await getGeocode({ address });
+            const { lat, lng } = await getLatLng(results[0]);
+            setValue(address);
+            getSearchText(address);
+            getPatientPosition({ lat, lng })
+        } catch (error) {
+            console.log("Error: ", error);
+        }
+    };
+
+    const getSearchText = (value) => {
+        setValue(value, false);
+        clearSuggestions();
+        setSearchAddress(value);
+
+    }
+
+    const getPatientPosition = (position) => {
+
+        setCurrentPostion(position);
+    }
 
     if (currentStep !== 0) {
         return null;
@@ -32,7 +122,7 @@ const BookingReason = (props) => {
             message.destroy()
             message.error("Xin vui lòng chọn bệnh nhân")
         } else {
-            const newData = { ...data, id: patient.id, fullname: patient.fullname, type: patient.type }
+            const newData = { ...data, address: searchAddress, id: patient.id, fullname: patient.fullname, type: patient.type, position: currentPosition }
             dispatch(saveBookingInfo(newData));
             dispatch(nextStep());
         }
@@ -53,17 +143,12 @@ const BookingReason = (props) => {
         }
     }
 
-
     const onChange = (value) => {
         setpatient(value)
     }
 
-
-
     const Option = (props) => {
         const option = { ...props?.data };
-
-
         return (
             <div className="doctors-select" ref={props.innerRef} {...props.innerProps}>
                 <div className="doctors-select-img" style={{ backgroundImage: `url(${option.avatarurl})` }} />
@@ -77,7 +162,6 @@ const BookingReason = (props) => {
             </div>
         )
     }
-
 
     return (
         <Animation>
@@ -115,7 +199,27 @@ const BookingReason = (props) => {
                                 </div>
                                 <div className="form-field-booking">
                                     <p className="form-booking-label">Địa chỉ</p>
-                                    <input defaultValue={infos?.address ?? patient?.address} className="form-field-input" name="address" ref={register({ required: true })} />
+                                    <div className="search-map-div">
+                                        <Combobox onSelect={handleSelect} className="combobox-map-div">
+                                            <ComboboxInput
+                                                className="form-field-input"
+                                                value={value}
+                                                onChange={handleInput}
+                                                disabled={!ready}
+                                                placeholder="Nhập vị trí của bạn"
+                                                required
+                                            />
+                                            <ComboboxPopover>
+                                                <ComboboxList>
+                                                    {status === "OK" &&
+                                                        data.map(({ id, description, key }) => (
+                                                            <ComboboxOption key={key} value={description} />
+                                                        ))}
+                                                </ComboboxList>
+                                            </ComboboxPopover>
+                                        </Combobox>
+                                    </div>
+                                    {/* <input defaultValue={infos?.address ?? patient?.address} className="form-field-input" name="address" ref={register({ required: true })} /> */}
                                     {errors.address && <span className="error-text">Xin vui lòng không bỏ trống</span>}
                                 </div>
                                 <div className="form-field-booking">
@@ -134,6 +238,7 @@ const BookingReason = (props) => {
                                     {errors.phone && <span className="error-text">Số điện thoại sai</span>}
                                 </div>
                                 <div className="form-field-booking">
+
                                     <p className="form-booking-label">Lý do</p>
                                     <textarea defaultValue={infos?.reason ?? ''} name="reason" className="form-text-area" ref={register({ required: true })} />
                                     {errors.reason && <span className="error-text">Xin vui lòng không bỏ trống</span>}
@@ -144,11 +249,11 @@ const BookingReason = (props) => {
                             </form>
                         </div>
                     </div>
-                    <img src={bookingImage} className="booking-introduction-image" />
                 </div>
             </div>
         </Animation>
     );
 };
+
 
 export default BookingReason;

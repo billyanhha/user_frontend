@@ -7,7 +7,18 @@ import { useDispatch, useSelector } from "react-redux";
 import { getUser } from '../../redux/user';
 import _ from 'lodash'
 import { userLogout } from '../../redux/auth';
-
+import logo from '../../assest/logo/logo.png';
+import logo2 from '../../assest/logo/logo2.png';
+import logox from '../../assest/logo/logo3.png';
+import logoxz from '../../assest/logo/logo3 2.png';
+import logo3 from '../../assest/logo/Group 336.png';
+import logo4 from '../../assest/logo/Group 337.png';
+import logo5 from '../../assest/logo/Group 338.png';
+import logo6 from '../../assest/logo/Group 339.png';
+import logo7 from '../../assest/logo/Group 340.png';
+import logo8 from '../../assest/logo/Group 341.png';
+import logo9 from '../../assest/logo/Group 343.png';
+import logo10 from '../../assest/logo/Group 344.png';
 const Navbar = (props) => {
 
     const { location } = props;
@@ -50,7 +61,7 @@ const Navbar = (props) => {
         props.history.push('/login');
     }
 
-    const toBookingPage =() => {
+    const toBookingPage = () => {
         props.history.push('/booking');
     }
 
@@ -99,7 +110,8 @@ const Navbar = (props) => {
     return (
         <div className={top_menu_class} >
             <Link to="/" className='top-menu-lead primary-color'>
-                Logo
+                <div className="nav-logo"><img alt='logo' src={logoxz} /></div> {/* needed ? change logo later : */}
+                {/* <Avatar size={100} src={logo8} /> */}
             </Link>
             <div className='right'>
                 {CustomLink("/", 'Trang chủ')}

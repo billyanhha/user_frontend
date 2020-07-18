@@ -14,6 +14,7 @@ import Dashboard from './pages/UserDashBoard'
 import QA from './pages/QA';
 import Booking from './pages/Booking';
 import PrivateRoute from './routeConfig/PrivateRoute';
+import AddressGoogleMap from './pages/AddressGoogleMap';
 
 import './App.css';
 import PackageDetail from './pages/PackageDetail';
@@ -39,6 +40,10 @@ const App = () => {
         <PrivateRoute exact path="/package/:id">
           <PackageDetail />
         </PrivateRoute>
+        <PrivateRoute exact path="/map">
+          <AddressGoogleMap />
+        </PrivateRoute>
+          
         <Route exact path='/qa' component={QA} />
         <Route exact path="/doctor/:id" render={(props) => <DetailDoctor {...props} />} />
         <Route path="*"><NoMatch /> </Route>
