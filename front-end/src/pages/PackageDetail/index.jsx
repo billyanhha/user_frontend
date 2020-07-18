@@ -77,7 +77,7 @@ const PackageDetail = (props) => {
     };
 
     const renderRateButton = (value) => {
-        if (packageData?.status[packageData?.status.length - 1]?.package_status_detail_id === package_status.done) {
+        // if (packageData?.status[packageData?.status.length - 1]?.package_status_detail_id === package_status.done) {
             if (value.package_rating_id) {
                 return (
                     <Button onClick={() => openRateModal(value)} style={{ marginLeft: '10px' }} size="small">
@@ -92,7 +92,7 @@ const PackageDetail = (props) => {
                     </Button>
                 )
             }
-        }
+        // }
     }
 
     const backToPreviousPage = () => {
@@ -285,6 +285,9 @@ const PackageDetail = (props) => {
                                 {packageInfo?.reason}
                             </Descriptions.Item>
                             {packageData?.status[packageData?.status.length - 1]?.package_status_detail_id === package_status.done
+                            || packageData?.status[packageData?.status.length - 1]?.package_status_detail_id === package_status.customerCancel
+                            || packageData?.status[packageData?.status.length - 1]?.package_status_detail_id === package_status.systemCancel
+                            || packageData?.status[packageData?.status.length - 1]?.package_status_detail_id === package_status.doctorCancel
                                 ? <Descriptions.Item label="Đánh giá">
                                     {packageInfo?.package_rating_id
                                         ? <Rate tooltips={desc} disabled autoAdjustOverflow={true} value={rateDefault} />
