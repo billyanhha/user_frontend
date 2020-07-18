@@ -60,7 +60,7 @@ const DetailDoctor = (props) => {
         if (index === 0) {
             return (
                 <span className="doctor-detail-info">
-                    {value?.degree_name}
+                    {value?.language_name}
                 </span>
             )
         }
@@ -68,7 +68,7 @@ const DetailDoctor = (props) => {
             <span>
                 <span className="primary-dot">-</span>
                 <span className="doctor-detail-info">
-                    {value?.degree_name}
+                    {value?.language_name}
                 </span>
             </span>
         )
@@ -102,35 +102,41 @@ const DetailDoctor = (props) => {
     return (
         <div className="default-div">
             <Navbar />
-            <Spin spinning = {isLoad}>
-            <div className="doctor">
-                <div className="detail-contain detail-main-about">
-                    <div className="doctor-avatar"
-                        style={{ backgroundImage: `url(${doctorDetail?.doctor?.avatarurl})` }}
-                    >
-                    </div>
-                    <div className="detail-content">
-                        <div className="detail-title">
-                            BS . {doctorDetail?.doctor?.fullname} <Rate className="doctor-rate" disabled value={doctorDetail?.doctor?.average_rating} />
-
+            <Spin spinning={isLoad}>
+                <div className="doctor">
+                    <div className="detail-contain detail-main-about">
+                        <div className="doctor-avatar"
+                            style={{ backgroundImage: `url(${doctorDetail?.doctor?.avatarurl})` }}
+                        >
                         </div>
-                        <div className="seperator" />
-                        <div className="home-introduction">
-                            Mang trải nghiệm thăm khám đa khoa hiện đại đến ngay trong ngôi nhà bạn. Từ cảm mạo thông thường đến các bệnh mãn tính - các bác sĩ ikemen thân thiện sẽ tận tình chăm sóc bạn & gia đình.                        </div>
-                        <div className="detail-button">
-                            <button className="link-button" onClick={toBooking}>
-                                Đặt lịch ngay
+                        <div className="detail-content">
+                            <div className="detail-title">
+                                BS. {doctorDetail?.doctor?.fullname} <br />
+                                {doctorDetail?.doctor?.average_rating == 0
+                                    ? <span className="rate-average">Chưa có đánh giá</span>
+                                    : <>
+                                        <Rate className="doctor-rate" disabled value={doctorDetail?.doctor?.average_rating} />
+                                        <span className="rate-average"> ­ {doctorDetail?.doctor?.average_rating} / 5</span>
+                                    </>
+                                }
+                            </div>
+                            <div className="seperator" />
+                            <div className="home-introduction">
+                                Mang trải nghiệm thăm khám đa khoa hiện đại đến ngay trong ngôi nhà bạn. Từ cảm mạo thông thường đến các bệnh mãn tính - các bác sĩ ikemen thân thiện sẽ tận tình chăm sóc bạn & gia đình.                        </div>
+                            <div className="detail-button">
+                                <button className="link-button" onClick={toBooking}>
+                                    Đặt lịch ngay
                             </button>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div className="detail-contain doctor-infor-div">
-                    <div className="detail-title">
-                        Thông tin
+                    <div className="detail-contain doctor-infor-div">
+                        <div className="detail-title">
+                            Thông tin
                     </div>
-                    <div className="seperator" />
-                    <div className="detail-list">
-                        {/* <div className="detail-list-item">
+                        <div className="seperator" />
+                        <div className="detail-list">
+                            {/* <div className="detail-list-item">
                             <div className="detail-list-item-top">
                                 <img src={detailSpecialties} />
                             </div>
@@ -139,70 +145,70 @@ const DetailDoctor = (props) => {
                                 {doctor.detailInfo.specializes}
                             </div>
                         </div> */}
-                        <div className="detail-list-item">
-                            <div className="detail-list-item-top">
-                                <img alt="language" src={detailLanguages}
-                                />
+                            <div className="detail-list-item">
+                                <div className="detail-list-item-top">
+                                    <img alt="language" src={detailLanguages}
+                                    />
+                                </div>
+                                <div className="detail-list-describe">Giao tiếp</div>
+                                <div className="detail-list-description">
+                                    {renderLanguages}
+                                </div>
                             </div>
-                            <div className="detail-list-describe">Giao tiếp</div>
-                            <div className="detail-list-description">
-                                {renderLanguages}
+                            <div className="detail-list-item">
+                                <div className="detail-list-item-top">
+                                    <img alt="certificate" src={detailCertificate} />
+                                </div>
+                                <div className="detail-list-describe">Học vấn</div>
+                                <div className="detail-list-description">
+                                    {renderDegree}
+                                </div>
                             </div>
-                        </div>
-                        <div className="detail-list-item">
-                            <div className="detail-list-item-top">
-                                <img alt="certificate" src={detailCertificate} />
-                            </div>
-                            <div className="detail-list-describe">Học vấn</div>
-                            <div className="detail-list-description">
-                                {renderDegree}
-                            </div>
-                        </div>
-                        <div className="detail-list-item">
-                            <div className="detail-list-item-top">
-                                <img alt="license" src={detailLicense} />
-                            </div>
-                            <div className="detail-list-describe">Chứng chỉ hành nghề</div>
-                            <div className="detail-list-description doctor-detail-info">
-                                {doctorDetail?.doctor?.license}
+                            <div className="detail-list-item">
+                                <div className="detail-list-item-top">
+                                    <img alt="license" src={detailLicense} />
+                                </div>
+                                <div className="detail-list-describe">Chứng chỉ hành nghề</div>
+                                <div className="detail-list-description doctor-detail-info">
+                                    {doctorDetail?.doctor?.license}
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div className="detail-contain">
-                    <div className="detail-title">
-                        Kinh nghiệm
+                    <div className="detail-contain">
+                        <div className="detail-title">
+                            Kinh nghiệm
                     </div>
-                    <div className="seperator" />
+                        <div className="seperator" />
 
-                    <div className="doctor-experiece">
-                        <Timeline>
-                            {renderExperience}
-                        </Timeline>
+                        <div className="doctor-experiece">
+                            <Timeline>
+                                {renderExperience}
+                            </Timeline>
+                        </div>
                     </div>
-                </div>
-                <div className="detail-contain doctor-infor-div">
-                    <div className="detail-title">
-                        Đánh giá
+                    <div className="detail-contain doctor-infor-div">
+                        <div className="detail-title">
+                            Đánh giá
                     </div>
-                    <div className="seperator" />
-                    <br />
-                    <h3>Bác sĩ có <span className="highlight">{doctorDetail?.ratings?.length} </span> đánh giá</h3>
-                    <div className="doctor-experiece">
-                        {renderRating}
-                        <br/>
-                        {
-                            doctorDetail?.ratings?.length ?
-                            <Pagination
-                                onChange={onPageNumberChange}
-                                current={currentPage}
-                                pageSize={3}
-                                total={doctorDetail?.ratings?.length} showSizeChanger={false} /> : ''
-                        }
+                        <div className="seperator" />
+                        <br />
+                        <h3>Bác sĩ có <span className="highlight">{doctorDetail?.ratings?.length} </span> đánh giá</h3>
+                        <div className="doctor-experiece">
+                            {renderRating}
+                            <br />
+                            {
+                                doctorDetail?.ratings?.length ?
+                                    <Pagination
+                                        onChange={onPageNumberChange}
+                                        current={currentPage}
+                                        pageSize={3}
+                                        total={doctorDetail?.ratings?.length} showSizeChanger={false} /> : ''
+                            }
 
+                        </div>
                     </div>
                 </div>
-            </div>
             </Spin>
             <Footer />
         </div>

@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import "./style.css";
-import { SettingOutlined } from '@ant-design/icons';
 import { Collapse, Select } from 'antd';
 import { Layout, Menu } from 'antd';
 import detail from "../../assest/image/generated-2.json";
 import {
-    UserOutlined,
+    UserOutlined, SettingOutlined, QuestionCircleOutlined
 } from '@ant-design/icons';
 import Navbar from '../../components/Navbar';
 import Footer from '../../components/Footer';
@@ -23,7 +22,7 @@ const text = `
 `;
 
 const genExtra = () => (
-    <SettingOutlined
+    <QuestionCircleOutlined
         onClick={event => {
             // If you don't want click extra trigger collapse, you can prevent this:
             event.stopPropagation();
@@ -35,9 +34,9 @@ const genExtra = () => (
 const QA = () => {
 
     useEffect(() => {
-        
-    
-        window.scroll(0,0)
+
+
+        window.scroll(0, 0)
 
     }, []);
 

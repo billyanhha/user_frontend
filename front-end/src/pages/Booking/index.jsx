@@ -45,10 +45,6 @@ const Booking = () => {
     const renderStep = steps.map((value) => {
         return <Steps.Step key={value} title={value} />
     });
-
-
-    if (loadError) return "Error";
-    if (!isLoaded) return "Loading...";
     
     return (
         <div className="default-div">

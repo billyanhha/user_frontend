@@ -34,6 +34,10 @@ body {
     /* tomato */
 }
 
+.rate-average {
+    font-size: 1.2rem !important;
+}
+
 .default-div {
     display: flex;
     flex-direction: column;

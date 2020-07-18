@@ -107,9 +107,16 @@ const FilterDoctor = (props) => {
                         <div className="home-list-item-name">
                             {value?.fullname}
                         </div>
-                        <center>
-                            <Rate className="doctor-rate" disabled value={value?.average_rating} />
-                        </center>
+                        <div className="doctor-rate">
+                            {
+                                value?.average_rating == 0
+                                    ? <span className="rate-average">Chưa có đánh giá</span>
+                                    : <>
+                                        <Rate disabled value={value?.average_rating} />
+                                        <span className="rate-average"> ­ {value?.average_rating} / 5</span>
+                                    </>
+                            }
+                        </div>
                     </div>
                 </Link>
             </Tooltip>

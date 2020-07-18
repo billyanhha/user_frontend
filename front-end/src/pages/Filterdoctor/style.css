@@ -187,7 +187,8 @@
 }
 
 .doctor-rate{
-    margin-bottom: 20px !important;
+    margin-bottom: 20px;
+    color: #000;
 }
 
 
