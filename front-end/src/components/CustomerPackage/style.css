@@ -14,6 +14,7 @@
 
 .cp-each-package {
     width: 100%;
+    /* min-height: 340px; */
     padding: 20px;
     box-shadow: 0 0 5px 1px #f0f0f0;
     border-radius: 10px;
@@ -100,7 +101,7 @@
 }
 
 .cp-indentify-doctor {
-    min-height: 40px;
+    height: 85px;
     border-top: 0.8px solid #f0f0f0;
     font-size: 0.9rem;
     padding-top: 10px;

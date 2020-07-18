@@ -102,7 +102,7 @@
     opacity: 1;
 }
 
-@media screen and (max-width: 1024px) {
+@media screen and (max-width: 1366px) {
     .pulse-tem-div {
         height: 220px;
         flex-direction: row;

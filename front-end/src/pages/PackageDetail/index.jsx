@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react';
 import './style.css'
 import { withRouter } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { getPackageInfo, getPackageStatus, getPackageServices, changePackageStatus } from '../../redux/package';
-import { PageHeader, Button, Descriptions, Tag, Tabs, Spin, Avatar, Popconfirm, Input, Modal } from 'antd';
+import { getPackageInfo, getPackageStatus, getPackageServices, changePackageStatus, ratingDoctor, updateRatingDoctor } from '../../redux/package';
+import { PageHeader, Button, Descriptions, Tag, Tabs, Spin, Avatar, Popconfirm, Input, Modal,Rate } from 'antd';
 import packageStatus from "../../configs/packageStatus"
 import _ from "lodash"
 import { UserOutlined } from '@ant-design/icons';
@@ -15,17 +15,84 @@ import PackageHistory from './components/PackageHistory';
 import EditPackage from './components/EditPackage';
 import ChartForPackage from '../PackageDetail/components/ChartForPackage';
 
+const desc = ['Rất kém', 'Kém', 'Trung Bình', 'Tốt', 'Rất Tốt'];
+const { TextArea } = Input;
+
 const { TabPane } = Tabs;
 
 const PackageDetail = (props) => {
 
     const dispatch = useDispatch();
     const { isLoad } = useSelector(state => state.ui);
+    const { currentUser } = useSelector(state => state.user);
     const { packageInfo, packageData } = useSelector(state => state.package);
     const [service, setservice] = useState(null);
     const [visible, setvisible] = useState(false);
+    const [rateVisible, setRateVisible] = useState(false);
+    const [rateValue, setrateValue] = useState(3);
     const [note, setnote] = useState('');
+    const [rateNote, setRateNote] = useState('');
+    const [currentPacakge, setcurrentPacakge] = useState({});
+
     const id = props.match.params.id
+
+    const handleChange = value => {
+        setrateValue(value)
+    };
+
+    const handleHoverChange = (value) => {
+    }
+
+    const onNoteChange = (e) => {
+        setRateNote(e.target.value)
+    }
+
+    const openRateModal = (value) => {
+        setRateVisible(true)
+        setrateValue(value?.star ?? 3)
+        setRateNote(value?.comment ?? '')
+        setcurrentPacakge(value)
+    }
+
+    const handleOk = () => {
+        let data = {};
+
+        data.star = rateValue;
+        data.comment = note;
+
+        data.packageId = currentPacakge?.package_id;
+        data.customer_id = currentUser?.customer_id;
+
+        if (currentPacakge?.package_rating_id) { // edit
+            data.package_rating_id = currentPacakge?.package_rating_id
+            dispatch(updateRatingDoctor(data))
+        } else { //add
+            dispatch(ratingDoctor(data))
+        }
+    };
+
+    const handleRateModalCancel = () => {
+        setvisible(false)
+    };
+
+    const renderRateButton = (value) => {
+        if (value.status_id === packageStatus.done) {
+            if (value.package_rating_id) {
+                return (
+                    <button onClick={() => openRateModal(value)}
+                        style={{ marginRight: '5px' }} size="large">
+                        Xem đánh giá
+                    </button>
+                )
+            }
+            else {
+                return (
+                    <button type="primary" onClick={() => openRateModal(value)}
+                        style={{ marginRight: '5px' }} size="large">Đánh giá</button>
+                )
+            }
+        }
+    }
 
     useEffect(() => {
 
@@ -120,6 +187,30 @@ const PackageDetail = (props) => {
             >
                 {renderData}
             </Modal>
+
+            <Modal
+                visible={visible}
+                title={"Đánh giá " + currentPacakge?.doctor_name}
+                onOk={handleOk}
+                onCancel={handleRateModalCancel}
+                footer={[
+                    <button key="back" onClick={handleRateModalCancel}>
+                        Quay lại
+                    </button>,
+                    <button key="submit" type="primary" onClick={handleOk}>
+                        Xác nhận
+                    </button>,
+                ]}
+            >
+                <span>
+                    <Rate tooltips={desc} autoAdjustOverflow={true} onHoverChange={handleHoverChange} onChange={handleChange} value={rateValue} />
+                    {rateValue ? <span className="ant-rate-text">{desc[rateValue - 1]}</span> : ''}
+                    <br /><br />
+                    <h3>Ghi chú</h3>
+                    <TextArea onChange={onNoteChange} value={note} rows={4} />
+                </span>
+            </Modal>
+
             <div className="site-page-header-ghost-wrapper">
                 <Spin size="large" spinning={isLoad}>
                     <PageHeader
@@ -161,15 +252,15 @@ const PackageDetail = (props) => {
                                     <div dangerouslySetInnerHTML={{ __html: packageInfo?.result_content ?? '<p>Không có dữ liệu</p>' }}></div>
                                 </TabPane>
                                 <TabPane tab="Sửa thông tin cơ bản" key="5" >
-                                    <EditPackage infos= {packageInfo}/>
+                                    <EditPackage infos={packageInfo} />
                                 </TabPane>
                                 <TabPane tab="Biểu đồ sức khoẻ" key="6" >
-                                    <ChartForPackage id={id}/>
+                                    <ChartForPackage id={id} />
                                 </TabPane>
                             </Tabs>
                         }
                     >
-                        <Descriptions size="small" column={3}>
+                        <Descriptions size="small" column={4}>
                             <Descriptions.Item label="Khám cho">
                                 <a target="_blank"
                                 // href={`/doctor/${packageInfo?.doctor_id}`} // to patient
@@ -191,6 +282,11 @@ const PackageDetail = (props) => {
                             </Descriptions.Item>
                             <Descriptions.Item label="Lý do">
                                 {packageInfo?.reason}
+                            </Descriptions.Item>
+                            <Descriptions.Item label="Đánh giá">
+                                <Rate tooltips={desc} autoAdjustOverflow={true} value={rateValue} />
+                                {/* {renderRateButton(value)} */}
+                                {console.log(packageInfo)}
                             </Descriptions.Item>
                             <Descriptions.Item label="Dịch vụ sử dụng">
                                 {renderServices}

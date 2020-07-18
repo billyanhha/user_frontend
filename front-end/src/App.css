@@ -41,19 +41,6 @@ body {
     min-height: 100vh;
 }
 
-/* backup first style*/
-/* .fancyButton {
-    background-color: #00BC9A;
-    padding: 10px 30px !important;
-    color: #fff;
-    font-weight: bold;
-    border-radius: 15px;
-    border-bottom-right-radius: 5px;
-    border: none;
-    outline: none;
-    cursor: pointer;
-} */
-
 .fancyButton {
     padding: 10px 30px !important;
     border-radius: 10px;
@@ -271,20 +258,6 @@ body {
     border: 1px solid #1890FF;
     margin-left: 10px;
 }
-
-/* 
-.default-outline-button{
-    border: 1px solid #fff;;
-    width: 100%;
-    color: #fff;
-    font-weight: bold;
-    border-radius: 10px;
-    padding: 10px 0px;
-    cursor: pointer;
-    margin-top: 10px;
-    transition: all 0.3s ease 0s;
-    outline: none;
-} */
 
 .default-button:hover {
     transform: translateY(-5px);
