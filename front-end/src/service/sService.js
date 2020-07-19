@@ -29,11 +29,9 @@ sService.getServiceQuery = (query) => new Promise((reslove , reject) => {
 })
 
 
-sService.getAllCategories = (size) => new Promise((reslove , reject) => {
+sService.getAllCategories = (data) => new Promise((reslove , reject) => {
     axios.get('/api/service-category' , {
-        params: {
-            size: size
-        }
+        params: data
     })
     .then(result => reslove(result.data))
     .catch(err => reject(err))

@@ -55,7 +55,7 @@ function* watchNextQueryServiceWorker(action) {
 function* watchgetAllCategoriesWorker(action) {
     try {
         yield put(openLoading());
-        const result = yield sService.getAllCategories(action?.size);
+        const result = yield sService.getAllCategories(action?.data);
         
         if (!_.isEmpty(result?.categorires)) {            
             yield put(getAllCategoriesSuccessful(result?.categorires));

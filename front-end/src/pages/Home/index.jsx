@@ -27,7 +27,7 @@ const Home = (props) => {
         window.scrollTo(0, 0) // make sure div in top
 
 
-        dispatch(getAllCategories(3))
+        dispatch(getAllCategories({itemsPage:3, active: true}))
         dispatch(getDoctorForHome())
     }, []);
 

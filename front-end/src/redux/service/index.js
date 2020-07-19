@@ -43,10 +43,10 @@ export const nextQueryServiceSuccessful = (services) => {
 }
 
 
-export const getAllCategories = (size) => {    
+export const getAllCategories = (data) => {    
     return {
         type: GET_ALL_CATEGORIES,
-        size
+        data
     }
 }
 
