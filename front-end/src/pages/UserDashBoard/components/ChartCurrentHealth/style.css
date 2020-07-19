@@ -1,0 +1,129 @@
+.chart-profile-content {
+    display: grid;
+    justify-content: center;
+    /* place-items: center; */
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    column-gap: 20px;
+    row-gap: 20px;
+
+    color: #000;
+    font-size: 1.2rem;
+    font-weight: bold;
+    cursor: default;
+}
+
+.chart-wrapper {
+    max-width: 400px;
+    border-radius: 10px;
+    border: 1px solid #dadada;
+}
+
+.health-index-wrapper {
+    width: 180px;
+    max-width: 200px;
+    min-height: 200px;
+    border-radius: 10px;
+    border: 1px solid #dadada;
+}
+
+.chart-profile-header {
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+}
+
+.chart-profile-title {
+    padding-top: 3px;
+    margin-right: 20px;
+    align-self: start;
+}
+
+.health-index-title {
+    align-self: baseline;
+}
+
+.chart-profile-data {
+    width: 100%;
+    text-align: center;
+    font-size: 2.5rem;
+}
+
+.chart-profile-data span {
+    font-size: 1rem;
+}
+
+.chart-profile-icon {
+    color: red;
+    font-size: 1.5rem;
+}
+
+.chart-profile-icon-custom {
+    color: red;
+    font-size: 1.5rem;
+}
+
+.chart-profile {
+    padding: 10px;
+    padding-right: 0;
+    height: 300px;
+    max-width: 400px;
+    overflow: hidden;
+}
+
+.chart-profile * {
+    font-family: 'Open Sans', sans-serif !important;
+    font-weight: bold !important;
+}
+
+.pulse-tem-div {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.chart-profile-data-convert {
+    padding-right: 20px;
+    margin-top: 20px;
+    width: 100%;
+    text-align: right;
+    font-size: 1rem;
+
+    opacity: 0;
+    transition: all 0.5s ease-in-out;
+    transition-delay: .2s;
+}
+
+.chart-profile-data-convert span {
+    font-size: 0.9rem;
+}
+
+.toggle-temperature:hover .chart-profile-data-convert {
+    opacity: 1;
+}
+
+@media screen and (max-width: 1366px) {
+    .pulse-tem-div {
+        height: 220px;
+        flex-direction: row;
+        border: 1px solid #dadada;
+        border-radius: 10px;
+    }
+
+    .health-index-wrapper {
+        border: none;
+    }
+
+    .health-index-split {
+        margin: 20px 0;
+        width: 0;
+        height: 180px;
+        border-right: 0.5px solid #f0f0f0;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .chart-profile-content {
+        justify-items: center;
+    }
+}

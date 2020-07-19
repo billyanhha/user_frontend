@@ -19,12 +19,13 @@ justify-content: center;
 }
 
 .booking-introduction-image{
-    width: 50%;
+    width: 63%;
+    margin-left: 2%;
 }
 
 .booking-introduction-left{
-    width: 50%;
-
+    width: 100%;
+    display: flex;
 }
 
 
@@ -159,6 +160,22 @@ justify-content: center;
     padding: 5px 10px;
 }
 
+.map-distance-div{
+    background: #fff;
+}
+
+.doctor-form-div{
+    background: #fff;
+    width: 40%;
+}
+.content-doctor-form-div{
+    display: flex;
+}
+
+.doctor-booking-step{
+    width: 100%;
+}
+
 @media screen and (max-width: 900px) {
     .booking-introduction{
         display: flex;
@@ -194,7 +211,68 @@ justify-content: center;
         margin-left: 0 !important;
         margin-top: 20px!important;
     }
-
-
+    .content-doctor-form-div{
+        display: initial;
+    }
+    .doctor-form-div {
+        width: 100%;
+    }
+    .booking-introduction-image {
+        width: 100%;
+    }
 }
 
+.search-map-div{
+    background: #fff;
+    width: 100%;
+    margin: 20px 0px;
+}
+.combobox-map-div{
+    background: #fff;
+    width: 100%;
+}
+
+.input-map-div{
+    background-color: #fff;
+    width: 100%;
+    border: none;
+    border-bottom: 1px solid #DADADA;
+    transition: all .2s ease-in-out;
+}
+.locate {
+    position: absolute;
+    /* top: 1rem; */
+    background: none;
+    border: none;
+    z-index: 10;
+  }
+  .locate img {
+    width: 30px;
+    cursor: pointer;
+    border: none;
+  }
+  
+  .map-doctor-info-div{
+    width: 150px;
+    height: 200px;
+    text-align: center;
+  }
+  .map-doctor-info-div p{
+    font-size: 14px;
+    font-weight: 600;
+  }
+.map-doctor-image-div{
+  justify-content: center;
+}
+  .map-doctor-image-div img{
+    width: 125px;
+    height: 125px;
+  }
+
+.map-detail-div{
+  margin-top: 15px;
+}
+
+.locate-icon-div{
+    background: #fff;
+}

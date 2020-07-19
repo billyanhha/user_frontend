@@ -180,7 +180,7 @@ function* watchRatingDoctorWorker(action) {
         );
         if (!_.isEmpty(result)) {
             window.location.reload()
-            message.success("Cảm ơn bạn đã đánh giá")
+            message.success("Cảm ơn bạn đã đánh giá!")
         }
     } catch (error) {
         message.destroy();

@@ -1,5 +1,5 @@
 .top-menu {
-    padding: 1% 10%;
+    padding: 0 10%;
     user-select: none;
     position: sticky;
     top: 0;
@@ -13,33 +13,39 @@
     flex-wrap: wrap;
 }
 
+.nav-logo {
+    height: 60px;
+    /* width: 80px; */
+    overflow: hidden;
+}
 
+.nav-logo img {
+    height: 100%;
+}
 
-.nav-userInfo-user-name > span{
+.nav-userInfo-user-name>span {
     color: #000;
 }
 
-
-
-
-.top-menu > .right > * {
+.top-menu>.right>* {
     margin: 0px 15px
 }
 
 
-.top-menu > .left > *, .top-menu > .right > * {
+.top-menu>.left>*,
+.top-menu>.right>* {
     padding: 11.4px;
     display: inline-block;
     text-align: center;
     min-width: 50px;
 }
 
-.nav-user-div{
+.nav-user-div {
     margin-right: 1px;
     padding: 11.4px 0 !important;
 }
 
-.top-menu *:hover{
+.top-menu *:hover {
     cursor: pointer;
 }
 
@@ -65,7 +71,8 @@
     color: #00BC9A;
     border-bottom: 1px solid #00BC9A;
 }
-.link-active{
+
+.link-active {
     color: #00BC9A;
     border-bottom: 1px solid #00BC9A;
 
@@ -73,13 +80,19 @@
 
 
 .top-menu-lead {
-    padding: 10px;
+    padding: 5px 10px;
     display: inline-block;
     font-size: 18px;
 }
 
 
-@media screen and (max-width: 1000px) {
+@media screen and (max-width: 1280px) {
+    .nav-logo {
+        height: 40px;
+    }
+}
+
+@media screen and (max-width: 1024px) {
 
     .top-menu {
         padding: 40px 20px 20px 20px;
@@ -87,8 +100,8 @@
         overflow: hidden;
         flex-direction: row-reverse;
     }
-
-    .top-menu > .left, .top-menu > .right {
+    .top-menu>.left,
+    .top-menu>.right {
         display: none;
     }
 
@@ -103,20 +116,21 @@
         transition: max-height 1s ease-in-out;
     }
 
-    .top-menu.toggled > .left {
+    .top-menu.toggled>.left {
         border-bottom: 1px solid black;
-        margin: 15px 0 0 0 ;
+        margin: 15px 0 0 0;
     }
 
     .top-menu.toggled *:not(.top-menu-lead):not(.top-menu-icon) {
         display: block !important;
         text-align: right;
         margin: 10px;
-        
+
     }
+
     .top-menu-lead {
         position: absolute;
-        top: 10px;
+        top: 5px;
         left: 10px;
         float: none;
     }
@@ -126,4 +140,3 @@
     }
 
 }
-

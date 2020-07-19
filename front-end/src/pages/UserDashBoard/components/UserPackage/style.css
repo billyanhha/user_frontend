@@ -1,8 +1,21 @@
-.userPackage{
+/* .userPackage {
     padding: 8px 0px;
+} */
+
+.userPackage-content {
+    padding-top: 16px;
 }
 
-.userPackage-content{
-    padding: 16px 0px;
-    /* overflow: auto; */
+.package-main-wrapper {
+    position: relative;
+    min-height: 60vh;
+    padding-bottom: 60px;
+}
+
+.package-main-wrapper .package-pagination {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    text-align: center;
+    margin-bottom: 20px;
 }
