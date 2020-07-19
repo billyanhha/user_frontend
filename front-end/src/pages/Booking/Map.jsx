@@ -109,7 +109,7 @@ const Map = (props) => {
         {/* <Spin size="large" spinning={isLoad}  > */}
           <div className="map-distance-div">
 
-            <div className="direction-distance-div">Khoảng cách đến vị trí khám bệnh: <p>{direction.distance}</p></div>
+            <div className="direction-distance-div">Khoảng cách từ chỗ bạn đến chỗ bác sĩ: <p>{direction.distance}</p></div>
             <div className="direction-time-div">Thời gian đi bằng xe máy: {direction.time} </div>
             {ready && <MapWithADirectionsRenderer patientAddress={patientAddress} doctorAddress={doctorAddress} getDirectionInfo={getDirectionInfo} />}
 

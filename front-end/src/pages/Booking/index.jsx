@@ -23,6 +23,12 @@ const libraries = ["geometry,drawing,places"];
 
 const Booking = () => {
 
+    
+    const { isLoaded, loadError } = useLoadScript({
+        googleMapsApiKey: "AIzaSyCI6EYzveNjHPdKPtWuGFNhblfYECyGxvw",
+        libraries,
+    });
+
     const { currentStep } = useSelector(state => state.booking);
     const steps = ["Các thông tin cơ bản", "Chọn bác sĩ", "Chọn lịch", "Xác nhận"];
     const dispatch = useDispatch();
@@ -31,20 +37,18 @@ const Booking = () => {
     const onMapLoad = useCallback((map) => {
         mapRef.current = map;
     }, []);
-    const { isLoaded, loadError } = useLoadScript({
-        googleMapsApiKey: "AIzaSyCI6EYzveNjHPdKPtWuGFNhblfYECyGxvw",
-        libraries,
-    });
-
+    
     useEffect(() => {
 
         window.scrollTo(0, 0) // make sure div in top
 
     }, []);
+    
 
     const renderStep = steps.map((value) => {
         return <Steps.Step key={value} title={value} />
     });
+
     
     return (
         <div className="default-div">
@@ -55,8 +59,8 @@ const Booking = () => {
                     </Steps>
                 </div>
                 <Fragment>
-                    <BookingReason />
-                    <BookingDoctor mapRef={mapRef} onMapLoad={onMapLoad}/>
+                    {isLoaded ? <BookingReason isLoaded={isLoaded}/> : ""}
+                    <BookingDoctor />
                     <BookingCalendar />
                     <BookingConfirm />
                 </Fragment>
