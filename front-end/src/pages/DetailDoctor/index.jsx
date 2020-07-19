@@ -36,6 +36,7 @@ const DetailDoctor = (props) => {
         let data = {}
         data.pageRatingNum = pageNum
         data.doctorId = doctorId;
+        setcurrentPage(pageNum)
         dispatch(getDoctorDetail(data))
     }
 
@@ -203,7 +204,7 @@ const DetailDoctor = (props) => {
                                         onChange={onPageNumberChange}
                                         current={currentPage}
                                         pageSize={3}
-                                        total={doctorDetail?.ratings?.length} showSizeChanger={false} /> : ''
+                                        total={doctorDetail?.ratings?.[0]?.full_count} showSizeChanger={false} /> : ''
                             }
 
                         </div>

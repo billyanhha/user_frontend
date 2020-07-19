@@ -31,8 +31,8 @@ const CustomerPackage = (props) => {
             <div key={value?.package_id} className="cp-each-package">
                 <div className="cp-info cp-indentify-patient">
                     <div>
-                        {value?.patient_avatarurl ?
-                            <Avatar size={100} style={{ borderRadius: '10px' }} src={value.patient_avatarurl} />
+                        {value?.patient_avatar ?
+                            <Avatar size={100} style={{ borderRadius: '10px' }} src={value?.patient_avatar} />
                             :
                             <Avatar size={100} style={{ borderRadius: '10px' }} src={DefaultAvatar} />
                         }
@@ -67,7 +67,7 @@ const CustomerPackage = (props) => {
                         <div className="cp-info">
                             <div>
                                 {value?.doctor_avatarurl ?
-                                    <Avatar size={60} style={{ borderRadius: '10px' }} src={value.doctor_avatarurl} />
+                                    <Avatar size={60} style={{ borderRadius: '10px' }} src={value?.doctor_avatarurl} />
                                     :
                                     <Avatar size={60} style={{ borderRadius: '10px' }} src={DefaultAvatar} />
                                 }
