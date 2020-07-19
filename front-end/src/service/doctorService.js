@@ -36,7 +36,7 @@ doctorService.getDoctorForHome = () => new Promise((reslove, reject) => {
 doctorService.getDoctorQuery = (query) => new Promise((reslove, reject) => {
     axios.get('/api/doctor', {
         params: {
-            fullname: query?.query,
+            query: query?.query,
             sort: query?.sortBy,
             itemsPage: 6,
             page: query?.page,

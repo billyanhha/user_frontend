@@ -178,7 +178,6 @@ const PackageDetail = (props) => {
 
     return (
         <div className=" default-div">
-            {console.log(packageData)}
             <Modal
                 visible={visible}
                 onCancel={handleCancel}
