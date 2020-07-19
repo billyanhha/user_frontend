@@ -160,7 +160,7 @@ const FilterDoctor = (props) => {
                         <div className="search">
                             <div className="searchText">
                                 <Search
-                                    placeholder="Tìm kiếm dịch vụ"
+                                    placeholder="Tìm kiếm bác sĩ"
                                     onSearch={handleSearchEnter}
                                     onChange={onChange}
                                     loading={disableButton || isLoad}
