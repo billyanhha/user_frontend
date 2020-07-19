@@ -1,8 +1,9 @@
 import { GET_SERVICE_FOR_HOME, SAVE_SERVICE_FOR_HOME, QUERY_SERVICE, QUERY_SERVICE_SUCCESSFUL, NEXT_QUERY_SERVICE, NEXT_QUERY_SERVICE_SUCCESSFUL, GET_ALL_CATEGORIES_SUCCESSFUL, GET_ALL_CATEGORIES } from "./action"
 
-export const getServiceForHome = () => {    
+export const getServiceForHome = (data) => {    
     return {
         type: GET_SERVICE_FOR_HOME,
+        data
     }
 }
 
