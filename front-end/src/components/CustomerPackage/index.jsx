@@ -46,8 +46,11 @@ const CustomerPackage = (props) => {
                     <div>SĐT đăng kí: <span>{value?.phone}</span></div>
                     <div className="cp-package-info-status">Tình trạng: <span className={value?.status_name.includes('từ chối') || value?.status_name.includes('hủy') ? 'reject-color' : 'primary-color'}>{value?.status_name}</span></div>
                     {value.status_id === packageStatus.done
+                        || value.status_id === packageStatus.customerCancel
+                        || value.status_id === packageStatus.doctorCancel
+                        || value.status_id === packageStatus.systemCancel
                         ? <div>
-                            Đánh giá gói: {value?.star && value?.star > 0 ? <Rate tooltips={desc} disabled autoAdjustOverflow={true} value={value?.star} /> : 'Chưa đánh giá'}
+                            {value?.star && value?.star > 0 ? <>Đánh giá của tôi: <Rate tooltips={desc} disabled autoAdjustOverflow={true} value={value?.star} /></> : 'Chưa có đánh giá'}
                         </div>
                         : ''
                     }
