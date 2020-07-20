@@ -191,7 +191,7 @@ const Profile = (props) => {
                     <div className="convert-progress">
                         {packages.num_done === '0'
                             ? "Chưa có ghi nhận tiến độ"
-                            : 'Hoàn thành ' + packages.num_pending + '/' + (Number.parseInt(packages.num_done, 10) + Number.parseInt(packages.num_pending, 10)) + ' số buổi'
+                            : 'Hoàn thành ' + packages.num_done + '/' + (Number.parseInt(packages.num_done, 10) + Number.parseInt(packages.num_pending, 10)) + ' số buổi'
                         }
                     </div>
                     <div className="package-show-more"><Link to={'/package/' + packages.id} target='_blank'>Chi tiết</Link></div>

@@ -1,5 +1,5 @@
-.booking-contain{
-    margin: 30px 5%;
+.booking-contain {
+    margin: 5vh 5%;
     padding: 30px 5%;
     border-radius: 20px;
     border: 1px solid #dadada;
@@ -7,45 +7,44 @@
     position: relative;
     min-height: 60vh;
     display: flex;
-flex-direction: column;
-justify-content: center;
+    flex-direction: column;
+    justify-content: center;
 }
 
-.booking-introduction{
+.booking-introduction {
     display: flex;
     flex-direction: row;
     justify-content: flex-start;
     align-items: center;
 }
 
-.booking-introduction-image{
+.booking-introduction-image {
     width: 63%;
     margin-left: 2%;
 }
 
-.booking-introduction-left{
+.booking-introduction-left {
     width: 100%;
     display: flex;
 }
 
-
-
 .booking-contain:hover {
-    box-shadow: 0px 9px 20px #707070;
+    border: 1px solid transparent;
+    box-shadow: 0px 5px 20px #dadada;
 }
 
-.booking-text{
+.booking-text {
     font-weight: 600;
     font-size: 40px;
     margin: 20px 0px;
 }
 
-.booking-guide{
+.booking-guide {
     font-weight: 400;
     font-size: 15px;
 }
 
-.booking-process-guilde-text{
+.booking-process-guilde-text {
     margin-top: 30px;
     font-weight: 400;
     font-size: 25px;
@@ -53,7 +52,7 @@ justify-content: center;
     font-weight: 600;
 }
 
-.booking-process-guilde{
+.booking-process-guilde {
     margin: 50px 0px 0px;
     max-width: 100%;
     padding: 0 10%;
@@ -61,47 +60,48 @@ justify-content: center;
     word-break: break-all !important; */
 }
 
-.form-field-booking{
+.form-field-booking {
     margin: 20px 0px;
 }
 
-.form-booking-label{
+.form-booking-label {
     font-size: 15px;
 }
 
-.form-text-area{
+.form-text-area {
     border: 1px solid #DADADA;
     height: 150px;
     width: 100%;
 }
 
-.form-text-area:focus{
+.form-text-area:focus {
     border: 1px solid #00BC9A;
     height: 150px;
 }
 
-.search-doctor{
+.search-doctor {
     margin: 20px 0;
 }
 
-.booking-calendar{
+.booking-calendar {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
     justify-content: space-between;
 }
 
-.booking-calendar-slot{
+.booking-calendar-slot {
     /* width: 20%; */
 }
 
-.radio-slot, .radio-slot-full  {
+.radio-slot,
+.radio-slot-full {
     position: absolute;
     z-index: 1;
     top: 0;
     left: 0;
     right: 0;
-    bottom:0;
+    bottom: 0;
     border: 3px solid #F9BB28;
     font-weight: bold;
 }
@@ -116,9 +116,9 @@ justify-content: center;
     margin-top: 15px;
     border: 1px solid #f0f0f0;
     border-radius: 2px;
-  }
+}
 
-.steps-action{
+.steps-action {
     margin: 15px 0px;
 }
 
@@ -128,7 +128,7 @@ justify-content: center;
     justify-self: center;
 }
 
-.doctors-select{
+.doctors-select {
     cursor: pointer;
     color: #000;
     transition: all .3s ease-in-out;
@@ -140,11 +140,11 @@ justify-content: center;
     cursor: pointer;
 }
 
-.doctors-select:last-child{
+.doctors-select:last-child {
     margin-bottom: 0px;
 }
 
-.doctors-select-img{
+.doctors-select-img {
     height: 150px;
     width: 100px;
     background-repeat: no-repeat;
@@ -152,56 +152,58 @@ justify-content: center;
     background-position: center center;
 }
 
-.doctors-select:hover{
+.doctors-select:hover {
     cursor: pointer;
     background-color: #1890FF;
     color: #fff;
 }
 
-.doctors-select-fullname{
+.doctors-select-fullname {
     padding: 5px 10px;
 }
 
-.map-distance-div{
+.map-distance-div {
     background: #fff;
 }
 
-.doctor-form-div{
+.doctor-form-div {
     background: #fff;
     width: 40%;
 }
-.content-doctor-form-div{
+
+.content-doctor-form-div {
     display: flex;
 }
 
-.doctor-booking-step{
+.doctor-booking-step {
     width: 100%;
 }
 
 @media screen and (max-width: 900px) {
-    .booking-introduction{
+    .booking-introduction {
         display: flex;
         flex-direction: column;
         justify-content: center;
         align-items: center;
     }
-    
-    .booking-introduction-image{
-        max-width:400px;
+
+    .booking-introduction-image {
+        max-width: 400px;
         order: 1;
     }
-    
-    .booking-introduction-left{
+
+    .booking-introduction-left {
         order: 2;
         width: 100%;
     }
+
     .site-calendar-demo-card {
         width: 100%;
-      }
-    
-    
-    
-    .booking-calendar{
+    }
+
+
+
+    .booking-calendar {
         display: flex;
         flex-direction: row;
         flex-wrap: wrap;
@@ -209,72 +211,82 @@ justify-content: center;
         align-items: center;
     }
 
-    .ant-radio-button-wrapper , .ant-radio-button-wrapper-checked{
+    .ant-radio-button-wrapper,
+    .ant-radio-button-wrapper-checked {
         margin-left: 0 !important;
-        margin-top: 20px!important;
+        margin-top: 20px !important;
     }
-    .content-doctor-form-div{
+
+    .content-doctor-form-div {
         display: initial;
     }
+
     .doctor-form-div {
         width: 100%;
     }
+
     .booking-introduction-image {
         width: 100%;
     }
 }
 
-.search-map-div{
+.search-map-div {
     background: #fff;
     width: 100%;
     margin: 20px 0px;
 }
-.combobox-map-div{
+
+.combobox-map-div {
     background: #fff;
     width: 100%;
 }
 
-.input-map-div{
+.input-map-div {
     background-color: #fff;
     width: 100%;
     border: none;
     border-bottom: 1px solid #DADADA;
     transition: all .2s ease-in-out;
 }
+
 .locate {
     position: absolute;
     /* top: 1rem; */
     background: none;
     border: none;
     z-index: 10;
-  }
-  .locate img {
+}
+
+.locate img {
     width: 30px;
     cursor: pointer;
     border: none;
-  }
-  
-  .map-doctor-info-div{
+}
+
+.map-doctor-info-div {
     width: 150px;
     height: 200px;
     text-align: center;
-  }
-  .map-doctor-info-div p{
+}
+
+.map-doctor-info-div p {
     font-size: 14px;
     font-weight: 600;
-  }
-.map-doctor-image-div{
-  justify-content: center;
 }
-  .map-doctor-image-div img{
+
+.map-doctor-image-div {
+    justify-content: center;
+}
+
+.map-doctor-image-div img {
     width: 125px;
     height: 125px;
-  }
-
-.map-detail-div{
-  margin-top: 15px;
 }
 
-.locate-icon-div{
+.map-detail-div {
+    margin-top: 15px;
+}
+
+.locate-icon-div {
     background: #fff;
 }
