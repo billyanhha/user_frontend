@@ -57,9 +57,9 @@ const BookingReason = (props) => {
     const { register, handleSubmit, errors, control } = useForm();
     const dispatch = useDispatch();
     const { token } = useSelector(state => state.auth)
-    const [patient, setpatient] = useState({});
-
     const { currentStep, infos } = useSelector(state => state.booking);
+    const [patient, setpatient] = useState({id: infos?.id??'', fullname: infos?.fullname??'', type: infos?.type??'',});
+
     const { currentUser } = useSelector(state => state.user);
     const [searchAddress, setSearchAddress] = useState("");
     const [currentPosition, setCurrentPostion] = useState(center);
