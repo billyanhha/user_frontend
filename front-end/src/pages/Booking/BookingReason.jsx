@@ -150,7 +150,7 @@ const BookingReason = (props) => {
         const option = { ...props?.data };
         return (
             <div className="doctors-select" ref={props.innerRef} {...props.innerProps}>
-                <div className="doctors-select-img" style={{ backgroundImage: `url(${option.avatarurl})` }} />
+                <div className="reason-user doctors-select-img " style={{ backgroundImage: `url(${option.avatarurl})` }} />
                 <div>
                     <p className="doctors-select-fullname">{option?.fullname}</p>
                     <p className="doctors-select-fullname">{option?.address}</p>
