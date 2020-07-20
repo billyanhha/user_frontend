@@ -244,6 +244,11 @@ body {
     transition: all .3s ease-in-out;
 }
 
+.submit-btn {
+    margin-left: 10px;
+
+}
+
 .disalbe-submit-btn {
     opacity: 0.5;
     cursor: progress;
@@ -260,7 +265,6 @@ body {
     color: #1890FF;
     transition: all .3s ease-in-out;
     border: 1px solid #1890FF;
-    margin-left: 10px;
 }
 
 .default-button:hover {

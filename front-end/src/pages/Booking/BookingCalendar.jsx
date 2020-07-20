@@ -4,8 +4,10 @@ import Animation from './Animation';
 import { Calendar, Radio, message, Tooltip } from 'antd';
 import { nextStep, preStep, getDoctorComingAppointment, saveBookingTime } from '../../redux/booking';
 import { getSlot } from '../../redux/slot';
-import moment from 'moment';
 import _ from 'lodash'
+import moment from 'moment';
+import 'moment/locale/vi';
+moment.locale('vi');
 
 const BookingCalendar = () => {
 
@@ -70,7 +72,7 @@ const BookingCalendar = () => {
             slots.forEach(element => {
                 text += " Slot " + element + " "
             });
-            if(slots.length === 4){
+            if (slots.length === 4) {
                 return (<Tooltip placement="leftTop" title={"Bác sĩ không có lịch trống"}>
                     <div className="radio-slot-full">
                     </div>
@@ -160,8 +162,8 @@ const BookingCalendar = () => {
                     </div>
                 </div>
                 <div className="steps-action">
-                    <button onClick={next} className="submit-btn">Tiếp theo</button>
                     <button onClick={prev} className="submit-btn-outline">Quay lại</button>
+                    <button onClick={next} className="submit-btn">Tiếp theo</button>
                 </div>
             </div>
         </Animation>

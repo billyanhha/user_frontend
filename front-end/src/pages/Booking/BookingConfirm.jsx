@@ -67,9 +67,9 @@ const BookingConfirm = () => {
                     </div>
                 </div>
                 <div className="steps-action">
+                    <button onClick={prev} className="submit-btn-outline">Quay lại</button>
                     <button disabled = {disable || isLoad} onClick={submit}
                     className={disable ? "disalbe-submit-btn" : "submit-btn"}>Xác nhận</button>
-                    <button onClick={prev} className="submit-btn-outline">Quay lại</button>
                 </div>
             </div>
         </Animation>

@@ -194,8 +194,8 @@ const BookingDoctor = (props) => {
                                 </div>
                             </div>
                             <div className="steps-action">
+                            <button onClick={prev} className="submit-btn-outline">Quay lại</button>
                                 <button onClick={next} className="submit-btn">Tiếp theo</button>
-                                <button onClick={prev} className="submit-btn-outline">Quay lại</button>
                             </div>
                         </div>
 
