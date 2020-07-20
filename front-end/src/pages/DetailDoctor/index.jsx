@@ -194,7 +194,7 @@ const DetailDoctor = (props) => {
                     </div>
                         <div className="seperator" />
                         <br />
-                        <h3>Bác sĩ có <span className="highlight">{doctorDetail?.ratings?.length} </span> đánh giá</h3>
+                        <h3>Bác sĩ có <span className="highlight">{doctorDetail?.ratings?.[0]?.full_count} </span> đánh giá</h3>
                         <div className="doctor-experiece">
                             {renderRating}
                             <br />
