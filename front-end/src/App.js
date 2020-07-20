@@ -40,10 +40,6 @@ const App = () => {
         <PrivateRoute exact path="/package/:id">
           <PackageDetail />
         </PrivateRoute>
-        <PrivateRoute exact path="/map">
-          <AddressGoogleMap />
-        </PrivateRoute>
-          
         <Route exact path='/qa' component={QA} />
         <Route exact path="/doctor/:id" render={(props) => <DetailDoctor {...props} />} />
         <Route path="*"><NoMatch /> </Route>

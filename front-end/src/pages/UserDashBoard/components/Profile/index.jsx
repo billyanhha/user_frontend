@@ -9,7 +9,7 @@ import ChartCurrentHealth from '../ChartCurrentHealth';
 // import { useDropzone } from 'react-dropzone';
 // import Dropzone from 'react-dropzone-uploader'
 import moment from 'moment';
-import AvatarEditor from 'react-avatar-editor';
+// import AvatarEditor from 'react-avatar-editor';
 import DatePicker from "react-datepicker";  //input dob
 import Select from 'react-select';          //input gender
 import { Modal, message, Spin, Progress } from 'antd';
@@ -284,7 +284,7 @@ const Profile = (props) => {
                             <Modal title="Đổi hình đại diện" centered visible={avatarVisible} width="450px" footer={null} onCancel={() => resetAvatar()}>
                                 <Spin indicator={loadingIcon} spinning={isLoad}  >
                                     <div className="avatar-editor">
-                                        <div className="avatar-editor-zone">
+                                        {/* <div className="avatar-editor-zone">
                                             {avatarImg?.raw
                                                 ?
                                                 <div className="avatar-crop">
@@ -311,7 +311,7 @@ const Profile = (props) => {
                                                     ? <div className="avatar-editor-message"><label htmlFor="upload-from-device"><PictureTwoTone twoToneColor="#00BC9A" /><br />Nhấn và chọn một hình ảnh</label></div>
                                                     : <img className="avatar-editor-preview" src={avatarImg.preview} />
                                             }
-                                        </div>
+                                        </div> */}
                                         <div className="avatar-editor-upload">
                                             {avatarImg.raw || avatarImg.preview
                                                 ?

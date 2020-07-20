@@ -64,10 +64,7 @@ const BookingReason = (props) => {
     const [searchAddress, setSearchAddress] = useState("");
     const [currentPosition, setCurrentPostion] = useState(center);
 
-    const { isLoaded, loadError } = useLoadScript({
-        googleMapsApiKey: "AIzaSyCI6EYzveNjHPdKPtWuGFNhblfYECyGxvw",
-        libraries,
-    });
+    console.log(props?.isLoaded);
 
     const {
         ready,
@@ -81,6 +78,8 @@ const BookingReason = (props) => {
             radius: 100 * 1000,
         },
     });
+
+
 
 
     const handleInput = (e) => {
