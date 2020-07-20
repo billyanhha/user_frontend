@@ -205,7 +205,7 @@ const BookingReason = (props) => {
                                                 value={value}
                                                 onChange={handleInput}
                                                 disabled={!ready}
-                                                placeholder="Nhập vị trí của bạn"
+                                                placeholder="Nhập địa chỉ điều dưỡng"
                                                 required
                                             />
                                             <ComboboxPopover>

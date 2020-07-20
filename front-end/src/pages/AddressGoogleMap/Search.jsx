@@ -58,7 +58,7 @@ const  Search = ({ panTo }) => {
                     value={value}
                     onChange={handleInput}
                     disabled={!ready}
-                    placeholder="Nhập vị trí của bạn"
+                    placeholder="Nhập địa chỉ điều dưỡng"
 
                 />
                 <ComboboxPopover>
