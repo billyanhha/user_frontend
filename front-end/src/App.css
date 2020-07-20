@@ -245,7 +245,7 @@ body {
     transition: all .3s ease-in-out;
 }
 
-.submit-btn {
+.submit-btn ,.disalbe-submit-btn  {
     margin-left: 10px;
 
 }
