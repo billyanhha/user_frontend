@@ -27,8 +27,9 @@ function* wachGetUserbWorker(action) {
             }
         }
     } catch (error) {
-        if (error.toString().includes('status code 401')) {
+        if (error?.response?.status  === 401) {
             yield put(userLogout());
+            message.destroy();
             message.error('Phiên đã hết hạn , vui lòng đăng nhập lại', 3)
         }
         console.log(error);
@@ -48,6 +49,7 @@ function* watchGetUserProfile(action) {
             }
         }
     } catch (error) {
+        message.destroy();
         message.error(error?.response?.data?.err ?? 'Hệ thống quá tải, xin thử lại sau!', 3);
     } finally {
         yield put(closeLoading())
@@ -67,6 +69,7 @@ function* watchEditUserProfile(action) {
             }
         }
     } catch (error) {
+        message.destroy();
         message.error(error?.response?.data?.err ?? 'Hệ thống quá tải, xin thử lại sau!', 3);
     } finally {
         yield put(closeLoading())
@@ -148,8 +151,10 @@ function* watchChangePhone(action) {
     } catch (error) {
         message.destroy();
         if (error.response?.data?.status === "10") {
+            message.destroy();
             message.error("SĐT này cần chờ 5 phút để gửi lại yêu cầu!", 4);
         } else {
+            message.destroy();
             message.error(error?.response?.data?.err ?? "Hệ thống quá tải!", 3);
         }
     } finally {

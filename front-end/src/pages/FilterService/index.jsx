@@ -27,7 +27,7 @@ const FilterService = (props) => {
     useEffect(() => {
 
         window.scrollTo(0, 0)
-        dispatch(getAllCategories())
+        dispatch(getAllCategories({active: true}))
         // handleSearchAndSort('', sortBy)
 
     }, []);

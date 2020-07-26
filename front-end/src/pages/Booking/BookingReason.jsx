@@ -64,8 +64,6 @@ const BookingReason = (props) => {
     const [searchAddress, setSearchAddress] = useState("");
     const [currentPosition, setCurrentPostion] = useState(center);
 
-    console.log(props?.isLoaded);
-
     const {
         ready,
         value,
@@ -78,9 +76,6 @@ const BookingReason = (props) => {
             radius: 100 * 1000,
         },
     });
-
-
-
 
     const handleInput = (e) => {
         setValue(e.target.value);
@@ -117,7 +112,7 @@ const BookingReason = (props) => {
     }
 
     const onSubmit = data => {
-        if (_.isEmpty(patient)) {
+        if (_.isEmpty(patient?.id)) {
             message.destroy()
             message.error("Xin vui lòng chọn bệnh nhân")
         } else {
@@ -138,7 +133,8 @@ const BookingReason = (props) => {
                 },
             };
         } catch (error) {
-            console.log(error);
+            message.destroy();
+            message.error(error?.response?.data?.err ?? 'Hệ thống quá tải, xin thử lại sau!', 3);
         }
     }
 

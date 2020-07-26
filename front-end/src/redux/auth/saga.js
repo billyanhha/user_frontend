@@ -66,8 +66,10 @@ function* watchForgotPasswordSendPhone(action) {
     } catch (error) {
         message.destroy();
         if (error.response?.data?.status === "10") {
+            message.destroy();
             message.error("SĐT này cần chờ 5 phút để gửi lại yêu cầu!", 4);
         } else {
+            message.destroy();
             message.error(error.response?.data?.err ?? "Hệ thống quá tải!", 3);
         }
     } finally {
@@ -108,8 +110,10 @@ function* watchResetPassword(action) {
     } catch (error) {
         message.destroy();
         if (error.response?.data?.err?.status === "101") {
+            message.destroy();
             message.error("Đường truyền bị gián đoạn, xin hãy thử lại!", 5);
         } else {
+            message.destroy();
             message.error(error.response?.data?.err ?? "Hệ thống quá tải!", 3);
         }
     } finally {
@@ -187,8 +191,10 @@ function* watchGuestRegister(action) {
     } catch (error) {
         message.destroy();
         if (error.response?.data?.err?.status === "101") {
+            message.destroy();
             message.error("Đường truyền bị gián đoạn, xin hãy thử lại sau vài giây!", 5);
         } else {
+            message.destroy();
             message.error(error.response?.data?.err ?? "Hệ thống quá tải!", 3);
         }
     } finally {
