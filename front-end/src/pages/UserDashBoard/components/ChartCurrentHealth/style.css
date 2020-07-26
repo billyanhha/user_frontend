@@ -1,6 +1,7 @@
 .chart-profile-content {
     display: grid;
     justify-content: center;
+    /* align-items: center; */
     /* place-items: center; */
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
     column-gap: 20px;
@@ -119,6 +120,18 @@
         width: 0;
         height: 180px;
         border-right: 0.5px solid #f0f0f0;
+    }
+}
+
+@media screen and (max-width: 1280px) {
+    .chart-wrapper {
+        margin: auto 5%;
+    }
+}
+
+@media screen and (max-width: 1080px) {
+    .chart-wrapper {
+        margin: 0;
     }
 }
 

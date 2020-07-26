@@ -47,7 +47,7 @@ const Login = (props) => {
                             <p className="label">Số điện thoại</p>
                             <div class="form-field-phone">
 
-                                <div className = "form-field-phone-label">84 - </div>
+                                <div className = "form-field-phone-label">+84 </div>
                                 <input type ="number" name="phone" ref={register({ required: true })} />
 
                             </div>
