@@ -15,9 +15,10 @@ import {
 import authService from '../../service/authService'
 import { openLoading, closeLoading } from '../ui';
 import { message } from 'antd';
-import { clearUserInfo } from '../user';
+import { clearUserInfo, saveIoInstance } from '../user';
 import _ from 'lodash'
 import { resetPackageForm } from '../booking';
+import io from 'socket.io-client';
 
 function* watchUserLoginWorker(action) {
     try {
@@ -26,6 +27,7 @@ function* watchUserLoginWorker(action) {
         const result = yield authService.userLogin(action.user);
 
         if (result && result.token) {
+
             yield put(userLoginSuccessful(result.token));
             message.destroy();
             message.success('Đăng nhập thành công');

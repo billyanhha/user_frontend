@@ -18,11 +18,14 @@ import AddressGoogleMap from './pages/AddressGoogleMap';
 
 import './App.css';
 import PackageDetail from './pages/PackageDetail';
+import Notify from './components/Notify';
+require('dotenv').config()
 
 const App = () => {
 
   return (
     <BrowserRouter>
+      <Notify />
       <LoadingBar showFastActions className="loading-bar" />
       <Switch >
         <Route exact path="/" render={(props) => <Home {...props} />} />

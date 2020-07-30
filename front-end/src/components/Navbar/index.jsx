@@ -19,6 +19,7 @@ import logo7 from '../../assest/logo/Group 340.png';
 import logo8 from '../../assest/logo/Group 341.png';
 import logo9 from '../../assest/logo/Group 343.png';
 import logo10 from '../../assest/logo/Group 344.png';
+import Notify from '../Notify';
 const Navbar = (props) => {
 
     const { location } = props;

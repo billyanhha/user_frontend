@@ -9,7 +9,6 @@ import 'antd/dist/antd.css'; // Import Ant Design styles by less entry
 import "react-datepicker/dist/react-datepicker.css";
 import { ConfigProvider } from 'antd';
 import vi_VN from 'antd/es/locale/vi_VN';
-
 const { store, persistor } = configureStore();
 
 
