@@ -10,7 +10,15 @@ const Notify = () => {
     const user = useSelector(state => state.user);
     const { token } = useSelector(state => state.auth);
     const [ioConnect, setioConnect] = useState(null);
+    const [data, setdata] = useState({});
 
+    useEffect(() => {
+
+        if (_.isEmpty(token)) {
+            setioConnect(null)
+        }
+
+    }, [token]);
 
     useEffect(() => {
 
@@ -22,17 +30,24 @@ const Notify = () => {
 
     }, [user?.currentUser]);
 
+    useEffect(() => {
+        
+        getMessage()
+
+    }, []);
+
+
     const notifyPanel = (data) => {
         if(!_.isEmpty(data)) {
-            const key = `open${Date.now()}`;
             const btn = (
                 <a href={data?.url}>Chi tiết</a>
             );
-            notification.open({
+            notification["info"]({
+                key: data?.id,
                 message: 'Thông báo',
                 description: data?.content,
                 btn,
-                key,
+                duration: 4
             });
         }
     }
@@ -40,11 +55,9 @@ const Notify = () => {
     const getMessage = () => {
         if(ioConnect) {
             ioConnect.on("server-send-notification", (data) => {
-                console.log(data);
                 notifyPanel(data)
             })
         }
-
     }
 
     return !_.isEmpty(token) ? (
