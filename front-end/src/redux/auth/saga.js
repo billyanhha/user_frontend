@@ -19,6 +19,7 @@ import { clearUserInfo, saveIoInstance } from '../user';
 import _ from 'lodash'
 import { resetPackageForm } from '../booking';
 import io from 'socket.io-client';
+import { clearIoInstance } from '../notification';
 
 function* watchUserLoginWorker(action) {
     try {
@@ -47,10 +48,13 @@ function* watchUserLogout(action) {
     try {
         yield put(showLoading())
         yield put(clearUserInfo())
+        yield put(clearIoInstance())
         yield put(resetPackageForm())
+
     } catch (error) {
         console.log(error);
     } finally {
+        window.location.pathname = "/login";
         yield put(hideLoading())
     }
 }

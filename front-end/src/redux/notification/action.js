@@ -1,0 +1,2 @@
+export const SAVE_IO_INSTANCE = 'SAVE_IO_INSTANCE';
+export const CLEAR_IO_INSTANCE = 'CLEAR_IO_INSTANCE';

@@ -1,41 +1,37 @@
 import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import _ from "lodash";
 import { notification } from 'antd';
 import { Link } from 'react-router-dom';
 import io from 'socket.io-client';
+import { saveIoInstance, clearIoInstance } from '../../redux/notification';
 
 const Notify = () => {
 
+    const notify = useSelector(state => state.notify);
     const user = useSelector(state => state.user);
     const { token } = useSelector(state => state.auth);
-    const [ioConnect, setioConnect] = useState(null);
-    const [data, setdata] = useState({});
+
+    const dispatch = useDispatch();
 
     useEffect(() => {
 
         if (_.isEmpty(token)) {
-            setioConnect(null)
+            dispatch(clearIoInstance())
         }
 
     }, [token]);
 
     useEffect(() => {
 
-        if (_.isEmpty(ioConnect) && !_.isEmpty(user?.currentUser)) {
+
+        if (_.isEmpty(notify?.io) && !_.isEmpty(user?.currentUser)) {
             const ioConnectData = io(process.env.REACT_APP_SERVER);
-            setioConnect(ioConnectData)
+            dispatch(saveIoInstance(ioConnectData))
             ioConnectData.emit("client-send-userId", user?.currentUser?.cusId + "customer")
         }
 
     }, [user?.currentUser]);
-
-    useEffect(() => {
-        
-        getMessage()
-
-    }, []);
-
 
     const notifyPanel = (data) => {
         if(!_.isEmpty(data)) {
@@ -53,8 +49,8 @@ const Notify = () => {
     }
 
     const getMessage = () => {
-        if(ioConnect) {
-            ioConnect.on("server-send-notification", (data) => {
+        if(notify?.io) {
+            notify.io.on("server-send-notification", (data) => {
                 notifyPanel(data)
             })
         }

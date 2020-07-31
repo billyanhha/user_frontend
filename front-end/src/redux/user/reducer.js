@@ -3,7 +3,7 @@ import {
     GET_USER_PROFILE_SUCCESSFUL, EDIT_USER_PROFILE_SUCCESSFUL, RESET_UPLOAD_STATUS,
     CHANGE_PASSWORD_SUCCESSFUL, CHANGE_EMAIL_SUCCESSFUL, CHANGE_PHONE_SUCCESSFUL, CHANGE_PHONE_VERIFY_SUCCESSFUL, CHANGE_PHONE_CANCEL_SUCCESSFUL,
     RESET_SETTING_STATUS,
-    GET_PATIENT_SUCCESSFUL, GET_USER_PACKAGE_SUCCESSFUL, SAVE_IO_INSTANCE
+    GET_PATIENT_SUCCESSFUL, GET_USER_PACKAGE_SUCCESSFUL
 } from "./action";
 
 const initialState = {
@@ -42,10 +42,6 @@ export const userReducer = (state = initialState, action) => {
     switch (action.type) {
         case GET_USER_SUCCESSFUL: {
             state = { ...state, currentUser: action.currentUser }
-            return state;
-        }
-        case SAVE_IO_INSTANCE: {
-            state = { ...state, io: action.data }
             return state;
         }
         case CLEAR_USER_INFO:
