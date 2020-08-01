@@ -1,33 +1,88 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import './style.css'
 import { Drawer, Button, Badge } from 'antd';
 import { NotificationOutlined } from '@ant-design/icons';
+import { useDispatch, useSelector } from 'react-redux';
+import { getUserNotification, getMoreUserNotification, markReadNotify, markAllRead } from '../../redux/notification';
+import moment from "moment";
+import {
+    FieldTimeOutlined
+} from '@ant-design/icons';
+
+
+const itemsPage = 30
 
 const Notification = (props) => {
+
+    const dispatch = useDispatch()
+    const { notifications, isOutOfData } = useSelector(state => state.notify);
+    const { currentUser } = useSelector(state => state.user);
+    const { isLoad } = useSelector(state => state.ui);
+    const { unreadNotifyNumber } = useSelector(state => state.notify);
+
+    const [page, setpage] = useState(1);
+    const [disable, setdisable] = useState(false);
+
+    useEffect(() => {
+
+        const data = { id: currentUser?.cusId, itemsPage: itemsPage, page: page }
+        dispatch(getUserNotification(data))
+
+    }, [currentUser]);
+
+    const getMoreUserNotificationData = () => {
+        setdisable(true)
+        let currentPage = page;
+        const data = { id: currentUser?.cusId, itemsPage: itemsPage , page: ++currentPage }
+        setpage(currentPage)
+        dispatch(getMoreUserNotification(data))
+        setTimeout(() => {
+            setdisable(false)
+        }, 1000);
+    }
+
+    const markAllReadFunc = () => {
+        const data = {id: currentUser?.cusId, itemsPage: itemsPage, page: 1 , receiver_id : currentUser?.cusId};
+        dispatch(markAllRead(data))
+
+    }
 
     const renderHeader = () => {
         return (
             <div className="drawer-header">
                 <div>
-                    <Badge count={1000} overflowCount={999} offset={[20, 0]}>
-                        <h3>Thông báo <NotificationOutlined/></h3>
+                    <Badge count={unreadNotifyNumber} showZero>
+                        <h3>Thông báo <NotificationOutlined /></h3>
                     </Badge>
                 </div>
-                <Button type="link" primary>
+                <Button onClick = {markAllReadFunc} type="link" primary>
                     Đánh dấu tất cả là đã xem
                 </Button>
             </div>
         )
     }
 
-    const renderNotify = [1, 3, 4, 5, 6, 7, 8, 9, 3, 4, 4, 56, 5, 55, 5, 5, 5, 55, 5, 5, 5, 5].map((value, index) => {
+    const markReadNotifyFunc = (id) => {
+        const data = { id: id, is_read: true }
+        dispatch(markReadNotify(data))
+    }
+
+    const renderNotify = notifications.map((value, index) => {
         return (
-            <div className="notify-item">
-                <Badge status="processing" />
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut augue quam, blandit ac ultrices ut, euismod a ante. Nam egestas, nunc a luctus pretium, erat diam scelerisque erat, a volutpat arcu eros sed libero. Sed elementum, metus non cursus mollis, elit purus molestie urna, quis pellentesque eros arcu a metus. Fusce eleifend elit at finibus accumsan. Curabitur a auctor sapien. Fusce eu feugiat dui. Cras nisl est, auctor a tincidunt eu, suscipit id metus. Suspendisse eget aliquet elit, hendrerit auctor massa. Cras posuere volutpat sagittis. Curabitur vel erat erat. Mauris facilisis tempus elit, in ultrices ipsum pharetra et.
+            <div onClick={() => markReadNotifyFunc(value?.id)}>
+                <a href={value?.url} className={(!value?.is_read ? "notify-item-nonread " : "notify-item")}>
+                    <p key={value?.id}>
+                        <Badge status="processing" />
+                        {value?.content}
+                    </p>
+                    <div className="notify-date">
+                        <FieldTimeOutlined /> {moment(value?.created_at).startOf('hour').fromNow()}
+                    </div>
+                </a>
             </div>
         )
     })
+
 
     return (
         <div className="notify-drawer">
@@ -42,7 +97,10 @@ const Notification = (props) => {
                 {renderNotify}
                 <div className="notify-loadmore">
                     <center>
-                        <Button className = "notify-loadmore-btn" type="primary">Tải thêm</Button>
+                        <Button
+                            style={{ visibility: `${isOutOfData ? 'hidden' : 'visible'}` }}
+                            loading={disable || isLoad}
+                            onClick={getMoreUserNotificationData} className="notify-loadmore-btn" type="primary">Tải thêm</Button>
                     </center>
                 </div>
             </Drawer>

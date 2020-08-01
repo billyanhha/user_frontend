@@ -4,7 +4,7 @@ import _ from "lodash";
 import { notification } from 'antd';
 import { Link } from 'react-router-dom';
 import io from 'socket.io-client';
-import { saveIoInstance, clearIoInstance } from '../../redux/notification';
+import { saveIoInstance, clearIoInstance, countUnreadNotify, markReadNotify, getUserNotification } from '../../redux/notification';
 
 const Notify = () => {
 
@@ -33,27 +33,48 @@ const Notify = () => {
 
     }, [user?.currentUser]);
 
+    const markReadNotifyFunc = (id) => {
+        const data = { id: id, is_read: true }
+        dispatch(markReadNotify(data))
+    }
+
+
     const notifyPanel = (data) => {
-        if(!_.isEmpty(data)) {
+        if (!_.isEmpty(data)) {
             const btn = (
-                <a href={data?.url}>Chi tiết</a>
+                <div onClick={() => markReadNotifyFunc(data?.id)}>
+                    <a href={data?.url}>Chi tiết</a>
+                </div>
             );
             notification["info"]({
                 key: data?.id,
                 message: 'Thông báo',
                 description: data?.content,
                 btn,
-                duration: 4
+                duration: 0,
+                placement: 'bottomLeft'
             });
         }
     }
 
     const getMessage = () => {
-        if(notify?.io) {
+        if (notify?.io) {
             notify.io.on("server-send-notification", (data) => {
+                getNewNotify()
+                getNotifyNum();
                 notifyPanel(data)
             })
         }
+    }
+
+    const getNewNotify = () => {
+        const data = { id: user?.currentUser?.cusId, itemsPage: 30, page: 1 }
+        dispatch(getUserNotification(data))
+    }
+
+    const getNotifyNum = () => {
+        const data = { receiver_id: user?.currentUser?.cusId }
+        dispatch(countUnreadNotify(data))
     }
 
     return !_.isEmpty(token) ? (

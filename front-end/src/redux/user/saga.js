@@ -13,7 +13,6 @@ import {
 } from '.'
 import { userLogout } from '../auth';
 import { message } from 'antd';
-import i18n from 'i18next';
 import { openLoading, closeLoading } from '../ui';
 import _ from "lodash"
 

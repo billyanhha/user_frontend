@@ -9,6 +9,7 @@ import { patientSaga } from './patient/saga';
 import { bookingSaga } from './booking/saga';
 import { slotSaga } from './slot/saga';
 import { packageSaga } from './package/saga';
+import { notifySaga } from './notification/saga';
 
 export function* rootSaga() {
   yield all([
@@ -21,6 +22,7 @@ export function* rootSaga() {
     patientSaga(),
     bookingSaga(),
     slotSaga(),
-    packageSaga()
+    packageSaga(),
+    notifySaga()
   ]);
 }

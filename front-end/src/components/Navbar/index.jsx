@@ -9,12 +9,14 @@ import _ from 'lodash'
 import { userLogout } from '../../redux/auth';
 import logoxz from '../../assest/logo/logo3 2.png';
 import Notification from '../Notification';
+import { countUnreadNotify } from '../../redux/notification';
 const Navbar = (props) => {
 
     const { location } = props;
     const history = useHistory();
     const [menu_class, setMenu_class] = useState('');
     const [drawerVisible, setdrawerVisible] = useState(false);
+    const { unreadNotifyNumber } = useSelector(state => state.notify);
     const { currentUser } = useSelector(state => state.user);
     const auth = useSelector(state => state.auth);
     const dispatch = useDispatch();
@@ -28,6 +30,14 @@ const Navbar = (props) => {
             dispatch(getUser(auth.token));
         }
     }, []);
+
+    useEffect(() => {
+        if (currentUser?.cusId) {
+            const data = { receiver_id: currentUser?.cusId }
+            dispatch(countUnreadNotify(data))
+        }
+    }, [currentUser]);
+
 
     const CustomLink = (to, name) => {
         return (
@@ -72,7 +82,7 @@ const Navbar = (props) => {
                 Trang quản lý của tôi
             </Menu.Item>
             <Menu.Item key="notify">
-                Thông báo
+                <span className="hightlight">{unreadNotifyNumber} </span>Thông báo mới
             </Menu.Item>
             <Menu.Item key="logout">
                 Đăng xuất
@@ -86,7 +96,7 @@ const Navbar = (props) => {
                 <Dropdown overlay={userMenu} className="nav-userInfo-user">
                     <span className="nav-userInfo-user-name" >
                         <span className="avatar-item">
-                            <Badge count={1}>
+                            <Badge count={unreadNotifyNumber} showZero>
                                 <Avatar size="large" shape={"square"} src={currentUser?.avatarurl} />
                             </Badge>
                         </span>
