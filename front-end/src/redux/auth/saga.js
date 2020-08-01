@@ -50,11 +50,11 @@ function* watchUserLogout(action) {
         yield put(clearUserInfo())
         yield put(clearIoInstance())
         yield put(resetPackageForm())
+        window.location.pathname = "/login";
 
     } catch (error) {
         console.log(error);
     } finally {
-        window.location.pathname = "/login";
         yield put(hideLoading())
     }
 }

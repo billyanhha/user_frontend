@@ -66,14 +66,17 @@ const Notification = (props) => {
         )
     }
 
-    const markReadNotifyFunc = (id) => {
-        const data = { id: id, is_read: true }
-        dispatch(markReadNotify(data))
+    const markReadNotifyFunc = (value) => {
+        if(!value?.is_read) {
+            const data = { id: value?.id, is_read: true }
+            dispatch(markReadNotify(data))
+        }
+
     }
 
     const renderNotify = notifications.map((value, index) => {
         return (
-            <div onClick={() => markReadNotifyFunc(value?.id)}>
+            <div onClick={() => markReadNotifyFunc(value)}>
                 <a href={value?.url} className={(!value?.is_read ? "notify-item-nonread " : "notify-item")}>
                     <p key={value?.id}>
                         <Badge status="processing" />
