@@ -68,13 +68,19 @@ const Notify = () => {
     }
 
     const getNewNotify = () => {
-        const data = { id: user?.currentUser?.cusId, itemsPage: 30, page: 1 }
-        dispatch(getUserNotification(data))
+        if(user?.currentUser?.cusId) {
+            const data = { id: user?.currentUser?.cusId, itemsPage: 30, page: 1 }
+            dispatch(getUserNotification(data))
+        }
+
     }
 
     const getNotifyNum = () => {
-        const data = { receiver_id: user?.currentUser?.cusId }
-        dispatch(countUnreadNotify(data))
+        if(user?.currentUser?.cusId){
+            const data = { receiver_id: user?.currentUser?.cusId }
+            dispatch(countUnreadNotify(data))
+        }
+
     }
 
     return !_.isEmpty(token) ? (

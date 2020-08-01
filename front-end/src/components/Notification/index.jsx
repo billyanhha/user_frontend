@@ -25,8 +25,12 @@ const Notification = (props) => {
 
     useEffect(() => {
 
-        const data = { id: currentUser?.cusId, itemsPage: itemsPage, page: page }
-        dispatch(getUserNotification(data))
+        if(currentUser?.cusId) {
+            const data = { id: currentUser?.cusId, itemsPage: itemsPage, page: page }
+            dispatch(getUserNotification(data))
+        }
+
+
 
     }, [currentUser]);
 
