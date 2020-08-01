@@ -314,9 +314,7 @@ const ChartCurrentHealth = (props) => {
                         </div>
                     </div>
                 </div> :
-                <div>
-                    <h2>Hiện tại, bạn đang chưa trong quá trình sử dụng dịch vụ. Xin vui lòng sử dụng đặt lịch!</h2>
-                </div>}
+                ""}
 
         </div>
     );

@@ -115,7 +115,11 @@ const BookingReason = (props) => {
         if (_.isEmpty(patient?.id)) {
             message.destroy()
             message.error("Xin vui lòng chọn bệnh nhân")
-        } else {
+        } 
+        else if (searchAddress===""){
+            message.destroy()
+            message.error("Xin vui lòng chọn địa chỉ hợp lệ được hiển thị trên gợi ý")
+        }else {
             const newData = { ...data, address: searchAddress, id: patient.id, fullname: patient.fullname, type: patient.type, position: currentPosition }
             dispatch(saveBookingInfo(newData));
             dispatch(nextStep());
