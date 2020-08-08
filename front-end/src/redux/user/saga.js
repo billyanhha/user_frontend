@@ -26,7 +26,7 @@ function* wachGetUserbWorker(action) {
             }
         }
     } catch (error) {
-        if (error?.response?.status  === 401) {
+        if (error?.response?.status  === 403 || error?.response?.status  === 401) {
             yield put(userLogout());
             message.destroy();
             message.error('Phiên đã hết hạn , vui lòng đăng nhập lại', 3)

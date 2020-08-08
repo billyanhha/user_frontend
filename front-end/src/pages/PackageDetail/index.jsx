@@ -96,7 +96,7 @@ const PackageDetail = (props) => {
     }
 
     const backToPreviousPage = () => {
-        props.history.goBack()
+        props.history.push("/profile")
     }
 
     const checkStatusPackage = () => {

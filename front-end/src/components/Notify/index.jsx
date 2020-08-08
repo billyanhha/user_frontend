@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import _ from "lodash";
-import { notification } from 'antd';
-import { Link } from 'react-router-dom';
+import { notification, Button } from 'antd';
+import { Link, withRouter } from 'react-router-dom';
 import io from 'socket.io-client';
 import { saveIoInstance, clearIoInstance, countUnreadNotify, markReadNotify, getUserNotification } from '../../redux/notification';
 
-const Notify = () => {
+const Notify = (props) => {
 
     const notify = useSelector(state => state.notify);
     const user = useSelector(state => state.user);
@@ -33,18 +33,21 @@ const Notify = () => {
 
     }, [user?.currentUser]);
 
-    const markReadNotifyFunc = (id) => {
-        const data = { id: id, is_read: true }
-        dispatch(markReadNotify(data))
+    const markReadNotifyFunc =  (value) => {
+        if(!value?.is_read) {
+            const data = { id: value?.id, is_read: true }
+            dispatch(markReadNotify(data))
+        }
+        window.location.href = (value?.url)
     }
 
 
     const notifyPanel = (data) => {
         if (!_.isEmpty(data)) {
             const btn = (
-                <div onClick={() => markReadNotifyFunc(data?.id)}>
-                    <a href={data?.url}>Chi tiết</a>
-                </div>
+                <Button type = "link" onClick={() => markReadNotifyFunc(data)}>
+                    Chi tiết
+                </Button>
             );
             notification["info"]({
                 key: data?.id,
@@ -90,4 +93,4 @@ const Notify = () => {
     ) : '';
 };
 
-export default Notify;
+export default withRouter(Notify);

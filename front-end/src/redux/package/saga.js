@@ -135,6 +135,7 @@ function* watchChangePackageStatusWorker(action) {
         message.success("Thay đổi trạng thái thành công");
         if (!_.isEmpty(result)) {
             yield put(getPackageStatus(action?.data?.packageId))
+            yield put(getPackageAppointments(action?.data?.packageId))
         }
     } catch (error) {
         message.destroy();

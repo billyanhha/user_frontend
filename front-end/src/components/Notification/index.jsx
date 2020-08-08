@@ -71,21 +71,22 @@ const Notification = (props) => {
             const data = { id: value?.id, is_read: true }
             dispatch(markReadNotify(data))
         }
+        window.location.href = (value?.url)
 
     }
 
     const renderNotify = notifications.map((value, index) => {
         return (
-            <div onClick={() => markReadNotifyFunc(value)}>
-                <a href={value?.url} className={(!value?.is_read ? "notify-item-nonread " : "notify-item")}>
-                    <p key={value?.id}>
+            <div  key={value?.id} onClick={() => markReadNotifyFunc(value)}>
+                <div className={(!value?.is_read ? "notify-item-nonread " : "notify-item")}>
+                    <p>
                         <Badge status="processing" />
                         {value?.content}
                     </p>
                     <div className="notify-date">
                         <FieldTimeOutlined /> {moment(value?.created_at).startOf('hour').fromNow()}
                     </div>
-                </a>
+                </div>
             </div>
         )
     })
