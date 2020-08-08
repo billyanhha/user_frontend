@@ -35,9 +35,8 @@ function* watchUserLoginWorker(action) {
         }
 
     } catch (error) {
-
         message.destroy();
-        message.error('Số điện thoại hoặc mật khẩu sai', 2);
+        message.error(error?.response?.data?.err)
     } finally {
         // message.destroy()
         yield put(closeLoading())
