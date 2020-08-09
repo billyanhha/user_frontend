@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 import Appointment from './Appointment.jsx';
 import Mycalendar from './Calendar';
 import { useEffect } from 'react';
-import { getPackageServices, getPackageAppointments } from '../../../../redux/package';
+import { getPackageServices, getPackageAppointments, getAllAppointmentByPackage } from '../../../../redux/package';
 
 
 const PackageAppointment = (props) => {
@@ -19,6 +19,7 @@ const PackageAppointment = (props) => {
         Promise.all([
             dispatch(getPackageAppointments(props.id)),
             dispatch(getPackageServices(props.id)),
+            dispatch(getAllAppointmentByPackage(props.id))
         ])
 
 
