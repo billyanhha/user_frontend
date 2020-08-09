@@ -30,6 +30,8 @@ function* wachGetUserbWorker(action) {
             yield put(userLogout());
             message.destroy();
             message.error('Phiên đã hết hạn , vui lòng đăng nhập lại', 3)
+
+    
         }
         console.log(error);
     } finally {

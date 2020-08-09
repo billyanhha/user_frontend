@@ -201,6 +201,7 @@ function* watchGetAllAppointmentByPackageId(action) {
             yield put(getAllAppointmentByPackageSuccessful(result?.appointments));
         }
     } catch (error) {message.destroy();
+        
         message.error(error?.response?.data?.err)
         console.log(error);
     } finally {
