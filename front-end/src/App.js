@@ -15,10 +15,11 @@ import QA from './pages/QA';
 import Booking from './pages/Booking';
 import PrivateRoute from './routeConfig/PrivateRoute';
 import AddressGoogleMap from './pages/AddressGoogleMap';
-
 import './App.css';
 import PackageDetail from './pages/PackageDetail';
 import Notify from './components/Notify';
+import FloatingButton from './components/FloatingButton';
+import { Tooltip } from 'antd';
 require('dotenv').config()
 
 const App = () => {
@@ -27,6 +28,7 @@ const App = () => {
     <BrowserRouter>
       <Notify />
       <LoadingBar showFastActions className="loading-bar" />
+      <FloatingButton />
       <Switch >
         <Route exact path="/" render={(props) => <Home {...props} />} />
         <Route exact path="/login" render={(props) => <Login {...props} />} />
@@ -48,7 +50,7 @@ const App = () => {
         <Route path="*"><NoMatch /> </Route>
       </Switch>
       <MessengerCustomerChat
-        pageId="585831004909513"
+        pageId="598146043893373"
         appId="912333495590130"
         htmlRef={window.location.pathname}
       />

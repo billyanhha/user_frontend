@@ -53,11 +53,6 @@ const UserDashBoard = () => {
                             <TabPane tab={<span><SettingOutlined />Cài đặt</span>} key="4">
                                 <Setting />
                             </TabPane>
-                            <TabPane tab={<span><MessageOutlined />Thông báo</span>} key="5">
-                                <div className="dashboard-component">
-                                    Thông báo
-                                </div>
-                            </TabPane>
                         </Tabs>
                     </div>
                 </div>
