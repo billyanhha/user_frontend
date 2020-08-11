@@ -14,12 +14,11 @@ import Dashboard from './pages/UserDashBoard'
 import QA from './pages/QA';
 import Booking from './pages/Booking';
 import PrivateRoute from './routeConfig/PrivateRoute';
-import AddressGoogleMap from './pages/AddressGoogleMap';
 import './App.css';
 import PackageDetail from './pages/PackageDetail';
 import Notify from './components/Notify';
 import FloatingButton from './components/FloatingButton';
-import { Tooltip } from 'antd';
+import Messenger from './pages/Messenger';
 require('dotenv').config()
 
 const App = () => {
@@ -38,6 +37,9 @@ const App = () => {
         <Route exact path='/service' component={FilterService} />
         <PrivateRoute exact path="/booking">
           <Booking />
+        </PrivateRoute>
+        <PrivateRoute exact path="/messenger">
+          <Messenger />
         </PrivateRoute>
         <PrivateRoute exact path="/profile">
           <Dashboard />

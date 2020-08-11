@@ -6,6 +6,7 @@ import { Provider } from "react-redux";
 import configureStore from './redux/store/configureStore';
 import { PersistGate } from 'redux-persist/integration/react';
 import 'antd/dist/antd.css'; // Import Ant Design styles by less entry
+import 'react-chat-elements/dist/main.css';
 import "react-datepicker/dist/react-datepicker.css";
 import { ConfigProvider } from 'antd';
 import vi_VN from 'antd/es/locale/vi_VN';

@@ -6,12 +6,14 @@ import { withRouter } from 'react-router-dom';
 
 const FloatingButton = (props) => {
 
-    const toProfile = () => {
-        props.history.push("/profile")
+
+
+    const toMessenger = () => {
+        props.history.push("/messenger")
     }
 
 
-    return (
+    return props.location.pathname === '/messenger' ? '' : (
         <Fab
             // mainButtonStyles={mainButtonStyles}
             // actionButtonStyles={actionButtonStyles}
@@ -21,8 +23,8 @@ const FloatingButton = (props) => {
                 <Badge count={5}>
                     <MessageOutlined style={{ fontSize: '23px', color: '#00BC9A' }} />
                 </Badge>}
-            text={<p>Chat với bác sĩ <br/> 5 tin nhắn mới</p>}
-            onClick={toProfile}
+            text={<p>Chat với bác sĩ <br /> 5 tin nhắn mới</p>}
+            onClick={toMessenger}
         >
         </Fab>
     );

@@ -73,16 +73,21 @@ const Navbar = (props) => {
             history.push('/profile');
         } else if (e.key === 'notify') {
             setdrawerVisible(true)
+        } else if (e.key === 'messenger') {
+            history.push('/messenger');
         }
     };
 
     const userMenu = (
         <Menu onClick={handleUserMenuClick}>
-            <Menu.Item key="profile">
-                Trang quản lý của tôi
-            </Menu.Item>
             <Menu.Item key="notify">
                 <span className="hightlight">{unreadNotifyNumber} </span>Thông báo mới
+            </Menu.Item>
+            <Menu.Item key="messenger">
+                Tin nhắn
+            </Menu.Item>
+            <Menu.Item key="profile">
+                Trang quản lý của tôi
             </Menu.Item>
             <Menu.Item key="logout">
                 Đăng xuất
