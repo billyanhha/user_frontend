@@ -20,6 +20,7 @@
 .messenger-content { 
     flex-basis: 75%;
     border-left: 1px solid #dadada;
+    position: relative;
 }
 
 .messenger-chatlist-header{
@@ -36,22 +37,31 @@
 }
 
 
+
 .messenger-chat-content { 
     padding: 20px 0px;
     padding-bottom: 0;
     height: 100%;
 }
 
-.messenger-chat-content-list{
-    padding-bottom: 30px;
-}
 
 .messenger-chat-content-input{
     position: sticky;
+
     bottom: 0;
-    height: 50px;
+    /* height: 50px; */
     background-color: #fff;
+    padding: 10px;
+    /* padding-left: 10px; */
 }
+
+
+.messenger-chat-content-input-form{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
 
 .messenger-chat-header{
     position: sticky;
@@ -68,6 +78,81 @@
 .messenger-chat-header > b {
     margin-left: 10px;
     font-size: 15px;
+}
+
+.messenger-chat-item{
+    display: flex;
+    align-items: flex-start;
+    margin: 20px 0px;
+    margin-left: 10px;
+}
+
+.messenger-chat-item:first-of-type {
+    display: flex;
+    align-items: flex-start;
+    margin: 20px 0px;
+    margin-left: 10px;
+    margin-top: 10px;
+
+}
+
+.messenger-chat-item-content{
+    margin-left: 10px;
+}
+
+.messenger-chat-item-content-box > .rce-mbox{
+    box-shadow: 1px 1px 1px 1px #dadada !important;
+}
+
+.messenger-chat-content-input-area{
+    height: 50px;
+    background-color: #dadada;
+    /* border-radius: 50px; */
+}
+
+.messenger-chat-content-input-upload-file{
+    width: 80px;
+    overflow: hidden;
+}
+
+/* Upload  */
+
+.messenger-chat-content-input-image{
+    width: 100%;
+}
+
+.mess-search{
+    padding: 10px 15px 10px 13px;
+}
+
+.mess-search-currentdoctor-list{
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+    border-bottom: 1px solid #ddd;
+}
+
+.mess-search-currentdoctor{
+    padding: 10px 0px;
+    display: flex;
+    flex-wrap: nowrap;
+    transition: all .3s ease-in-out;
+    cursor: pointer;
+}
+
+.mess-search-currentdoctor:hover{
+    background-color: #ddd;
+}
+
+.mess-search-currentdoctor-info{
+    margin-left: 5px;
+}
+
+.mess-search-currentdoctor-info-big{
+    font-size: 15px
+}
+
+.mess-search-currentdoctor-info-small{
+    font-size: 10px
 }
 
 

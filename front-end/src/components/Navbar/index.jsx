@@ -74,7 +74,7 @@ const Navbar = (props) => {
         } else if (e.key === 'notify') {
             setdrawerVisible(true)
         } else if (e.key === 'messenger') {
-            history.push('/messenger');
+            history.push('/messenger/t');
         }
     };
 

@@ -9,11 +9,11 @@ const FloatingButton = (props) => {
 
 
     const toMessenger = () => {
-        props.history.push("/messenger")
+        props.history.push("/messenger/t")
     }
 
 
-    return props.location.pathname === '/messenger' ? '' : (
+    return props.location.pathname === '/messenger/t' ? '' : (
         <Fab
             // mainButtonStyles={mainButtonStyles}
             // actionButtonStyles={actionButtonStyles}

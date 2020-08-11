@@ -38,7 +38,7 @@ const App = () => {
         <PrivateRoute exact path="/booking">
           <Booking />
         </PrivateRoute>
-        <PrivateRoute exact path="/messenger">
+        <PrivateRoute exact path="/messenger/:id">
           <Messenger />
         </PrivateRoute>
         <PrivateRoute exact path="/profile">

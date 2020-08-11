@@ -10,7 +10,6 @@ import _ from "lodash"
 
 import "./style.css";
 
-const { Search } = Input;
 
 const { TabPane } = Tabs;
 
@@ -40,21 +39,22 @@ const UserPackage = () => {
     }, [curPage]);
 
 
+
     const resetGet = () => {
         setsearchText('')
         setcurrentPage(1)
     }
 
     const handleMenuClick = (e) => {
-        resetGet()
+        setcurrentPage(1)
         setcurPatient(e.key)
         handleGetUserPackage(e.key, curStatus, 1, '')
     }
 
     const onStatusChange = (key) => {
-        resetGet()
+        setcurrentPage(1)
         setstatus(key)
-        handleGetUserPackage(curPatient, key, 1, '')
+        handleGetUserPackage(curPatient, key, 1, searchText)
 
     }
 
@@ -66,7 +66,7 @@ const UserPackage = () => {
     const onSearchChange = _.debounce((value) => {
         setsearchText(value)
         setcurrentPage(1)
-        handleGetUserPackage(curPatient, '-1', 1, value)
+        handleGetUserPackage(curPatient, curStatus, 1, value)
 
     }, 300)
 
@@ -121,7 +121,7 @@ const UserPackage = () => {
         return (
             <TabPane tab={status[value].msg} key={status[value].id}>
                 <div className="package-main-wrapper">
-                    <Search
+                    <Input.Search
                         size="large"
                         defaultValue={searchText}
                         className="package-search"

@@ -10,6 +10,7 @@ import { bookingSaga } from './booking/saga';
 import { slotSaga } from './slot/saga';
 import { packageSaga } from './package/saga';
 import { notifySaga } from './notification/saga';
+import { chatSaga } from './chat/saga';
 
 export function* rootSaga() {
   yield all([
@@ -23,6 +24,7 @@ export function* rootSaga() {
     bookingSaga(),
     slotSaga(),
     packageSaga(),
-    notifySaga()
+    notifySaga(),
+    chatSaga()
   ]);
 }
