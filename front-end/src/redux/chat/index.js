@@ -1,4 +1,8 @@
-import { GET_CHAT, GET_MORE_CHAT, GET_CHAT_SUCCESSFUL, GET_MORE_CHAT_SUCCESSFUL, GET_THREAD_CHAT_SUCCESSFUL, GET_THREAD_CHAT, GET_MORE_THREAD_CHAT, GET_MORE_THREAD_CHAT_SUCCESSFUL, GET_USER_RELATE_DOCTOR, GET_USER_RELATE_DOCTOR_SUCCESSFUL } from "./action"
+import { GET_CHAT, GET_MORE_CHAT, GET_CHAT_SUCCESSFUL,
+     GET_MORE_CHAT_SUCCESSFUL, GET_THREAD_CHAT_SUCCESSFUL,
+      GET_THREAD_CHAT, GET_MORE_THREAD_CHAT, GET_MORE_THREAD_CHAT_SUCCESSFUL,
+       GET_USER_RELATE_DOCTOR, GET_USER_RELATE_DOCTOR_SUCCESSFUL,
+        SEND_MESSAGE, GET_UNREAD_GROUP, GET_UNREAD_GROUP_SUCCESSFUL } from "./action"
 
 export const getChat = (payload) => {    
     return {
@@ -80,5 +84,24 @@ export const getUserRelateDoctorSuccessful = (payload) => {
     }
 }
 
+export const sendMessage = (payload) => {
+    return {
+        type: SEND_MESSAGE,
+        payload
+    }
+}
 
+export const getUnreadGroup = (payload) => {
+    return {
+        type: GET_UNREAD_GROUP,
+        payload
+    }
+}
+
+export const getUnreadGroupSuccessful = (payload) => {
+    return {
+        type: GET_UNREAD_GROUP_SUCCESSFUL,
+        payload
+    }
+}
 

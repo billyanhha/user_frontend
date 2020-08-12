@@ -1,10 +1,10 @@
 import { put, takeLatest, select } from 'redux-saga/effects';
-import { GET_CHAT, GET_MORE_CHAT, GET_THREAD_CHAT, GET_MORE_THREAD_CHAT, GET_USER_RELATE_DOCTOR } from './action';
+import { GET_CHAT, GET_MORE_CHAT, GET_THREAD_CHAT, GET_MORE_THREAD_CHAT, GET_USER_RELATE_DOCTOR, GET_UNREAD_GROUP } from './action';
 import _ from 'lodash';
 import { openLoading, closeLoading } from '../ui';
 import { message } from 'antd';
 import chatService from '../../service/chatService';
-import { getChatSuccessful, getMoreChatSuccessful, getThreadChatSuccessful, getMoreThreadChatSuccessful, getUserRelateDoctorSuccessful } from '.';
+import { getChatSuccessful, getMoreChatSuccessful, getThreadChatSuccessful, getMoreThreadChatSuccessful, getUserRelateDoctorSuccessful, getUnreadGroupSuccessful } from '.';
 
 
 function* watchGetChatWorker(action) {
@@ -113,6 +113,27 @@ function* watchUserRelateDoctorWorker(action) {
 }
 
 
+function* watchGetUnreadWorker(action) {
+    try {
+        yield put(openLoading())
+        const {token} = yield select(state => state.auth)
+        const result = yield chatService.getUnreadGroup(action.payload , token);
+        if (!_.isEmpty(result?.result?.num_group_unread)) {
+
+            yield put(getUnreadGroupSuccessful(result?.result?.num_group_unread));
+        } else {
+            yield put(getUnreadGroupSuccessful(0));
+
+        }
+    } catch (error) {
+        message.destroy();
+        message.error(error?.response?.data?.err ?? 'Hệ thống quá tải, xin thử lại sau!', 3);
+    } finally {
+        yield put(closeLoading())
+    }
+
+}
+
 export function* chatSaga() {
 
     yield takeLatest(GET_CHAT, watchGetChatWorker);
@@ -120,5 +141,6 @@ export function* chatSaga() {
     yield takeLatest(GET_THREAD_CHAT, watchGetThreadChatWorker);
     yield takeLatest(GET_MORE_THREAD_CHAT, watchGetMoreThreadChatWorker);
     yield takeLatest(GET_USER_RELATE_DOCTOR, watchUserRelateDoctorWorker);
+    yield takeLatest(GET_UNREAD_GROUP, watchGetUnreadWorker);
 
 }

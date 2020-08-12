@@ -74,21 +74,19 @@ const MessChatList = (props) => {
 
     return (
         <div>
-            <Spin indicator={antIcon} spinning={isLoad}>
-                {
-                    (chatList?.length === 0 && !isLoad) ?
-                        (<center><h4>Bạn chưa có cuộc hội thoại nào</h4></center>) : ''
-                }
-                <div>
-                    {renderChatList}
-                    <center>
-                        <Button
-                            loading={disable || isLoad}
-                            style={{ display: `${isOutOfChatListData ? 'none' : ''}` }}
-                            type="link" onClick={getMoreChatData} >Tải thêm</Button>
-                    </center>
-                </div>
-            </Spin>
+            {
+                (chatList?.length === 0 && !isLoad) ?
+                    (<center><h4>Bạn chưa có cuộc hội thoại nào</h4></center>) : ''
+            }
+            <div>
+                {renderChatList}
+                <center>
+                    <Button
+                        loading={disable || isLoad}
+                        style={{ display: `${isOutOfChatListData ? 'none' : ''}` }}
+                        type="link" onClick={getMoreChatData} >Tải thêm</Button>
+                </center>
+            </div>
         </div>
     );
 };

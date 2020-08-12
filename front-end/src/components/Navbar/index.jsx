@@ -18,6 +18,8 @@ const Navbar = (props) => {
     const [drawerVisible, setdrawerVisible] = useState(false);
     const { unreadNotifyNumber } = useSelector(state => state.notify);
     const { currentUser } = useSelector(state => state.user);
+    const { nonReadGroupNumber } = useSelector(state => state.chat);
+
     const auth = useSelector(state => state.auth);
     const dispatch = useDispatch();
 
@@ -84,7 +86,7 @@ const Navbar = (props) => {
                 <span className="hightlight">{unreadNotifyNumber} </span>Thông báo mới
             </Menu.Item>
             <Menu.Item key="messenger">
-                Tin nhắn
+                <span className="hightlight">{nonReadGroupNumber}</span> Tin nhắn
             </Menu.Item>
             <Menu.Item key="profile">
                 Trang quản lý của tôi

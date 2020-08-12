@@ -2,6 +2,7 @@ import axios from "../axios";
 
 const chatService = {}
 
+const itemsPage = 11
 
 chatService.getChat = (payload , token) => new Promise((reslove, reject) => {
     const api = `/api/chat/group/customer/${payload.cusId}`;
@@ -43,6 +44,8 @@ chatService.getThreadChat = (payload , token) => new Promise((reslove, reject) =
     axios.get(api,  {
         params: {
             page : 1,
+            itemsPage: itemsPage
+
         },
         headers: {
             Authorization: "Bearer " + token,
@@ -61,7 +64,7 @@ chatService.getMoreThreadChat = (payload , token) => new Promise((reslove, rejec
     axios.get(api,  {
         params: {
             page : payload?.page,
-
+            itemsPage: itemsPage
         },
         headers: {
             Authorization: "Bearer " + token,
@@ -88,5 +91,20 @@ chatService.getUserRelateDoctor = (payload , token) => new Promise((reslove, rej
         })
         .catch(err => reject(err))
 });
+
+chatService.getUnreadGroup = (payload , token) => new Promise((reslove, reject) => {
+    const api = `/api/chat/group/customer/${payload.cusId}/unread`;    
+    axios.get(api,  {
+        headers: {
+            Authorization: "Bearer " + token,
+            Accept: '*/*'
+        }
+    })
+        .then(result => {            
+            reslove(result.data)
+        })
+        .catch(err => reject(err))
+});
+
 
 export default chatService
