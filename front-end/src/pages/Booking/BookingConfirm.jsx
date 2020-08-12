@@ -60,7 +60,7 @@ const BookingConfirm = () => {
                                 <p><b>Địa chỉ :     </b> {infos?.address}</p>
                                 <p><b>Số điện thoại :</b> {infos?.phone}</p>
                                 <p><b>Nguyên nhân : </b> {infos?.reason}</p>
-                                <p><b>Bác sĩ :      </b> {doctorInfo?.fullname}</p>
+                                <p><b>Bác sĩ :      </b> {doctorInfo?.fullname ? doctorInfo?.fullname : "Không chọn bác sĩ"}</p>
                                 <p><b>Thời gian :   </b> {bookingTime?.date} - vào slot {bookingTime?.slot_id}</p>
                             </div>
                         </div>
