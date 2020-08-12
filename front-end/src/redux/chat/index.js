@@ -1,4 +1,4 @@
-import { GET_CHAT, GET_MORE_CHAT, GET_CHAT_SUCCESSFUL, GET_MORE_CHAT_SUCCESSFUL, GET_THREAD_CHAT_SUCCESSFUL, GET_THREAD_CHAT, GET_MORE_THREAD_CHAT, GET_MORE_THREAD_CHAT_SUCCESSFUL } from "./action"
+import { GET_CHAT, GET_MORE_CHAT, GET_CHAT_SUCCESSFUL, GET_MORE_CHAT_SUCCESSFUL, GET_THREAD_CHAT_SUCCESSFUL, GET_THREAD_CHAT, GET_MORE_THREAD_CHAT, GET_MORE_THREAD_CHAT_SUCCESSFUL, GET_USER_RELATE_DOCTOR, GET_USER_RELATE_DOCTOR_SUCCESSFUL } from "./action"
 
 export const getChat = (payload) => {    
     return {
@@ -64,5 +64,21 @@ export const getMoreThreadChatSuccessful = (payload) => {
         payload
     }
 }
+
+
+export const getUserRelateDoctor = (payload) => {
+    return {
+        type: GET_USER_RELATE_DOCTOR,
+        payload
+    }
+}
+
+export const getUserRelateDoctorSuccessful = (payload) => {
+    return {
+        type: GET_USER_RELATE_DOCTOR_SUCCESSFUL,
+        payload
+    }
+}
+
 
 

@@ -74,4 +74,19 @@ chatService.getMoreThreadChat = (payload , token) => new Promise((reslove, rejec
         .catch(err => reject(err))
 });
 
+
+chatService.getUserRelateDoctor = (payload , token) => new Promise((reslove, reject) => {
+    const api = `/api/customer/${payload.cusId}/current-doctor`;    
+    axios.get(api,  {
+        headers: {
+            Authorization: "Bearer " + token,
+            Accept: '*/*'
+        }
+    })
+        .then(result => {            
+            reslove(result.data)
+        })
+        .catch(err => reject(err))
+});
+
 export default chatService

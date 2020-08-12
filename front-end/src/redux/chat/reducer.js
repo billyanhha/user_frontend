@@ -1,9 +1,10 @@
-import { GET_CHAT_SUCCESSFUL, GET_MORE_CHAT_SUCCESSFUL, GET_THREAD_CHAT_SUCCESSFUL, GET_MORE_THREAD_CHAT_SUCCESSFUL } from "./action";
+import { GET_CHAT_SUCCESSFUL, GET_MORE_CHAT_SUCCESSFUL, GET_THREAD_CHAT_SUCCESSFUL, GET_MORE_THREAD_CHAT_SUCCESSFUL, GET_USER_RELATE_DOCTOR_SUCCESSFUL } from "./action";
 
 const initialState = {
     chatList: [],
     isOutOfChatListData: false,
     currenThreadChat: {data: [], isOutOfData : false},
+    userRelateDoctor: []
 }
 
 export const chatReducer = (state = initialState, action) => {
@@ -22,6 +23,10 @@ export const chatReducer = (state = initialState, action) => {
         }
         case GET_MORE_THREAD_CHAT_SUCCESSFUL : {
             state = {...state , currenThreadChat: {data: [...action?.payload?.result , ...state?.currenThreadChat?.data  ], isOutOfData : action?.payload?.isOutOfData}};
+            return state
+        }
+        case GET_USER_RELATE_DOCTOR_SUCCESSFUL : {
+            state = {...state , userRelateDoctor: action?.payload};
             return state
         }
         default:  {

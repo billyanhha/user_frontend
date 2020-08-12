@@ -1,10 +1,10 @@
 import { put, takeLatest, select } from 'redux-saga/effects';
-import { GET_CHAT, GET_MORE_CHAT, GET_THREAD_CHAT, GET_MORE_THREAD_CHAT } from './action';
+import { GET_CHAT, GET_MORE_CHAT, GET_THREAD_CHAT, GET_MORE_THREAD_CHAT, GET_USER_RELATE_DOCTOR } from './action';
 import _ from 'lodash';
 import { openLoading, closeLoading } from '../ui';
 import { message } from 'antd';
 import chatService from '../../service/chatService';
-import { getChatSuccessful, getMoreChatSuccessful, getThreadChatSuccessful, getMoreThreadChatSuccessful } from '.';
+import { getChatSuccessful, getMoreChatSuccessful, getThreadChatSuccessful, getMoreThreadChatSuccessful, getUserRelateDoctorSuccessful } from '.';
 
 
 function* watchGetChatWorker(action) {
@@ -91,6 +91,26 @@ function* watchGetMoreThreadChatWorker(action) {
 
 }
 
+function* watchUserRelateDoctorWorker(action) {
+    try {
+        yield put(openLoading())
+        const {token} = yield select(state => state.auth)
+        const result = yield chatService.getUserRelateDoctor(action.payload , token);
+        if (!_.isEmpty(result?.doctors)) {
+
+            yield put(getUserRelateDoctorSuccessful(result?.doctors));
+        } else {
+            yield put(getUserRelateDoctorSuccessful([]));
+
+        }
+    } catch (error) {
+        message.destroy();
+        message.error(error?.response?.data?.err ?? 'Hệ thống quá tải, xin thử lại sau!', 3);
+    } finally {
+        yield put(closeLoading())
+    }
+
+}
 
 
 export function* chatSaga() {
@@ -99,5 +119,6 @@ export function* chatSaga() {
     yield takeLatest(GET_MORE_CHAT, watchGetMoreChatWorker);
     yield takeLatest(GET_THREAD_CHAT, watchGetThreadChatWorker);
     yield takeLatest(GET_MORE_THREAD_CHAT, watchGetMoreThreadChatWorker);
+    yield takeLatest(GET_USER_RELATE_DOCTOR, watchUserRelateDoctorWorker);
 
 }
