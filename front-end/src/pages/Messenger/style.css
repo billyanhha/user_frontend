@@ -8,7 +8,7 @@
 }
 
 .messenger-chatlist, .messenger-content {
-    max-height: calc(100vh - 70px);
+    height: calc(100vh - 70px);
     overflow: auto;
 
 }
@@ -17,10 +17,12 @@
     flex-basis: 25%;
 }
 
-.messenger-content { 
+
+
+.messenger-content-wrapper{
+    position: relative;
     flex-basis: 75%;
     border-left: 1px solid #dadada;
-    position: relative;
 }
 
 .messenger-chatlist-header{
@@ -41,14 +43,14 @@
 .messenger-chat-content { 
     padding: 20px 0px;
     padding-bottom: 0;
-    height: 100%;
 }
 
 
 .messenger-chat-content-input{
-    position: sticky;
-
+    position: absolute;
     bottom: 0;
+    left: 0;
+    right: 0;
     /* height: 50px; */
     background-color: #fff;
     padding: 10px;
@@ -80,28 +82,46 @@
     font-size: 15px;
 }
 
-.messenger-chat-item{
+.messenger-chat-item , .messenger-chat-item:first-of-type{
     display: flex;
-    align-items: flex-start;
-    margin: 20px 0px;
-    margin-left: 10px;
+    align-items: flex-end;
+    margin: 20px 10px;
+}
+
+.messenger-chat-item-user{
+    flex-direction: row-reverse;
+    
 }
 
 .messenger-chat-item:first-of-type {
-    display: flex;
-    align-items: flex-start;
-    margin: 20px 0px;
-    margin-left: 10px;
     margin-top: 10px;
 
 }
 
-.messenger-chat-item-content{
-    margin-left: 10px;
+.messenger-chat-item-content-nonuser , .messenger-chat-item-content-user{
+    max-width: 320px;
+    border-radius: 22px;
+    padding: 16px;
+    word-wrap: break-word;
 }
 
-.messenger-chat-item-content-box > .rce-mbox{
-    box-shadow: 1px 1px 1px 1px #dadada !important;
+.messenger-chat-item-content-image{
+    border-radius: 22px;
+    width: 100%;
+}
+
+.messenger-chat-item-content-user{
+    background-color: #EFEFEF;
+}
+
+.messenger-chat-item-content-nonuser{
+    border: 1px solid #efefef;
+    margin-left: 5px;
+}
+
+.chat-date{
+    font-size: 10px;
+    font-weight: bold;
 }
 
 .messenger-chat-content-input-area{
@@ -155,14 +175,35 @@
     font-size: 10px
 }
 
+.chat-item-wrapper  .rce-citem {
+    background-color: transparent !important;
+} 
+
+.messenger-chat-content-list{
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 70px;
+}
 
 @media screen and (max-width: 1024px) {
     .messenger-chatlist{
         flex-basis: 100%;
+        height: auto;
     }
     
-    .messenger-content { 
+    .messenger-content-wrapper { 
         flex-basis: 100%;
 
     }
+
+    .messenger-chat-content-input{
+        position: fixed;
+        bottom: 0;
+        width: 100%;
+        /* height: 50px; */
+        background-color: #fff;
+        padding: 10px;
+        /* padding-left: 10px; */
+    }
+    
 }

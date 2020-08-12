@@ -13,7 +13,7 @@ const FloatingButton = (props) => {
     }
 
 
-    return props.location.pathname === '/messenger/t' ? '' : (
+    return props.location.pathname.includes('/messenger')  ? '' : (
         <Fab
             // mainButtonStyles={mainButtonStyles}
             // actionButtonStyles={actionButtonStyles}

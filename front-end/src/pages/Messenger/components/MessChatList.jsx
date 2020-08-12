@@ -4,18 +4,21 @@ import { ChatItem } from 'react-chat-elements'
 import { useDispatch, useSelector } from 'react-redux';
 import { getChat, getMoreChat } from '../../../redux/chat';
 import { LoadingOutlined } from '@ant-design/icons';
-import { Spin } from 'antd';
+import { Spin, Button } from 'antd';
 import moment from "moment"
-import InfiniteScroll from 'react-infinite-scroller';
+import _ from "lodash";
+import { withRouter } from 'react-router-dom';
+
 const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
 
-const MessChatList = () => {
+const MessChatList = (props) => {
 
     const dispatch = useDispatch();
     const { chatList, isOutOfChatListData } = useSelector(state => state.chat);
     const { isLoad } = useSelector(state => state.ui);
     const { currentUser } = useSelector(state => state.user);
 
+    const [disable, setdisable] = useState(false);
     const [page, setpage] = useState(1);
 
     useEffect(() => {
@@ -24,28 +27,47 @@ const MessChatList = () => {
 
     }, [currentUser]);
 
+
     const getChatData = () => {
         const data = { page: page, cusId: currentUser?.cusId }
         dispatch(getChat(data))
     }
 
+
+
     const getMoreChatData = () => {
-        const nextPage = page++;
-        setpage(nextPage)
-        const data = { page: nextPage, cusId: currentUser?.cusId }
-        dispatch(getMoreChat(data))
+        if (!isOutOfChatListData && !isLoad) {
+
+            setdisable(true)
+            const nextPage = page + 1;
+            setpage(nextPage)
+            const data = { page: nextPage, cusId: currentUser?.cusId }
+            dispatch(getMoreChat(data))
+            setTimeout(() => {
+                setdisable(false)
+            }, 1000);
+        }
+    }
+
+    const openChatThread = (value) => {
+        props.history.push("/messenger/" + value?.doctor_id + "?name=" + value?.doctor_name + "&avatar=" + value?.doctor_avatar)
     }
 
 
     const renderChatList = chatList?.map((value, index) => {
-        return (<ChatItem
-            key={value?.doctor_id}
-            avatar={value?.doctor_avatar}
-            alt={value?.doctor_name}
-            title={value?.doctor_name}
-            subtitle={value?.msg}
-            date={moment(value?.last_created).format()}
-            unread={value?.num_customer_unread} />)
+        return (
+            <div key={value?.doctor_id}
+                className="chat-item-wrapper" style={{ backgroundColor: `${(props.match.params.id === value?.doctor_id) ? '#f2f2f2' : ''}` }}>
+                <ChatItem
+                    onClick={() => openChatThread(value)}
+                    avatar={value?.doctor_avatar}
+                    alt={value?.doctor_name}
+                    title={value?.doctor_name}
+                    subtitle={value?.msg}
+                    date={new Date(moment(value?.last_created).format())}
+                    unread={value?.num_customer_unread} />
+            </div>
+        )
     })
 
 
@@ -58,18 +80,17 @@ const MessChatList = () => {
                         (<center><h4>Bạn chưa có cuộc hội thoại nào</h4></center>) : ''
                 }
                 <div>
-                    <InfiniteScroll
-                        pageStart={0}
-                        loadMore={getMoreChatData}
-                        hasMore= {!isOutOfChatListData}
-                        loader={<Spin indicator={antIcon} />}
-                    >
-                        {renderChatList}
-                    </InfiniteScroll>
+                    {renderChatList}
+                    <center>
+                        <Button
+                            loading={disable || isLoad}
+                            style={{ display: `${isOutOfChatListData ? 'none' : ''}` }}
+                            type="link" onClick={getMoreChatData} >Tải thêm</Button>
+                    </center>
                 </div>
             </Spin>
         </div>
     );
 };
 
-export default MessChatList;
+export default withRouter(MessChatList);
