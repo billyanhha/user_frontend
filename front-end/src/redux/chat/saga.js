@@ -4,7 +4,7 @@ import _ from 'lodash';
 import { openLoading, closeLoading } from '../ui';
 import { message } from 'antd';
 import chatService from '../../service/chatService';
-import { getChatSuccessful, getMoreChatSuccessful, getChat,getThreadChatSuccessful, getMoreThreadChatSuccessful, getUserRelateDoctorSuccessful, getUnreadGroupSuccessful, getThreadChat, closeThreadLoad, openThreadLoad } from '.';
+import { getChatSuccessful, getMoreChatSuccessful, getChat,getThreadChatSuccessful, getMoreThreadChatSuccessful, getUserRelateDoctorSuccessful, getUnreadGroupSuccessful, getThreadChat, closeThreadLoad, openThreadLoad, sendChatLoad } from '.';
 
 
 function* watchGetChatWorker(action) {
@@ -138,7 +138,7 @@ function* watchGetUnreadWorker(action) {
 
 function* watchSendMessageWorker(action) {
     try {
-
+        yield put(sendChatLoad(true))
         const {token} = yield select(state => state.auth)
         const result = yield chatService.sendMessage(action.payload, action.cusId , token);
         if(!_.isEmpty(result?.result?.id)){
@@ -151,6 +151,7 @@ function* watchSendMessageWorker(action) {
         message.destroy();
         message.error(error?.response?.data?.err ?? 'Hệ thống quá tải, xin thử lại sau!', 3);
     } finally {
+        yield put(sendChatLoad(false))
     }
 
 }

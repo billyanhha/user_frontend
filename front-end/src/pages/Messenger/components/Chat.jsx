@@ -26,7 +26,7 @@ const Chat = (props) => {
 
     const dispatch = useDispatch();
     const { currentUser } = useSelector(state => state.user);
-    const { currenThreadChat, threadLoad } = useSelector(state => state.chat);
+    const { currenThreadChat, threadLoad, sendChatLoad } = useSelector(state => state.chat);
     const { isLoad } = useSelector(state => state.ui);
     const { io } = useSelector(state => state.notify);
 
@@ -115,7 +115,7 @@ const Chat = (props) => {
     }
 
     const clearChat = () => {
-        if(!threadLoad) {
+        if(!sendChatLoad) {
             setopenUploadFile(false)
             setchatText('')
             setFileList([]);
@@ -246,7 +246,7 @@ const Chat = (props) => {
                     <div className="messenger-chat-content-input-image">
                         {renderUploadFile}
                     </div>
-                    {/* <Spin size="large" indicator={antIcon} spinning={threadLoad} > */}
+                    <Spin size="large" indicator={antIcon} spinning={sendChatLoad} >
                         <div className="messenger-chat-content-input-form">
                             <div className="messenger-chat-content-input-upload-file">
                                 <Button type="link" onClick={openUploadImage}>
@@ -264,7 +264,7 @@ const Chat = (props) => {
                                 className="messenger-chat-content-input-area"
                                 placeholder="" />
                         </div>
-                    {/* </Spin> */}
+                    </Spin>
                 </div>
             </div>
         );

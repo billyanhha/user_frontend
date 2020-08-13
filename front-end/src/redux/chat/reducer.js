@@ -1,4 +1,4 @@
-import { GET_CHAT_SUCCESSFUL, GET_MORE_CHAT_SUCCESSFUL, GET_THREAD_CHAT_SUCCESSFUL, GET_MORE_THREAD_CHAT_SUCCESSFUL, GET_USER_RELATE_DOCTOR_SUCCESSFUL, GET_UNREAD_GROUP_SUCCESSFUL, OPEN_THREAD_LOAD, CLOSE_THREAD_LOAD } from "./action";
+import { GET_CHAT_SUCCESSFUL, GET_MORE_CHAT_SUCCESSFUL, GET_THREAD_CHAT_SUCCESSFUL, GET_MORE_THREAD_CHAT_SUCCESSFUL, GET_USER_RELATE_DOCTOR_SUCCESSFUL, GET_UNREAD_GROUP_SUCCESSFUL, OPEN_THREAD_LOAD, CLOSE_THREAD_LOAD, SEND_CHAT_LOAD } from "./action";
 
 const initialState = {
     chatList: [],
@@ -6,7 +6,8 @@ const initialState = {
     currenThreadChat: {data: [], isOutOfData : false},
     userRelateDoctor: [],
     nonReadGroupNumber: 0,
-    threadLoad: false
+    threadLoad: false,
+    sendChatLoad: false
 }
 
 export const chatReducer = (state = initialState, action) => {
@@ -41,6 +42,10 @@ export const chatReducer = (state = initialState, action) => {
         }
         case CLOSE_THREAD_LOAD : {
             state = {...state , threadLoad: false};
+            return state
+        }
+        case SEND_CHAT_LOAD : {
+            state = {...state , sendChatLoad: action.bool};
             return state
         }
         default:  {
