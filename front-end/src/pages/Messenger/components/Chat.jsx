@@ -10,19 +10,19 @@ import { getThreadChat, getMoreThreadChat, sendMessage } from '../../../redux/ch
 import moment from "moment";
 import { LoadingOutlined } from '@ant-design/icons';
 import _ from "lodash"
-import { animateScroll } from "react-scroll";
+import { animateScroll } from 'react-scroll'
 
 const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
 
 const Chat = (props) => {
 
-    const ref = React.createRef();
     const [fileList, setFileList] = useState([]);
     const [file, setfile] = useState({});
     const [openUploadFile, setopenUploadFile] = useState(false);
     const [disable, setdisable] = useState(false);
     const [page, setpage] = useState(1);
     const [chatText, setchatText] = useState('');
+    const [isLoadMore, setisLoadMore] = useState(false);
 
     const dispatch = useDispatch();
     const { currentUser } = useSelector(state => state.user);
@@ -37,24 +37,35 @@ const Chat = (props) => {
 
         getChatThreadData();
         setpage(1)
-        if (io) {
-            // io.emit("chat", `chat&&${currentUser?.cusId}&&${doctor_id}`)
+        if (io && currentUser?.cusId) {
+            io.emit("chat", `chat&&${currentUser?.cusId}&&${doctor_id}`)
         }
 
     }, [currentUser, doctor_id, io]);
 
-    const scrollToBottom = () => {
-        ref.current.scrollIntoView({
-            behavior: 'smooth',
-        });
+
+
+    const scrollToBottomDiv = () => {
+        animateScroll.scrollToBottom({
+            containerId: 'messenger-chat-content-list-13'
+        })
     }
+
+    useEffect(() => {
+
+        if(!isLoadMore) {
+            scrollToBottomDiv()
+
+        }
+
+    }, [currenThreadChat?.data]);
+
 
     const getChatThreadData = () => {
         if ((doctor_id !== 't')) {
-
+            setisLoadMore(false)
             const data = { cusId: currentUser?.cusId, doctor_id: doctor_id }
             dispatch(getThreadChat(data))
-            scrollToBottom()
         }
 
     }
@@ -62,12 +73,13 @@ const Chat = (props) => {
 
     const getMoreChatThreadData = () => {
         if (!currenThreadChat?.isOutOfData && !isLoad && (doctor_id !== 't')) {
+            setisLoadMore(true)
             setdisable(true)
             const nextPage = page + 1;
             setpage(nextPage)
             const data = { page: nextPage, cusId: currentUser?.cusId, doctor_id: doctor_id }
             dispatch(getMoreThreadChat(data))
-            scrollToBottom()
+            // scrollToBottomDiv()
             setTimeout(() => {
                 setdisable(false)
             }, 1000);
@@ -103,9 +115,11 @@ const Chat = (props) => {
     }
 
     const clearChat = () => {
-        setopenUploadFile(false)
-        setchatText('')
-        setFileList([]);
+        if(!threadLoad) {
+            setopenUploadFile(false)
+            setchatText('')
+            setFileList([]);
+        }
     }
 
 
@@ -154,7 +168,7 @@ const Chat = (props) => {
 
     const renderChat = currenThreadChat?.data?.map((value, index) => {
         return (
-            <div>
+            <div key={value?.id}>
 
                 {index === 0 ? (
                     <center>
@@ -170,7 +184,7 @@ const Chat = (props) => {
                     </center>
                 ) : ''}
 
-                <div key={value?.id} className={"messenger-chat-item " + (value?.sender_type === 'customer' ? 'messenger-chat-item-user' : '')}>
+                <div className={"messenger-chat-item " + (value?.sender_type === 'customer' ? 'messenger-chat-item-user' : '')}>
                     {value?.sender_type == 'customer' ?
                         '' : (
                             <Avatar
@@ -208,9 +222,9 @@ const Chat = (props) => {
         )
 
         : (
-            <div className="messenger-content-wrapper" id="messenger-chat-content-list-13" >
-                <div className="messenger-content">
-                    <div className="messenger-chat">
+            <div className="messenger-content-wrapper" >
+                <div className="messenger-content" id="messenger-chat-content-list-13" >
+                    <div className="messenger-chat" >
                         <div className="messenger-chat-header">
                             <Avatar
                                 src={getdocAva()}
@@ -219,34 +233,38 @@ const Chat = (props) => {
                                 type="circle flexible" />
                             <b>{getdocName()}</b>
                         </div>
-                        <div className="messenger-chat-content"   >
-                            <div className="messenger-chat-content-list" >
+                        <div className="messenger-chat-content" >
+                            <div className="messenger-chat-content-list">
                                 {renderChat}
-                                {threadLoad ? (<Spin size="large" indicator={antIcon} spinning={threadLoad} />) : ''}
+                                <Spin size="large" indicator={antIcon} spinning={threadLoad} />
+
                             </div>
                         </div>
                     </div>
                 </div>
-                <div className="messenger-chat-content-input" ref={ref}>
+                <div className="messenger-chat-content-input">
                     <div className="messenger-chat-content-input-image">
                         {renderUploadFile}
                     </div>
-                    <div className="messenger-chat-content-input-form">
-                        <div className="messenger-chat-content-input-upload-file">
-                            <Button type="link" onClick={openUploadImage}>
-                                {openUploadFile ? <CloseCircleFilled style={{ fontSize: '25px' }} /> : <FolderAddFilled style={{ fontSize: '25px' }} />}
-                            </Button>
+                    {/* <Spin size="large" indicator={antIcon} spinning={threadLoad} > */}
+                        <div className="messenger-chat-content-input-form">
+                            <div className="messenger-chat-content-input-upload-file">
+                                <Button type="link" onClick={openUploadImage}>
+                                    {openUploadFile ? <CloseCircleFilled style={{ fontSize: '25px' }} /> : <FolderAddFilled style={{ fontSize: '25px' }} />}
+                                </Button>
+                            </div>
+                            <Input.TextArea
+                                // autoSize={false}
+                                allowClear={true}
+                                loading={threadLoad}
+                                onChange={onTextChange}
+                                value={chatText}
+                                onPressEnter={onSubmitChat}
+                                style={{ borderRadius: '10px' }}
+                                className="messenger-chat-content-input-area"
+                                placeholder="" />
                         </div>
-                        <Input.TextArea
-                            // autoSize={false}
-                            allowClear={true}
-                            onChange={onTextChange}
-                            value={chatText}
-                            onPressEnter={onSubmitChat}
-                            style={{ borderRadius: '10px' }}
-                            className="messenger-chat-content-input-area"
-                            placeholder="" />
-                    </div>
+                    {/* </Spin> */}
                 </div>
             </div>
         );
