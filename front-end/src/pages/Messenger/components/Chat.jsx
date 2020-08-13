@@ -6,10 +6,10 @@ import { Upload, Button } from 'antd';
 import { FolderAddFilled, CloseCircleFilled } from '@ant-design/icons';
 import { withRouter } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { getThreadChat, getMoreThreadChat } from '../../../redux/chat';
+import { getThreadChat, getMoreThreadChat, sendMessage } from '../../../redux/chat';
 import moment from "moment";
 import { LoadingOutlined } from '@ant-design/icons';
-import { createRef } from 'react';
+import _ from "lodash"
 import { animateScroll } from "react-scroll";
 
 const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
@@ -22,11 +22,13 @@ const Chat = (props) => {
     const [openUploadFile, setopenUploadFile] = useState(false);
     const [disable, setdisable] = useState(false);
     const [page, setpage] = useState(1);
+    const [chatText, setchatText] = useState('');
 
     const dispatch = useDispatch();
     const { currentUser } = useSelector(state => state.user);
     const { currenThreadChat } = useSelector(state => state.chat);
     const { isLoad } = useSelector(state => state.ui);
+    const { io } = useSelector(state => state.notify);
 
     const doctor_id = props.match.params.id;
     const params = new URLSearchParams(props.location.search);
@@ -35,9 +37,11 @@ const Chat = (props) => {
 
         getChatThreadData();
         setpage(1)
+        if (io) {
+            // io.emit("chat&&customer_id&&doctor_id", `chat&&${currentUser?.cusId}&&${doctor_id}`)
+        }
 
-    }, [currentUser, doctor_id]);
-
+    }, [currentUser, doctor_id, io]);
 
     const scrollToBottom = () => {
         animateScroll.scrollToBottom({
@@ -78,6 +82,75 @@ const Chat = (props) => {
         return params.get('avatar');
     }
 
+    const onSubmitChat = (e) => {
+        const text = e.target.value.trim();
+        if (fileList.length !== 0 && io?.id && currentUser?.cusId) {
+            const formData = new FormData();
+            formData.append('image', file)
+            formData.append('msg', '123')
+            formData.append('doctor_id', doctor_id)
+            formData.append('socketId', io?.id)
+            dispatch(sendMessage(formData, currentUser?.cusId, doctor_id))
+            clearChat();
+        }
+        if (text && io?.id && currentUser?.cusId) {
+            const formData = new FormData();
+            formData.append('msg', text)
+            formData.append('doctor_id', doctor_id)
+            formData.append('socketId', io?.id)
+            dispatch(sendMessage(formData, currentUser?.cusId, doctor_id))
+            clearChat()
+        }
+    }
+
+    const clearChat = () => {
+        setopenUploadFile(false)
+        setchatText('')
+    }
+
+
+    const onChangeFile = async ({ fileList: newFileList }) => {
+
+        setFileList(newFileList);
+        if (newFileList[0]) {
+            setfile(newFileList[0].originFileObj)
+        }
+    };
+
+    const onPreviewImage = async file => {
+        let src = file.url;
+        if (!src) {
+            src = await new Promise(resolve => {
+                const reader = new FileReader();
+                reader.readAsDataURL(file.originFileObj);
+                reader.onload = () => {
+                    resolve(reader.result);
+                };
+            });
+        }
+        const image = new Image();
+        image.src = src;
+        const imgWindow = window.open(src);
+        imgWindow.document.write(image.outerHTML);
+    };
+
+    const renderUploadFile = openUploadFile && (
+        <div className = "render-upload-file">
+            <Upload
+                fileList={fileList}
+                listType="picture-card"
+                onChange={onChangeFile}
+                onPreview={onPreviewImage}
+            >
+                {fileList.length < 1 && 'Tải ảnh'}
+            </Upload>
+        </div>
+    )
+
+    const openUploadImage = () => {
+        setopenUploadFile(!openUploadFile)
+        setFileList([]);
+    }
 
     const renderChat = currenThreadChat?.data?.map((value, index) => {
         return (
@@ -121,47 +194,9 @@ const Chat = (props) => {
     })
 
 
-    const onChangeFile = async ({ fileList: newFileList }) => {
-
-        setFileList(newFileList);
-        if (newFileList[0]) {
-            setfile(newFileList[0].originFileObj)
-        }
-    };
-
-    const onPreviewImage = async file => {
-        let src = file.url;
-        if (!src) {
-            src = await new Promise(resolve => {
-                const reader = new FileReader();
-                reader.readAsDataURL(file.originFileObj);
-                reader.onload = () => {
-                    resolve(reader.result);
-                };
-            });
-        }
-        const image = new Image();
-        image.src = src;
-        const imgWindow = window.open(src);
-        imgWindow.document.write(image.outerHTML);
-    };
-
-    const renderUploadFile = openUploadFile && (
-        <Upload
-            fileList={fileList}
-            listType="picture-card"
-            onChange={onChangeFile}
-            onPreview={onPreviewImage}
-        >
-            {fileList.length < 1 && 'Tải ảnh'}
-        </Upload>
-    )
-
-    const openUploadImage = () => {
-        setopenUploadFile(!openUploadFile)
-        setFileList([]);
+    const onTextChange = (e) => {
+        setchatText(e.target.value)
     }
-
 
     return (doctor_id === 't') ?
 
@@ -204,6 +239,9 @@ const Chat = (props) => {
                         <Input.TextArea
                             // autoSize={false}
                             allowClear={true}
+                            onChange = {onTextChange}
+                            value = {chatText}
+                            onPressEnter={onSubmitChat}
                             style={{ borderRadius: '10px' }}
                             className="messenger-chat-content-input-area"
                             placeholder="" />

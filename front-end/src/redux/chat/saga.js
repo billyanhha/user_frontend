@@ -1,10 +1,10 @@
 import { put, takeLatest, select } from 'redux-saga/effects';
-import { GET_CHAT, GET_MORE_CHAT, GET_THREAD_CHAT, GET_MORE_THREAD_CHAT, GET_USER_RELATE_DOCTOR, GET_UNREAD_GROUP } from './action';
+import { GET_CHAT, GET_MORE_CHAT, GET_THREAD_CHAT, GET_MORE_THREAD_CHAT, GET_USER_RELATE_DOCTOR, GET_UNREAD_GROUP, SEND_MESSAGE } from './action';
 import _ from 'lodash';
 import { openLoading, closeLoading } from '../ui';
 import { message } from 'antd';
 import chatService from '../../service/chatService';
-import { getChatSuccessful, getMoreChatSuccessful, getThreadChatSuccessful, getMoreThreadChatSuccessful, getUserRelateDoctorSuccessful, getUnreadGroupSuccessful } from '.';
+import { getChatSuccessful, getMoreChatSuccessful, getChat,getThreadChatSuccessful, getMoreThreadChatSuccessful, getUserRelateDoctorSuccessful, getUnreadGroupSuccessful, getThreadChat } from '.';
 
 
 function* watchGetChatWorker(action) {
@@ -134,6 +134,25 @@ function* watchGetUnreadWorker(action) {
 
 }
 
+
+function* watchSendMessageWorker(action) {
+    try {
+        const {token} = yield select(state => state.auth)
+        const result = yield chatService.sendMessage(action.payload, action.cusId , token);
+        if(!_.isEmpty(result?.result?.id)){
+            const payloadThread = { cusId: action.cusId, doctor_id: action.doctor_id }
+            yield put(getThreadChat(payloadThread))
+            const payloadChat = { page: 1, cusId: action.cusId }
+            yield put(getChat(payloadChat))
+        }
+    } catch (error) {
+        message.destroy();
+        message.error(error?.response?.data?.err ?? 'Hệ thống quá tải, xin thử lại sau!', 3);
+    } finally {
+    }
+
+}
+
 export function* chatSaga() {
 
     yield takeLatest(GET_CHAT, watchGetChatWorker);
@@ -142,5 +161,6 @@ export function* chatSaga() {
     yield takeLatest(GET_MORE_THREAD_CHAT, watchGetMoreThreadChatWorker);
     yield takeLatest(GET_USER_RELATE_DOCTOR, watchUserRelateDoctorWorker);
     yield takeLatest(GET_UNREAD_GROUP, watchGetUnreadWorker);
+    yield takeLatest(SEND_MESSAGE, watchSendMessageWorker);
 
 }

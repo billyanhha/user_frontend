@@ -185,6 +185,10 @@
     margin-bottom: 70px;
 }
 
+.render-upload-file{
+    background-color: transparent;
+}
+
 @media screen and (max-width: 1024px) {
     .messenger-chatlist{
         flex-basis: 100%;

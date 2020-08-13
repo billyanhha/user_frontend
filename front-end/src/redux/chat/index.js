@@ -84,17 +84,19 @@ export const getUserRelateDoctorSuccessful = (payload) => {
     }
 }
 
-export const sendMessage = (payload) => {
+export const sendMessage = (payload, cusId, doctor_id) => {
     return {
         type: SEND_MESSAGE,
-        payload
+        payload,
+        cusId,
+        doctor_id
     }
 }
 
 export const getUnreadGroup = (payload) => {
     return {
         type: GET_UNREAD_GROUP,
-        payload
+        payload,
     }
 }
 
