@@ -1,10 +1,10 @@
-import { put, takeLatest, select } from 'redux-saga/effects';
+import { put, takeLatest, select, takeEvery } from 'redux-saga/effects';
 import { GET_CHAT, GET_MORE_CHAT, GET_THREAD_CHAT, GET_MORE_THREAD_CHAT, GET_USER_RELATE_DOCTOR, GET_UNREAD_GROUP, SEND_MESSAGE } from './action';
 import _ from 'lodash';
 import { openLoading, closeLoading } from '../ui';
 import { message } from 'antd';
 import chatService from '../../service/chatService';
-import { getChatSuccessful, getMoreChatSuccessful, getChat,getThreadChatSuccessful, getMoreThreadChatSuccessful, getUserRelateDoctorSuccessful, getUnreadGroupSuccessful, getThreadChat } from '.';
+import { getChatSuccessful, getMoreChatSuccessful, getChat,getThreadChatSuccessful, getMoreThreadChatSuccessful, getUserRelateDoctorSuccessful, getUnreadGroupSuccessful, getThreadChat, closeThreadLoad, openThreadLoad } from '.';
 
 
 function* watchGetChatWorker(action) {
@@ -51,7 +51,8 @@ function* watchGetMoreChatWorker(action) {
 
 function* watchGetThreadChatWorker(action) {
     try {
-        yield put(openLoading())
+        
+        yield put(openThreadLoad())
         const {token} = yield select(state => state.auth)
         const result = yield chatService.getThreadChat(action.payload , token);
         if (!_.isEmpty(result?.result)) {
@@ -65,14 +66,14 @@ function* watchGetThreadChatWorker(action) {
         message.destroy();
         message.error(error?.response?.data?.err ?? 'Hệ thống quá tải, xin thử lại sau!', 3);
     } finally {
-        yield put(closeLoading())
+        yield put(closeThreadLoad())
     }
 
 }
 
 function* watchGetMoreThreadChatWorker(action) {
     try {
-        yield put(openLoading())
+        yield put(openThreadLoad())
         const {token} = yield select(state => state.auth)
         const result = yield chatService.getMoreThreadChat(action.payload , token);
         if (!_.isEmpty(result?.result)) {
@@ -86,7 +87,7 @@ function* watchGetMoreThreadChatWorker(action) {
         message.destroy();
         message.error(error?.response?.data?.err ?? 'Hệ thống quá tải, xin thử lại sau!', 3);
     } finally {
-        yield put(closeLoading())
+        yield put(closeThreadLoad())
     }
 
 }
@@ -137,6 +138,7 @@ function* watchGetUnreadWorker(action) {
 
 function* watchSendMessageWorker(action) {
     try {
+
         const {token} = yield select(state => state.auth)
         const result = yield chatService.sendMessage(action.payload, action.cusId , token);
         if(!_.isEmpty(result?.result?.id)){
@@ -161,6 +163,6 @@ export function* chatSaga() {
     yield takeLatest(GET_MORE_THREAD_CHAT, watchGetMoreThreadChatWorker);
     yield takeLatest(GET_USER_RELATE_DOCTOR, watchUserRelateDoctorWorker);
     yield takeLatest(GET_UNREAD_GROUP, watchGetUnreadWorker);
-    yield takeLatest(SEND_MESSAGE, watchSendMessageWorker);
+    yield takeEvery(SEND_MESSAGE, watchSendMessageWorker);
 
 }

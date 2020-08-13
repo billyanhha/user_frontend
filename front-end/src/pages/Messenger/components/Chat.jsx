@@ -16,7 +16,7 @@ const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
 
 const Chat = (props) => {
 
-
+    const ref = React.createRef();
     const [fileList, setFileList] = useState([]);
     const [file, setfile] = useState({});
     const [openUploadFile, setopenUploadFile] = useState(false);
@@ -26,7 +26,7 @@ const Chat = (props) => {
 
     const dispatch = useDispatch();
     const { currentUser } = useSelector(state => state.user);
-    const { currenThreadChat } = useSelector(state => state.chat);
+    const { currenThreadChat, threadLoad } = useSelector(state => state.chat);
     const { isLoad } = useSelector(state => state.ui);
     const { io } = useSelector(state => state.notify);
 
@@ -38,14 +38,14 @@ const Chat = (props) => {
         getChatThreadData();
         setpage(1)
         if (io) {
-            // io.emit("chat&&customer_id&&doctor_id", `chat&&${currentUser?.cusId}&&${doctor_id}`)
+            // io.emit("chat", `chat&&${currentUser?.cusId}&&${doctor_id}`)
         }
 
     }, [currentUser, doctor_id, io]);
 
     const scrollToBottom = () => {
-        animateScroll.scrollToBottom({
-            containerId: "messenger-chat-content-list-13"
+        ref.current.scrollIntoView({
+            behavior: 'smooth',
         });
     }
 
@@ -86,8 +86,7 @@ const Chat = (props) => {
         const text = e.target.value.trim();
         if (fileList.length !== 0 && io?.id && currentUser?.cusId) {
             const formData = new FormData();
-            formData.append('image', file)
-            formData.append('msg', '123')
+            formData.append('image', fileList[0].originFileObj)
             formData.append('doctor_id', doctor_id)
             formData.append('socketId', io?.id)
             dispatch(sendMessage(formData, currentUser?.cusId, doctor_id))
@@ -106,6 +105,7 @@ const Chat = (props) => {
     const clearChat = () => {
         setopenUploadFile(false)
         setchatText('')
+        setFileList([]);
     }
 
 
@@ -135,7 +135,7 @@ const Chat = (props) => {
     };
 
     const renderUploadFile = openUploadFile && (
-        <div className = "render-upload-file">
+        <div className="render-upload-file">
             <Upload
                 fileList={fileList}
                 listType="picture-card"
@@ -208,7 +208,7 @@ const Chat = (props) => {
         )
 
         : (
-            <div className="messenger-content-wrapper"  >
+            <div className="messenger-content-wrapper" id="messenger-chat-content-list-13" >
                 <div className="messenger-content">
                     <div className="messenger-chat">
                         <div className="messenger-chat-header">
@@ -219,14 +219,15 @@ const Chat = (props) => {
                                 type="circle flexible" />
                             <b>{getdocName()}</b>
                         </div>
-                        <div className="messenger-chat-content" >
-                            <div className="messenger-chat-content-list">
+                        <div className="messenger-chat-content"   >
+                            <div className="messenger-chat-content-list" >
                                 {renderChat}
+                                {threadLoad ? (<Spin size="large" indicator={antIcon} spinning={threadLoad} />) : ''}
                             </div>
                         </div>
                     </div>
                 </div>
-                <div className="messenger-chat-content-input">
+                <div className="messenger-chat-content-input" ref={ref}>
                     <div className="messenger-chat-content-input-image">
                         {renderUploadFile}
                     </div>
@@ -239,8 +240,8 @@ const Chat = (props) => {
                         <Input.TextArea
                             // autoSize={false}
                             allowClear={true}
-                            onChange = {onTextChange}
-                            value = {chatText}
+                            onChange={onTextChange}
+                            value={chatText}
                             onPressEnter={onSubmitChat}
                             style={{ borderRadius: '10px' }}
                             className="messenger-chat-content-input-area"
