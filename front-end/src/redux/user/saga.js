@@ -3,13 +3,13 @@ import userService from "../../service/userService";
 import {
     GET_USER,
     GET_USER_PROFILE, EDIT_USER_PROFILE, EDIT_AVATAR, CHANGE_PASSWORD, CHANGE_EMAIL, CHANGE_PHONE, CHANGE_PHONE_VERIFY, CHANGE_PHONE_CANCEL,
-    GET_PATIENT, GET_USER_PACKAGE
+    GET_PATIENT, GET_USER_PACKAGE, SUBCRIBE_EMAIL, VERIFY_EMAIL
 } from './action';
 import {
     getUserSuccessful, getUserProfile,
     getUserProfileSuccessful, editUserProfileSuccessful, changePasswordSuccessful, changeEmailSuccessful,
     verifyChangePhone, verifyChangePhoneSuccessful, changePhoneSuccessful, cancelChangePhoneSuccessful,
-    getPatientSuccessful, getUserPackageSuccessful
+    getPatientSuccessful, getUserPackageSuccessful, subcribeEmailSuccessful, getUser, verifyEmailSuccessful
 } from '.'
 import { userLogout } from '../auth';
 import { message } from 'antd';
@@ -230,6 +230,43 @@ function* wachGetUserPackageWorker(action) {
     }
 }
 
+function* watchVerifyEmail(action) {
+    try {
+        yield put(openLoading());
+        const result = yield userService.verifyEmail(action.tokenEmail);
+        if (result) {
+            message.destroy();
+            yield put(verifyEmailSuccessful(true));
+            message.success('Xác thực email thành công! Giờ bạn có thể nhận email từ hệ thống', 4);
+        }
+    } catch (error) {
+        yield put(verifyEmailSuccessful(error?.response?.data?.err??false));
+        message.destroy();
+        message.error(error?.response?.data?.err, 3)
+    } finally {
+        yield put(closeLoading())
+    }
+}
+
+function* watchSubcribeEmail(action) {
+    try {
+        yield put(openLoading());
+        const {token} = yield select(state => state.auth);
+        const { currentUser } = yield select(state => state.user)
+        const result = yield userService.subcribeEmail(token, currentUser?.cusId, action.data);
+        if (result?.customerUpdated) {
+            message.destroy();
+            message.success(action.data.mail_subscribe==="true"?'Đăng kí email thành công! Giờ bạn có thể nhận email từ hệ thống':'Huỷ đăng kí email thành công!', 4)
+            yield put(getUser(token));
+        }
+    } catch (error) {
+        message.destroy();
+        message.error(error?.response?.data?.err, 3)
+    } finally {
+        yield put(closeLoading())
+    }
+}
+
 export function* userSaga() {
     yield takeLatest(GET_USER, wachGetUserbWorker);
     yield takeLatest(GET_USER_PROFILE, watchGetUserProfile);
@@ -242,4 +279,6 @@ export function* userSaga() {
     yield takeLatest(CHANGE_PASSWORD, watchChangePassword);
     yield takeLatest(GET_PATIENT, wachGetPatientbWorker)
     yield takeLatest(GET_USER_PACKAGE, wachGetUserPackageWorker)
+    yield takeLatest(VERIFY_EMAIL, watchVerifyEmail);
+    yield takeLatest(SUBCRIBE_EMAIL, watchSubcribeEmail);
 }

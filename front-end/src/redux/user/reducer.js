@@ -3,7 +3,7 @@ import {
     GET_USER_PROFILE_SUCCESSFUL, EDIT_USER_PROFILE_SUCCESSFUL, RESET_UPLOAD_STATUS,
     CHANGE_PASSWORD_SUCCESSFUL, CHANGE_EMAIL_SUCCESSFUL, CHANGE_PHONE_SUCCESSFUL, CHANGE_PHONE_VERIFY_SUCCESSFUL, CHANGE_PHONE_CANCEL_SUCCESSFUL,
     RESET_SETTING_STATUS,
-    GET_PATIENT_SUCCESSFUL, GET_USER_PACKAGE_SUCCESSFUL
+    GET_PATIENT_SUCCESSFUL, GET_USER_PACKAGE_SUCCESSFUL, VERIFY_EMAIL_SUCCESSFUL
 } from "./action";
 
 const initialState = {
@@ -14,7 +14,9 @@ const initialState = {
     phoneNumber: null,
     currentStep: 0,
     uploadStatus: null,
-    settingStatus: false
+    settingStatus: false,
+    io: null,
+    verifyEmail: null
 }
 
 const initialStatePackage = {
@@ -70,6 +72,9 @@ export const userReducer = (state = initialState, action) => {
             return state;
         case RESET_SETTING_STATUS:
             state = { ...state, userProfile: null, settingStatus: false }
+            return state;
+        case VERIFY_EMAIL_SUCCESSFUL:
+            state = { ...state, verifyEmail: action?.result}
             return state;
         default:
             return state;

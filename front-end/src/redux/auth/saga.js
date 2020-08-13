@@ -49,6 +49,9 @@ function* watchUserLogout(action) {
     } catch (error) {
         console.log(error);
     } finally {
+        setTimeout(() => {
+            window.location.pathname = "/";
+        }, 1000);
         yield put(hideLoading())
     }
 }

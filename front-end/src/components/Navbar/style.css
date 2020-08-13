@@ -15,12 +15,12 @@
 
 .nav-logo {
     height: 60px;
-    /* width: 80px; */
     overflow: hidden;
 }
 
 .nav-logo img {
-    height: 100%;
+    margin-top: 8%;
+    height: 70%;
 }
 
 .nav-userInfo-user-name>span {
