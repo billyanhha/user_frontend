@@ -1,22 +1,23 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useHistory, Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { useForm, Controller, ErrorMessage } from "react-hook-form";
-import { getUserProfile, editUserProfile, editAvatar, resetUploadStatus } from '../../../../redux/user';
-import { createDependent, getPackageProgress } from '../../../../redux/patient';
-import relationship from '../../../../configs/relationship'
+
 import ChartCurrentHealth from '../ChartCurrentHealth';
-// import { useDropzone } from 'react-dropzone';
-// import Dropzone from 'react-dropzone-uploader'
 import moment from 'moment';
-// import AvatarEditor from 'react-avatar-editor';
-import DatePicker from "react-datepicker";  //input dob
-import Select from 'react-select';          //input gender
+import AvatarEditor from 'react-avatar-editor';
+import DatePicker from "react-datepicker";
+import Select from 'react-select';
 import { Modal, message, Spin, Progress } from 'antd';
+
 import { EditTwoTone, PictureTwoTone, LoadingOutlined } from '@ant-design/icons';
 import vi from 'date-fns/locale/vi'
+import { getUserProfile, editUserProfile, editAvatar, resetUploadStatus } from '../../../../redux/user';
+import { createDependent, getPackageProgress } from '../../../../redux/patient';
 
+import relationship from '../../../../configs/relationship'
 import DefaultAvatar from '../../../../assest/image/hhs-default_avatar.jpg';
+
 import './style.css';
 
 const Profile = (props) => {
@@ -36,7 +37,6 @@ const Profile = (props) => {
     const [createNew, setCreateNew] = useState(props.createNew);
 
     const [profileInfo, setProfileInfo] = useState(null);
-    // const avatarRef = useRef(null);
     const [avatarRef, setAvatarRef] = useState(null);
     const [avatarVisible, setAvatarVisible] = useState(false);
     const [relationGender, setRelationGender] = useState(false);
@@ -49,7 +49,7 @@ const Profile = (props) => {
         preview: null
     });
 
-    const { register, handleSubmit, watch, errors, control, reset } = useForm({ validateCriteriaMode: "all" });
+    const { register, handleSubmit, errors, control, reset } = useForm({ validateCriteriaMode: "all" });
 
     const options = [
         { value: "Male", label: "Nam" },
@@ -81,6 +81,7 @@ const Profile = (props) => {
                 const canvas = createAvatar[0];
                 let file;
                 let formData = new FormData();
+
                 canvas.toBlob(blob => {
                     file = new File([blob], avatarName == "" ? "noname.jpg" : avatarName);
                     formData.append("patientAvatar", file);
@@ -90,7 +91,6 @@ const Profile = (props) => {
                     formData.append("type", data.relation.value);
                     formData.append("dateofbirth", moment(data.Datepicker).format('YYYY-MM-DD'));
                     dispatch(createDependent(token, currentUser?.customer_id, formData));
-
                 });
             } else {
                 userEdit = { ...userEdit, type: data.relation.value }
@@ -148,7 +148,7 @@ const Profile = (props) => {
                 });
             }
         } else {
-            console.log("Upload Fail")
+            message.warning("Không thể xác nhận được ảnh tải lên.", 3);
         }
     };
 
@@ -159,7 +159,7 @@ const Profile = (props) => {
                 .then(res => res.blob())
                 .then(blob => (setAvatarImg({ preview: window.URL.createObjectURL(blob) })));
         } else {
-            console.log("Nothing to preview!")
+            message.warning("Không thể tải ảnh chế độ xem trước.", 3);
         }
     }
 
@@ -284,7 +284,7 @@ const Profile = (props) => {
                             <Modal title="Đổi hình đại diện" centered visible={avatarVisible} width="450px" footer={null} onCancel={() => resetAvatar()}>
                                 <Spin indicator={loadingIcon} spinning={isLoad}  >
                                     <div className="avatar-editor">
-                                        {/* <div className="avatar-editor-zone">
+                                        <div className="avatar-editor-zone">
                                             {avatarImg?.raw
                                                 ?
                                                 <div className="avatar-crop">
@@ -311,7 +311,7 @@ const Profile = (props) => {
                                                     ? <div className="avatar-editor-message"><label htmlFor="upload-from-device"><PictureTwoTone twoToneColor="#00BC9A" /><br />Nhấn và chọn một hình ảnh</label></div>
                                                     : <img className="avatar-editor-preview" src={avatarImg.preview} />
                                             }
-                                        </div> */}
+                                        </div>
                                         <div className="avatar-editor-upload">
                                             {avatarImg.raw || avatarImg.preview
                                                 ?
