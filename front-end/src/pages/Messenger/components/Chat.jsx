@@ -6,7 +6,7 @@ import { Upload, Button } from 'antd';
 import { FolderAddFilled, CloseCircleFilled } from '@ant-design/icons';
 import { withRouter } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { getThreadChat, getMoreThreadChat, sendMessage } from '../../../redux/chat';
+import { getThreadChat, getMoreThreadChat, sendMessage, updateIsRead } from '../../../redux/chat';
 import moment from "moment";
 import { LoadingOutlined } from '@ant-design/icons';
 import _ from "lodash"
@@ -36,8 +36,9 @@ const Chat = (props) => {
     useEffect(() => {
 
         getChatThreadData();
+        updateThreadIsReadFunc()
         setpage(1)
-        if (io && currentUser?.cusId) {
+        if (io && currentUser?.cusId && doctor_id) {
             io.emit("chat", `chat&&${currentUser?.cusId}&&${doctor_id}`)
         }
 
@@ -47,7 +48,7 @@ const Chat = (props) => {
 
     const scrollToBottomDiv = () => {
         animateScroll.scrollToBottom({
-            containerId: 'messenger-chat-content-list-13'
+            containerId: 'messenger-chat-content-list-13',
         })
     }
 
@@ -62,14 +63,21 @@ const Chat = (props) => {
 
 
     const getChatThreadData = () => {
-        if ((doctor_id !== 't')) {
+        if ((doctor_id !== 't')  && doctor_id && currentUser?.cusId) {
             setisLoadMore(false)
-            const data = { cusId: currentUser?.cusId, doctor_id: doctor_id }
+            const data = { cusId: currentUser?.cusId, doctor_id: doctor_id}
             dispatch(getThreadChat(data))
         }
 
     }
 
+    const updateThreadIsReadFunc = () => {
+        if ((doctor_id !== 't') && io?.id && doctor_id && currentUser?.cusId) {
+            const data = { cusId: currentUser?.cusId, doctor_id: doctor_id, socketId: io?.id }
+            dispatch(updateIsRead(data))
+        }
+
+    }
 
     const getMoreChatThreadData = () => {
         if (!currenThreadChat?.isOutOfData && !isLoad && (doctor_id !== 't')) {
@@ -210,6 +218,7 @@ const Chat = (props) => {
 
     const onTextChange = (e) => {
         setchatText(e.target.value)
+        
     }
 
     return (doctor_id === 't') ?

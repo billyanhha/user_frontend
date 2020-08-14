@@ -2,7 +2,7 @@ import { GET_CHAT, GET_MORE_CHAT, GET_CHAT_SUCCESSFUL,
      GET_MORE_CHAT_SUCCESSFUL, GET_THREAD_CHAT_SUCCESSFUL,
       GET_THREAD_CHAT, GET_MORE_THREAD_CHAT, GET_MORE_THREAD_CHAT_SUCCESSFUL,
        GET_USER_RELATE_DOCTOR, GET_USER_RELATE_DOCTOR_SUCCESSFUL,
-        SEND_MESSAGE, GET_UNREAD_GROUP, GET_UNREAD_GROUP_SUCCESSFUL, OPEN_THREAD_LOAD, CLOSE_THREAD_LOAD, SEND_CHAT_LOAD } from "./action"
+        SEND_MESSAGE, GET_UNREAD_GROUP, GET_UNREAD_GROUP_SUCCESSFUL, OPEN_THREAD_LOAD, CLOSE_THREAD_LOAD, SEND_CHAT_LOAD, UPDATE_IS_READ } from "./action"
 
 export const getChat = (payload) => {    
     return {
@@ -125,3 +125,11 @@ export const sendChatLoad = (bool) => {
         bool
     }
 }
+
+export const updateIsRead = (payload) => {
+    return {
+        type: UPDATE_IS_READ,
+        payload
+    }
+}
+

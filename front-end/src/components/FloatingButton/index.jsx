@@ -14,7 +14,9 @@ const FloatingButton = (props) => {
 
     useEffect(() => {
 
-        dispatch(getUnreadGroup({ cusId: currentUser?.cusId }))
+        if(currentUser?.cusId){
+            dispatch(getUnreadGroup({ cusId: currentUser?.cusId }))
+        }
 
     }, [currentUser]);
 

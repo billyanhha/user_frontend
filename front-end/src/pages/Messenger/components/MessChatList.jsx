@@ -29,8 +29,10 @@ const MessChatList = (props) => {
 
 
     const getChatData = () => {
-        const data = { page: page, cusId: currentUser?.cusId }
-        dispatch(getChat(data))
+        if(currentUser?.cusId){
+            const data = { page: page, cusId: currentUser?.cusId }
+            dispatch(getChat(data))
+        }
     }
 
 

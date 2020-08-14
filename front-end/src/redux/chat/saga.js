@@ -1,5 +1,5 @@
 import { put, takeLatest, select, takeEvery } from 'redux-saga/effects';
-import { GET_CHAT, GET_MORE_CHAT, GET_THREAD_CHAT, GET_MORE_THREAD_CHAT, GET_USER_RELATE_DOCTOR, GET_UNREAD_GROUP, SEND_MESSAGE } from './action';
+import { GET_CHAT, GET_MORE_CHAT, GET_THREAD_CHAT, GET_MORE_THREAD_CHAT, GET_USER_RELATE_DOCTOR, GET_UNREAD_GROUP, SEND_MESSAGE, UPDATE_IS_READ } from './action';
 import _ from 'lodash';
 import { openLoading, closeLoading } from '../ui';
 import { message } from 'antd';
@@ -156,6 +156,23 @@ function* watchSendMessageWorker(action) {
 
 }
 
+
+function* watchUpdateIsReadWorker(action) {
+    try {
+        const {token} = yield select(state => state.auth)
+        const result = yield chatService.updateIsRead(action.payload , token);
+        if(!_.isEmpty(result?.result)){
+            const payloadChat = { page: 1, cusId: action.payload.cusId }
+            yield put(getChat(payloadChat))
+        }
+    } catch (error) {
+        message.destroy();
+        message.error(error?.response?.data?.err ?? 'Hệ thống quá tải, xin thử lại sau!', 3);
+    } finally {
+    }
+
+}
+
 export function* chatSaga() {
 
     yield takeLatest(GET_CHAT, watchGetChatWorker);
@@ -165,5 +182,6 @@ export function* chatSaga() {
     yield takeLatest(GET_USER_RELATE_DOCTOR, watchUserRelateDoctorWorker);
     yield takeLatest(GET_UNREAD_GROUP, watchGetUnreadWorker);
     yield takeEvery(SEND_MESSAGE, watchSendMessageWorker);
+    yield takeEvery(UPDATE_IS_READ, watchUpdateIsReadWorker);
 
 }

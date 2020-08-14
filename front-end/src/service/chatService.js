@@ -121,4 +121,22 @@ chatService.sendMessage = (payload, cusId , token) => new Promise((reslove, reje
         .catch(err => reject(err))
 });
 
+chatService.updateIsRead = (payload , token) => new Promise((reslove, reject) => {
+    const api = `/api/chat/thread/${payload.cusId}/${payload.doctor_id}`;    
+    axios.put(api, {
+        is_customer_read:true,
+        socketId: payload?.socketId
+    }, {
+        headers: {
+            Authorization: "Bearer " + token,
+            Accept: '*/*'
+        }
+    })
+        .then(result => {            
+            reslove(result.data)
+        })
+        .catch(err => reject(err))
+});
+
+
 export default chatService
