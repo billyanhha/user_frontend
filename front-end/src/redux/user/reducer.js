@@ -47,9 +47,10 @@ export const userReducer = (state = initialState, action) => {
             let newState = { ...state, savedTimeOut: action?.time }
             return newState;
         }
-        case GET_USER_SUCCESSFUL:
+        case GET_USER_SUCCESSFUL: {
             state = { ...state, currentUser: action.currentUser }
             return state;
+        }
         case CLEAR_USER_INFO:
             return initialState;
         case GET_USER_PROFILE_SUCCESSFUL:

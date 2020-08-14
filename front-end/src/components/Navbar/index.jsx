@@ -10,15 +10,25 @@ import {userLogout} from "../../redux/auth";
 // import logoMin from '../../assest/logo/IKEMEN.png';      //Logo "IKEMEN" only
 import logoFull from "../../assest/logo/Ikemen_full.png"; //Logo "IKEMEN" with Home Health Service
 import TextLoop from "react-text-loop";
+import Notification from '../Notification';
+import { countUnreadNotify } from '../../redux/notification';
 
 const Navbar = props => {
     const {location} = props;
     const history = useHistory();
-    const [redirect, setRedirect] = useState(false);
-    const [menu_class, setMenu_class] = useState("");
-    const {currentUser} = useSelector(state => state.user);
+    // const [redirect, setRedirect] = useState(false);
+    const [menu_class, setMenu_class] = useState('');
+    const [drawerVisible, setdrawerVisible] = useState(false);
+    const { unreadNotifyNumber } = useSelector(state => state.notify);
+    const { currentUser } = useSelector(state => state.user);
+    const { nonReadGroupNumber } = useSelector(state => state.chat);
+
     const auth = useSelector(state => state.auth);
     const dispatch = useDispatch();
+
+    const closeDrawer = () => {
+        setdrawerVisible(false)
+    }
 
     useEffect(() => {
         if (auth.isLoggedIn && auth.token) {
@@ -26,9 +36,17 @@ const Navbar = props => {
         }
     }, []);
 
-    if (redirect) {
-        return <Redirect to="/login" />;
-    }
+    // if (redirect) {
+    //     return <Redirect to="/login" />;
+    // }
+
+    useEffect(() => {
+        if (currentUser?.cusId) {
+            const data = { receiver_id: currentUser?.cusId }
+            dispatch(countUnreadNotify(data))
+        }
+    }, [currentUser]);
+
 
     const CustomLink = (to, name) => {
         return (
@@ -63,44 +81,56 @@ const Navbar = props => {
     const handleUserMenuClick = e => {
         if (e.key === "logout") {
             dispatch(userLogout());
-            setRedirect(true);
-        }
-        if (e.key === "profile") {
-            history.push("/profile");
+        } else if (e.key === 'profile') {
+            history.push('/profile');
+        } else if (e.key === 'notify') {
+            setdrawerVisible(true)
+        } else if (e.key === 'messenger') {
+            history.push('/messenger/t');
         }
     };
 
     const userMenu = (
         <Menu onClick={handleUserMenuClick}>
-            <Menu.Item key="profile">Trang quản lý của tôi</Menu.Item>
-            <Menu.Item key="logout">Đăng xuất</Menu.Item>
+            <Menu.Item key="profile">
+                Trang quản lý của tôi
+            </Menu.Item>
+            <Menu.Item key="notify">
+                <span className="hightlight">{unreadNotifyNumber} </span>Thông báo mới
+            </Menu.Item>
+            <Menu.Item key="messenger">
+                <span className="hightlight">{nonReadGroupNumber}</span> Tin nhắn
+            </Menu.Item>
+            <Menu.Item key="logout">
+                Đăng xuất
+            </Menu.Item>
         </Menu>
     );
 
-    const renderAuth = auth.isLoggedIn ? (
-        <div className="nav-user-div nav-userInfo">
-            <span className="avatar-item">
-                <Badge count={1}>
-                    <Avatar shape={"square"} src={currentUser?.avatarurl} />
-                </Badge>
-            </span>
-            <Dropdown overlay={userMenu} className="nav-userInfo-user">
-                <Button type="link" className="nav-userInfo-user-name">
-                    {currentUser?.fullname}
-                </Button>
-            </Dropdown>
-            <button onClick={toBookingPage} className="fancyButton-background">
-                Đặt lịch
-            </button>
-        </div>
-    ) : (
-        <button onClick={toLoginPage} className="fancyButton">
-            Đăng nhập
-        </button>
-    );
+    const renderAuth = auth.isLoggedIn ?
+        (
+            <div className="nav-user-div nav-userInfo">
+                <Dropdown overlay={userMenu} className="nav-userInfo-user">
+                    <span className="nav-userInfo-user-name" >
+                        <span className="avatar-item">
+                            <Badge count={unreadNotifyNumber} showZero>
+                                <Avatar size="large" shape={"square"} src={currentUser?.avatarurl} />
+                            </Badge>
+                        </span>
+                        {currentUser?.fullname}
+                    </span>
+                </Dropdown>
+                <button onClick={toBookingPage} className="fancyButton-background">Đặt lịch</button>
+            </div>
+
+        )
+        : (
+            <button onClick={toLoginPage} className="fancyButton">Đăng nhập</button>
+        )
 
     return (
         <div>
+            <Notification visible={drawerVisible} closeDrawer={closeDrawer} />
             <div className={top_menu_class}>
                 <Link to="/" className="top-menu-lead primary-color">
                     <div className="nav-logo">

@@ -27,7 +27,7 @@ const FilterService = (props) => {
     useEffect(() => {
 
         window.scrollTo(0, 0)
-        dispatch(getAllCategories())
+        dispatch(getAllCategories({active: true}))
         // handleSearchAndSort('', sortBy)
 
     }, []);
@@ -91,7 +91,7 @@ const FilterService = (props) => {
     //     }, 1000);
 
     // }
-
+    
     const categories = service?.categories?.map((value, index) => (
         <div className="home-list-item service-list" key={value?.id}>
             <div style = {{backgroundImage: `url(${value?.image})`}} className = "service-list-image"></div>

@@ -19,12 +19,18 @@ import VerifyEmail from './pages/VerifyEmail';
 
 import './App.css';
 import PackageDetail from './pages/PackageDetail';
+import Notify from './components/Notify';
+import FloatingButton from './components/FloatingButton';
+import Messenger from './pages/Messenger';
+require('dotenv').config()
 
 const App = () => {
 
   return (
     <BrowserRouter>
+      <Notify />
       <LoadingBar showFastActions className="loading-bar" />
+      <FloatingButton />
       <Switch >
         <Route exact path="/" render={(props) => <Home {...props} />} />
         <Route exact path="/login" render={(props) => <Login {...props} />} />
@@ -37,6 +43,9 @@ const App = () => {
         <PrivateRoute exact path="/booking">
           <Booking />
         </PrivateRoute>
+        <PrivateRoute exact path="/messenger/:id">
+          <Messenger />
+        </PrivateRoute>
         <PrivateRoute exact path="/profile">
           <Dashboard />
         </PrivateRoute>
@@ -48,7 +57,7 @@ const App = () => {
         <Route path="*"><NoMatch /> </Route>
       </Switch>
       <MessengerCustomerChat
-        pageId="585831004909513"
+        pageId="598146043893373"
         appId="912333495590130"
         htmlRef={window.location.pathname}
       />

@@ -21,9 +21,10 @@ const UserDashBoard = () => {
     const history = useHistory();
     const { isLoad } = useSelector(state => state.ui);
     const { currentUser } = useSelector(state => state.user);
+
     useEffect(() => {
         window.scroll(0, 0);
-        if (currentUser?.customer_id === undefined) {
+        if (!currentUser?.cusId) {
             history.push("/login");
             message.destroy()
             message.info("Xin hãy đăng nhập!", 2);
@@ -51,11 +52,6 @@ const UserDashBoard = () => {
                             </TabPane>
                             <TabPane tab={<span><SettingOutlined />Cài đặt</span>} key="4">
                                 <Setting />
-                            </TabPane>
-                            <TabPane tab={<span><MessageOutlined />Thông báo</span>} key="5">
-                                <div className="dashboard-component">
-                                    Thông báo
-                                </div>
                             </TabPane>
                         </Tabs>
                     </div>

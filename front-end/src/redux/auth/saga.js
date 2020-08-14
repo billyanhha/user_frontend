@@ -15,9 +15,11 @@ import {
 import authService from '../../service/authService'
 import { openLoading, closeLoading } from '../ui';
 import { message } from 'antd';
-import { clearUserInfo } from '../user';
+import { clearUserInfo, saveIoInstance } from '../user';
 import _ from 'lodash'
 import { resetPackageForm } from '../booking';
+import io from 'socket.io-client';
+import { clearIoInstance } from '../notification';
 
 function* watchUserLoginWorker(action) {
     try {
@@ -26,15 +28,15 @@ function* watchUserLoginWorker(action) {
         const result = yield authService.userLogin(action.user);
 
         if (result && result.token) {
+
             yield put(userLoginSuccessful(result.token));
             message.destroy();
             message.success('Đăng nhập thành công');
         }
 
     } catch (error) {
-
         message.destroy();
-        message.error('Số điện thoại hoặc mật khẩu sai', 2);
+        message.error(error?.response?.data?.err)
     } finally {
         // message.destroy()
         yield put(closeLoading())
@@ -45,12 +47,13 @@ function* watchUserLogout(action) {
     try {
         yield put(showLoading())
         yield put(clearUserInfo())
+        yield put(clearIoInstance())
         yield put(resetPackageForm())
     } catch (error) {
         console.log(error);
     } finally {
         setTimeout(() => {
-            window.location.pathname = "/";
+            window.location.pathname = "/login";
         }, 1000);
         yield put(hideLoading())
     }
@@ -115,8 +118,10 @@ function* watchResetPassword(action) {
     } catch (error) {
         message.destroy();
         if (error.response?.data?.err?.status === "101") {
+            message.destroy();
             message.error("Đường truyền bị gián đoạn, xin hãy thử lại!", 5);
         } else {
+            message.destroy();
             message.error(error.response?.data?.err ?? "Hệ thống quá tải!", 3);
         }
     } finally {
@@ -203,8 +208,10 @@ function* watchGuestRegister(action) {
     } catch (error) {
         message.destroy();
         if (error.response?.data?.err?.status === "101") {
+            message.destroy();
             message.error("Đường truyền bị gián đoạn, xin hãy thử lại sau vài giây!", 5);
         } else {
+            message.destroy();
             message.error(error.response?.data?.err ?? "Hệ thống quá tải!", 3);
         }
     } finally {

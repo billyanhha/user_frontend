@@ -16,6 +16,7 @@ function* watchGetDoctorComingAppointmentWorker(action) {
             yield put(saveDoctorComingAppointment(result?.appointments));
         }
     } catch (error) {
+        
         console.log(error);
     } finally {
         yield put(closeLoading())
@@ -51,8 +52,8 @@ function* watchAdddPackageWorker(action) {
         }
         message.success("Đăng kí thành công")
     } catch (error) {
+        message.destroy();
         message.error(error?.response?.data?.err)
-        console.log(error?.response);
     } finally {
         yield put(closeLoading())
     }

@@ -42,7 +42,7 @@ const BookingDoctor = (props) => {
         console.log(currentDoctor);
         if(size(currentDoctor)>0){
             setReady(true);
-            showModal();
+            setVisible(true);
         }
     },[currentDoctor]);
 

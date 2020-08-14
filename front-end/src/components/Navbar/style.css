@@ -13,6 +13,7 @@
     flex-wrap: wrap;
 }
 
+
 .nav-logo {
     height: 60px;
     overflow: hidden;
@@ -23,8 +24,13 @@
     height: 70%;
 }
 
+.nav-userInfo-user-name{
+    margin-right: 20px;
+}
+
 .nav-userInfo-user-name>span {
     color: #000;
+    margin: 0px 10px;
 }
 
 .top-menu>.right>* {
@@ -43,6 +49,7 @@
 .nav-user-div {
     margin-right: 1px;
     padding: 11.4px 0 !important;
+
 }
 
 .top-menu *:hover {

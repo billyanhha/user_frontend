@@ -18,6 +18,7 @@ function* watchGetAllDependent(action) {
             }
         }
     } catch (error) {
+        message.destroy();
         message.error(error?.response?.data?.err ?? 'Hệ thống quá tải, xin thử lại sau!', 3);
     } finally {
         yield put(closeLoading())
@@ -37,6 +38,7 @@ function* watchCreateDependent(action) {
         }
     } catch (error) {
         yield put(createDependentSuccessful(false));
+        message.destroy();
         message.error(error?.response?.data?.err ?? 'Hệ thống quá tải, xin thử lại sau!', 3);
     } finally {
         yield put(closeLoading())
@@ -53,6 +55,7 @@ function* watchGetPackageProgress(action) {
             }
         }
     } catch (error) {
+        message.destroy();
         message.error(error?.response?.data?.err ?? 'Hệ thống quá tải, không thể lấy dữ liệu tiến độ!', 3);
     } finally {
         yield put(closeLoading())
@@ -69,6 +72,7 @@ function* watchGetCurrentHealth(action) {
             }
         }
     } catch (error) {
+        message.destroy();
         message.error(error?.response?.data?.err ?? 'Hệ thống quá tải, xin thử lại sau!', 3);
     } finally {
         yield put(closeLoading())

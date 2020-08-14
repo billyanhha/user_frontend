@@ -64,8 +64,6 @@ const BookingReason = (props) => {
     const [searchAddress, setSearchAddress] = useState("");
     const [currentPosition, setCurrentPostion] = useState(center);
 
-    console.log(props?.isLoaded);
-
     const {
         ready,
         value,
@@ -79,12 +77,26 @@ const BookingReason = (props) => {
         },
     });
 
-
-
-
     const handleInput = (e) => {
+        getSearchText("");
         setValue(e.target.value);
     };
+
+    const rad = (x) => {
+        return x * Math.PI / 180;
+      };
+
+    const getDistance = (p1, p2) => {
+        var R = 6378137; // Earth’s mean radius in meter
+        var dLat = rad(p2.lat - p1.lat);
+        var dLong = rad(p2.lng - p1.lng);
+        var a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+          Math.cos(rad(p1.lat)) * Math.cos(rad(p2.lat)) *
+          Math.sin(dLong / 2) * Math.sin(dLong / 2);
+        var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        var d = R * c;
+        return d; // returns the distance in meter
+      };
 
     const handleSelect = async (address) => {
         setValue(address, false);
@@ -92,9 +104,22 @@ const BookingReason = (props) => {
         try {
             const results = await getGeocode({ address });
             const { lat, lng } = await getLatLng(results[0]);
-            setValue(address);
-            getSearchText(address);
-            getPatientPosition({ lat, lng })
+            
+            //check if address is too far from SonTay: > 10km
+            const sontay = {lat: 21.140790, lng:105.507240};
+            console.log(getDistance(sontay,{lat,lng}));
+            if(getDistance(sontay,{lat,lng}) > 10000){
+                message.destroy();
+                message.error("Nơi bạn muốn khám quá xa, bác sĩ có thể từ chối yêu cầu của bạn. Vui vòng chọn vị trí tại khu vực Sơn tây!");
+                setValue("", false);
+            }else{
+                setValue(address);
+                getSearchText(address);
+                getPatientPosition({ lat, lng })
+            }
+            
+
+            
         } catch (error) {
             console.log("Error: ", error);
         }
@@ -117,10 +142,14 @@ const BookingReason = (props) => {
     }
 
     const onSubmit = data => {
-        if (_.isEmpty(patient)) {
+        if (_.isEmpty(patient?.id)) {
             message.destroy()
             message.error("Xin vui lòng chọn bệnh nhân")
-        } else {
+        } 
+        else if (searchAddress===""){
+            message.destroy()
+            message.error("Xin vui lòng chọn địa chỉ hợp lệ được hệ thống gợi ý khi nhập liệu")
+        }else {
             const newData = { ...data, address: searchAddress, id: patient.id, fullname: patient.fullname, type: patient.type, position: currentPosition }
             dispatch(saveBookingInfo(newData));
             dispatch(nextStep());
@@ -138,7 +167,8 @@ const BookingReason = (props) => {
                 },
             };
         } catch (error) {
-            console.log(error);
+            message.destroy();
+            message.error(error?.response?.data?.err ?? 'Hệ thống quá tải, xin thử lại sau!', 3);
         }
     }
 

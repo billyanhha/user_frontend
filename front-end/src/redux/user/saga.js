@@ -13,7 +13,6 @@ import {
 } from '.'
 import { userLogout } from '../auth';
 import { message } from 'antd';
-import i18n from 'i18next';
 import { openLoading, closeLoading } from '../ui';
 import _ from "lodash"
 
@@ -27,9 +26,12 @@ function* wachGetUserbWorker(action) {
             }
         }
     } catch (error) {
-        if (error.toString().includes('status code 401')) {
+        if (error?.response?.status  === 403 || error?.response?.status  === 401) {
             yield put(userLogout());
+            message.destroy();
             message.error('Phiên đã hết hạn , vui lòng đăng nhập lại', 3)
+
+    
         }
         console.log(error);
     } finally {
@@ -48,6 +50,7 @@ function* watchGetUserProfile(action) {
             }
         }
     } catch (error) {
+        message.destroy();
         message.error(error?.response?.data?.err ?? 'Hệ thống quá tải, xin thử lại sau!', 3);
     } finally {
         yield put(closeLoading())
@@ -67,6 +70,7 @@ function* watchEditUserProfile(action) {
             }
         }
     } catch (error) {
+        message.destroy();
         message.error(error?.response?.data?.err ?? 'Hệ thống quá tải, xin thử lại sau!', 3);
     } finally {
         yield put(closeLoading())
