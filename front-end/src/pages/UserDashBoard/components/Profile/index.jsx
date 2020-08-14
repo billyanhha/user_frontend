@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useHistory, Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { useForm, Controller, ErrorMessage } from "react-hook-form";
+import { isEmpty } from 'lodash'
 
 import ChartCurrentHealth from '../ChartCurrentHealth';
 import moment from 'moment';
@@ -484,13 +485,16 @@ const Profile = (props) => {
             {dependentInfo || createNew ?
                 ''
                 : <>
-                    {progress
-                        ? <div className="profile-progress-header">Tiến độ các gói gần đây</div>
+                    {!isEmpty(progress)
+                        ? <>
+                            <div className="profile-progress-header">Tiến độ các gói gần đây</div>
+                            <div className="profile-progress">
+                                {renderProgress}
+                            </div>
+                        </>
                         : ''
                     }
-                    <div className="profile-progress">
-                        {renderProgress}
-                    </div>
+                    
                 </>
             }
 

@@ -15,6 +15,7 @@ import QA from './pages/QA';
 import Booking from './pages/Booking';
 import PrivateRoute from './routeConfig/PrivateRoute';
 import AddressGoogleMap from './pages/AddressGoogleMap';
+import VerifyEmail from './pages/VerifyEmail';
 
 import './App.css';
 import PackageDetail from './pages/PackageDetail';
@@ -27,6 +28,8 @@ const App = () => {
       <Switch >
         <Route exact path="/" render={(props) => <Home {...props} />} />
         <Route exact path="/login" render={(props) => <Login {...props} />} />
+        <Route exact path="/verify-email/:token" render={(props) => <VerifyEmail {...props} />} />
+
         <Route exact path="/register" component={Register} />
         <Route exact path="/password-recovery" component={ForgotPassword} />
         <Route exact path='/doctors' component={Filterdoctor} />

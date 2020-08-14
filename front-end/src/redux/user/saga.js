@@ -9,7 +9,7 @@ import {
     getUserSuccessful, getUserProfile,
     getUserProfileSuccessful, editUserProfileSuccessful, changePasswordSuccessful, changeEmailSuccessful,
     verifyChangePhone, verifyChangePhoneSuccessful, changePhoneSuccessful, cancelChangePhoneSuccessful,
-    getPatientSuccessful, getUserPackageSuccessful, subcribeEmailSuccessful, getUser, verifyEmailSuccessful
+    getPatientSuccessful, getUserPackageSuccessful, subcribeEmailSuccessful, getUser, verifyEmailSuccessful, saveTimeOut
 } from '.'
 import { userLogout } from '../auth';
 import { message } from 'antd';
@@ -76,10 +76,8 @@ function* watchEditUserProfile(action) {
 function* watchEditAvatar(action) {
     try {
         yield put(openLoading());
-        console.log(action)
         if (action.avatar && action.customerID && action.patientID && action.token) {
             const result = yield userService.editAvatar(action.avatar, action.customerID, action.patientID, action.token);
-            console.log(result)
             if (result && result?.patientUpdated?.message === "update successfully") {
                 yield put(editUserProfileSuccessful(true));
                 message.success('Cập nhật ảnh đại diện thành công!', 3)
@@ -102,7 +100,8 @@ function* watchChangeEmail(action) {
             const result = yield userService.changeEmail(action.token, action.data, action.customerID);
             if (result) {
                 yield put(changeEmailSuccessful(true));
-                message.success('Cập nhật email thành công!', 3)
+                yield put(getUserProfile(action.customerID, action.token));
+                message.success('Cập nhật email thành công! Xin kiểm tra hòm thư để xác thực Email mới!', 3)
             }
         }
     } catch (error) {
@@ -116,18 +115,19 @@ function* watchChangeEmail(action) {
 function* watchVerifyChangePhone(action) {
     try {
         yield put(openLoading());
-        console.log(action)
         if (action.token && action.data && action.customerID) {
             const result = yield userService.verifyChangePhone(action.token, action.data, action.customerID);
-            console.log(result)
             if (result && result.request_id) {
                 yield put(verifyChangePhoneSuccessful(result.request_id, action.data.phone));
-                // yield put(verifyChangePhoneSuccessful("fakeid", "84942865066"));
+                yield put(saveTimeOut(Date.now() + 300000));
                 message.success('Xác nhận thành công!', 3)
             }
         }
     } catch (error) {
-        message.error(error?.response?.data?.err, 3)
+        if (error.response?.data?.status === "10") {
+            message.error("SĐT này cần chờ 5 phút để gửi lại yêu cầu!", 4);
+        }else
+            message.error(error?.response?.data?.err, 3)
     } finally {
         yield put(closeLoading())
     }
@@ -137,18 +137,19 @@ function* watchChangePhone(action) {
     try {
         yield put(openLoading());
         if (action.token && action.data && action.customerID) {
-            console.log(action)
             const result = yield userService.changePhone(action.token, action.data, action.customerID);
-            console.log(result)
             if (result) {
                 yield put(changePhoneSuccessful());
+                yield put(saveTimeOut(0));
                 message.success('Cập nhật số điện thoại thành công!', 3)
             }
         }
     } catch (error) {
         message.destroy();
-        if (error.response?.data?.status === "10") {
-            message.error("SĐT này cần chờ 5 phút để gửi lại yêu cầu!", 4);
+        if (error.response?.data?.err?.status === "101") {
+            message.error("Đường truyền bị gián đoạn, xin hãy thử lại!", 5);
+        } else if (error.response?.data?.status === "16") {
+            message.error("Mã OTP không chính xác!", 4);
         } else {
             message.error(error?.response?.data?.err ?? "Hệ thống quá tải!", 3);
         }
@@ -160,16 +161,26 @@ function* watchChangePhone(action) {
 function* watchChangePhoneCancel(action) {
     try {
         yield put(openLoading())
-        message.loading('Đang gửi yêu cầu');
-        const result = yield userService.cancelChangePhone(action.requestID);
-        if (result) {
-            yield put(cancelChangePhoneSuccessful());
-            message.destroy();
-            message.success('Huỷ yêu cầu thành công!', 3);
+
+        /*  100% Cancel Request Successfully after force user wait 30s minimum.
+
+            Checked case: before 5 minutes (since lastest time user sent Change pass request (step 1)) → cancel req → re-request step 1
+            SO, no need to worry if our backend request cancel that "request_id" (otpID) to Nexmo server failed (error status 3).
+        */
+       
+        message.destroy();
+        yield put(cancelChangePhoneSuccessful());
+        yield put(saveTimeOut(0));
+        message.success('Huỷ yêu cầu thành công!', 3);
+
+        if(action.requestID){
+            yield userService.cancelChangePhone(action.requestID);
         }
     } catch (error) {
-        message.destroy();
-        message.error(error?.response?.data?.err ?? "Hệ thống quá tải!", 3);
+        if(error?.response?.data?.err){
+            message.destroy();
+            message.error(error?.response?.data?.err, 3);
+        } 
     } finally {
         yield put(closeLoading())
     }
@@ -207,7 +218,6 @@ function* wachGetPatientbWorker(action) {
         }
     } catch (error) {
         message.error(error?.response?.data?.err)
-        console.log(error);
     } finally {
         // do long running stuff
         yield put(closeLoading())
@@ -223,7 +233,6 @@ function* wachGetUserPackageWorker(action) {
         yield put(getUserPackageSuccessful(result?.packages));
     } catch (error) {
         message.error(error?.response?.data?.err)
-        console.log(error);
     } finally {
         // do long running stuff
         yield put(closeLoading())

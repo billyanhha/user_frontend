@@ -1,25 +1,22 @@
-import React, { useState, useEffect } from 'react';
-import { UnorderedListOutlined } from "@ant-design/icons";
-import './style.css'
-import { Link, withRouter, Redirect, useHistory } from "react-router-dom";
-import { Menu, Dropdown, Button, Badge, Avatar } from 'antd';
-import { useDispatch, useSelector } from "react-redux";
-import { getUser } from '../../redux/user';
-import _ from 'lodash'
-import { userLogout } from '../../redux/auth';
-import Notification from '../Notification';
-import { countUnreadNotify } from '../../redux/notification';
+import React, {useState, useEffect} from "react";
+import {UnorderedListOutlined} from "@ant-design/icons";
+import "./style.css";
+import {Link, withRouter, Redirect, useHistory} from "react-router-dom";
+import {Menu, Dropdown, Button, Badge, Avatar, message, Alert} from "antd";
+import {useDispatch, useSelector} from "react-redux";
+import {getUser} from "../../redux/user";
+import _ from "lodash";
+import {userLogout} from "../../redux/auth";
+// import logoMin from '../../assest/logo/IKEMEN.png';      //Logo "IKEMEN" only
+import logoFull from "../../assest/logo/Ikemen_full.png"; //Logo "IKEMEN" with Home Health Service
+import TextLoop from "react-text-loop";
 
-import logoMin from '../../assest/logo/IKEMEN.png';
-import logoFull from '../../assest/logo/Ikemen_full.png';
-
-const Navbar = (props) => {
-
-    const { location } = props;
+const Navbar = props => {
+    const {location} = props;
     const history = useHistory();
     const [redirect, setRedirect] = useState(false);
-    const [menu_class, setMenu_class] = useState('');
-    const { currentUser } = useSelector(state => state.user);
+    const [menu_class, setMenu_class] = useState("");
+    const {currentUser} = useSelector(state => state.user);
     const auth = useSelector(state => state.auth);
     const dispatch = useDispatch();
 
@@ -30,94 +27,120 @@ const Navbar = (props) => {
     }, []);
 
     if (redirect) {
-        return <Redirect to="/login" />
+        return <Redirect to="/login" />;
     }
 
     const CustomLink = (to, name) => {
         return (
-            <Link to={to} className={'top-menu-item ' + (location.pathname === to ? 'link-active' : '')} >
+            <Link to={to} className={"top-menu-item " + (location.pathname === to ? "link-active" : "")}>
                 {name}
             </Link>
-        )
-    }
+        );
+    };
 
     const setToggleTopMenuClass = () => {
-        if (menu_class === '') {
-            setMenu_class('toggled')
+        if (menu_class === "") {
+            setMenu_class("toggled");
         } else {
-            setMenu_class('')
+            setMenu_class("");
         }
-    }
+    };
 
-    let top_menu_class = `top-menu ${menu_class}`
+    let top_menu_class = `top-menu ${menu_class}`;
 
     const toLoginPage = () => {
-        props.history.push('/login');
-    }
+        props.history.push("/login");
+    };
 
     const toBookingPage = () => {
-        props.history.push('/booking');
-    }
+        if (currentUser?.active) {
+            props.history.push("/booking");
+        } else {
+            message.info("Tài khoản của bạn chưa được phê duyệt! Xin hãy kiên nhẫn hoặc liên hệ với chúng tôi để được giải đáp thêm.", 5);
+        }
+    };
 
     const handleUserMenuClick = e => {
-        if (e.key === 'logout') {
+        if (e.key === "logout") {
             dispatch(userLogout());
             setRedirect(true);
         }
-        if (e.key === 'profile') {
-            history.push('/profile');
+        if (e.key === "profile") {
+            history.push("/profile");
         }
     };
 
     const userMenu = (
         <Menu onClick={handleUserMenuClick}>
-            <Menu.Item key="profile">
-                Trang quản lý của tôi
-            </Menu.Item>
-            <Menu.Item key="logout">
-                Đăng xuất
-            </Menu.Item>
+            <Menu.Item key="profile">Trang quản lý của tôi</Menu.Item>
+            <Menu.Item key="logout">Đăng xuất</Menu.Item>
         </Menu>
     );
 
-    const renderAuth = auth.isLoggedIn ?
-        (
-            <div className="nav-user-div nav-userInfo">
-                <span className="avatar-item">
-                    <Badge count={1}>
-                        <Avatar shape={"square"} src={currentUser?.avatarurl} />
-                    </Badge>
-                </span>
-                <Dropdown overlay={userMenu} className="nav-userInfo-user">
-                    <Button type='link' className="nav-userInfo-user-name" >
-                        {currentUser?.fullname}
-                    </Button>
-                </Dropdown>
-                <button onClick={toBookingPage} className="fancyButton-background">Đặt lịch</button>
-            </div>
-
-        )
-        : (
-            <button onClick={toLoginPage} className="fancyButton">Đăng nhập</button>
-        )
+    const renderAuth = auth.isLoggedIn ? (
+        <div className="nav-user-div nav-userInfo">
+            <span className="avatar-item">
+                <Badge count={1}>
+                    <Avatar shape={"square"} src={currentUser?.avatarurl} />
+                </Badge>
+            </span>
+            <Dropdown overlay={userMenu} className="nav-userInfo-user">
+                <Button type="link" className="nav-userInfo-user-name">
+                    {currentUser?.fullname}
+                </Button>
+            </Dropdown>
+            <button onClick={toBookingPage} className="fancyButton-background">
+                Đặt lịch
+            </button>
+        </div>
+    ) : (
+        <button onClick={toLoginPage} className="fancyButton">
+            Đăng nhập
+        </button>
+    );
 
     return (
         <div>
-            <Notification visible={drawerVisible} closeDrawer={closeDrawer} />
             <div className={top_menu_class}>
-                <Link to="/" className='top-menu-lead primary-color'>
-                    <div className="nav-logo"><img alt='logo' src={logoFull} /></div>
+                <Link to="/" className="top-menu-lead primary-color">
+                    <div className="nav-logo">
+                        <img alt="logo" src={logoFull} />
+                    </div>
                 </Link>
-                <div className='right'>
-                    {CustomLink("/", 'Trang chủ')}
-                    {CustomLink("/service", 'Các dịch vụ')}
-                    {CustomLink("/doctors", 'Bác sĩ')}
-                    {CustomLink("/qa", 'Hỏi đáp')}
+                <div className="right">
+                    {CustomLink("/", "Trang chủ")}
+                    {CustomLink("/service", "Các dịch vụ")}
+                    {CustomLink("/doctors", "Bác sĩ")}
+                    {CustomLink("/qa", "Hỏi đáp")}
                     {renderAuth}
                 </div>
-                <UnorderedListOutlined className='top-menu-icon' onClick={setToggleTopMenuClass} />
+                <UnorderedListOutlined className="top-menu-icon" onClick={setToggleTopMenuClass} />
             </div>
-            <UnorderedListOutlined className='top-menu-icon' onClick={setToggleTopMenuClass} />
+            {auth.isLoggedIn && currentUser?.active === false ? (
+                <div className="nav-alert-banner">
+                    <div className="nav-alert-controlled">
+                        <Alert
+                            message="Tài khoản của bạn chưa được phê duyệt!"
+                            description={
+                                <TextLoop mask delay={500} interval={10000}>
+                                    <div>
+                                        Tài khoản chưa phê duyệt sẽ không thể sử dụng dịch vụ. Xin hãy vào mục <Link to="/qa">Hỏi đáp</Link> để được
+                                        giải đáp những câu hỏi.
+                                    </div>
+                                    <div>Xin hãy kiên nhẫn chờ Quản trị viên phê duyệt.</div>
+                                    <div>Liên hệ với chúng tôi để được giải đáp thêm. Thông tin liên hệ ở cuối trang web.</div>
+                                    <div>Cảm ơn bạn đã đăng kí sử dụng dịch vụ của chúng tôi!</div>
+                                </TextLoop>
+                            }
+                            type="warning"
+                            showIcon
+                            banner
+                        />
+                    </div>
+                </div>
+            ) : (
+                ""
+            )}
         </div>
     );
 };

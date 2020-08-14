@@ -87,6 +87,15 @@
                     }
                 }
 
+                .setting-verify-email { 
+                    flex: 1;
+                    text-align: right;
+
+                    @include breakpoint(phone_smaller) {
+                        font-size: 0.8rem;
+                    }
+                }
+
                 &:last-child {
                     border: none;
                 }

@@ -21,46 +21,42 @@ const ForgotPassword = () => {
     const currentStep = useSelector(state => state.auth.stepRecoverPassword);
     const isSuccessful = useSelector(state => state.auth.isResetPasswordSuccess);
     const otpID = useSelector(state => state.auth.otpID);
+    const timeOutSaved = useSelector(state => state.auth.savedTimeOut);     //moment that request to send phone num api successfully
 
     const password = useRef({});
     password.current = watch("password", "");
-    const [countTime, setCountTime] = useState(0);
-    const [startCountdown, setStartCountdown] = useState(false);
+    
+    //Each render → Compare time now with "timeOutSaved" state, if still have time to countdown then countdown.
+    let startCountdown = timeOutSaved > Date.now() ? true : false;
 
     const handleRequestOTP = (data) => {
         dispatch(forgotPasswordSendPhone(data.phone.replace(/\s+/g, '').substring(1)));
-        setCountTime(Date.now())
-        setStartCountdown(true)
     }
 
     const handleVerifyOTP = (data) => {
-        if (otpID != '') {
+        if (otpID) {
             dispatch(forgotPasswordSendOTP(otpID, data.otp));
-            setStartCountdown(false)
-            setCountTime(0)
         }
     }
 
     const handleResetPassword = (data) => {
-        if (otpID != '')
+        if (otpID)
             dispatch(resetPassword(otpID, data.password, data.password_repeat));
     }
 
     const cancelRequest = () => {
-        if (otpID != '') {
+        if (otpID) {
             dispatch(forgotPasswordCancel(otpID));
-            setStartCountdown(false)
-            setCountTime(0)
         }
     }
 
     const renderer = ({ minutes, seconds, completed }) => {
         if (completed) {
-            return <button style={{ display: "none" }} onClick={cancelRequest()}></button>;
+            return <button style={{ display: "none" }} onClick={cancelRequest()}></button>;     //trigged (fired) cancelRequest function when btn rendered
         } else {
             return (
                 <span>
-                    OTP gửi đến SĐT của bạn sẽ hết hạn trong {minutes * 60 + seconds} giây
+                    OTP gửi đến SĐT của bạn sẽ hết hạn sau {minutes} phút {seconds} giây.
                 </span>
             );
         }
@@ -78,8 +74,8 @@ const ForgotPassword = () => {
 
     const redirectToLogin = () => {
         if (isSuccessful) {
-            history.push("/login");
-            dispatch(forgotPasswordSetStep(0));
+            history.replace("/login");
+            dispatch(forgotPasswordSetStep(0));     //also set timeOutSaved = 0
         }
     }
 
@@ -100,6 +96,7 @@ const ForgotPassword = () => {
                                 placeholder="+84 912 345 678"
                                 autoComplete="off"
                                 autoFocus
+                                defaultValue=""
                                 maskChar={null}
                                 rules={{ required: "Bạn hãy điền số điện thoại " }}
                             />
@@ -127,7 +124,7 @@ const ForgotPassword = () => {
             content:
                 <div>
                     <div className="OTP-status">
-                        {startCountdown && (<Countdown date={countTime + 120000} renderer={renderer} />)}
+                        {startCountdown && otpID && (<Countdown date={timeOutSaved} renderer={renderer} />)}
                     </div>
                     <div>
                         <form onSubmit={handleSubmit(handleVerifyOTP)}>
@@ -161,7 +158,7 @@ const ForgotPassword = () => {
 
                         <div className="recovery-form-field">
                             {currentStep > 0 &&
-                                startCountdown && (<Countdown date={countTime + 30000} renderer={renderer2} />)
+                                startCountdown && otpID && (<Countdown date={timeOutSaved - 270000} renderer={renderer2} />)
                             }
                         </div>
                     </div>
@@ -224,10 +221,17 @@ const ForgotPassword = () => {
     ];
 
     useEffect(() => {
-        if (isSuccessful)
-            dispatch(forgotPasswordSetStep(0));
-        if (currentStep === 1 && otpID != '')
-            dispatch(forgotPasswordSetStep(0));
+        if (isSuccessful || !otpID){
+            if (currentStep !== 0 ){
+                dispatch(forgotPasswordSetStep(0));     //also set timeOutSaved = 0
+            }
+        } else {
+            if (currentStep > 0) {
+                if(timeOutSaved <= Date.now()) {
+                    dispatch(forgotPasswordSetStep(0));
+                }
+            }
+        }
     }, []);
 
     return (
@@ -248,7 +252,7 @@ const ForgotPassword = () => {
                         </div> :
                         <div className="recovery-form">
                             <h2>Đặt lại mật khẩu</h2>
-                            <div>Xác thực SĐT và nhập mật khẩu mới</div>
+                            {currentStep===0?<div>Xác thực SĐT và nhập mật khẩu mới</div>:""}
                             <div className="recovery-form-custom">
                                 <Steps size="small" current={currentStep}>
                                     {steps.map(item => (

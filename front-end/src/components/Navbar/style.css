@@ -85,6 +85,15 @@
     font-size: 18px;
 }
 
+.nav-alert-banner{
+    position: sticky;
+    background-color: #fffbe6;
+}
+
+.nav-alert-controlled{
+    width: 50%;
+    margin: 0 auto;
+}
 
 @media screen and (max-width: 1280px) {
     .nav-logo {

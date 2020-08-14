@@ -26,7 +26,8 @@ import {
     SUBCRIBE_EMAIL,
     SUBCRIBE_EMAIL_SUCCESSFUL,
     VERIFY_EMAIL,
-    VERIFY_EMAIL_SUCCESSFUL
+    VERIFY_EMAIL_SUCCESSFUL,
+    SAVE_TIME_OUT
 } from "./action";
 
 export const getUser = token => {
@@ -227,3 +228,10 @@ export const subcribeEmail = data => {
         data
     };
 };
+
+export const saveTimeOut = (time) => {
+    return {
+        type: SAVE_TIME_OUT,
+        time
+    }
+}

@@ -134,6 +134,19 @@
   }
 }
 
+.setting-wrapper .setting-content .setting-classify .setting-element .setting-verify-email {
+  -webkit-box-flex: 1;
+      -ms-flex: 1;
+          flex: 1;
+  text-align: right;
+}
+
+@media (max-width: 320px) {
+  .setting-wrapper .setting-content .setting-classify .setting-element .setting-verify-email {
+    font-size: 0.8rem;
+  }
+}
+
 .setting-wrapper .setting-content .setting-classify .setting-element:last-child {
   border: none;
 }
