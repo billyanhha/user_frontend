@@ -40,6 +40,9 @@ const Chat = (props) => {
         setpage(1)
         if (io && currentUser?.cusId && doctor_id) {
             io.emit("chat", `chat&&${currentUser?.cusId}&&${doctor_id}`)
+            io.on('chat-thread', data => {
+                getChatThreadData()
+            })
         }
 
     }, [currentUser, doctor_id, io]);
@@ -265,6 +268,7 @@ const Chat = (props) => {
                             <Input.TextArea
                                 // autoSize={false}
                                 allowClear={true}
+                                autoFocus
                                 loading={threadLoad}
                                 onChange={onTextChange}
                                 value={chatText}
