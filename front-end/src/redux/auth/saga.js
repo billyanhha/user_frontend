@@ -207,11 +207,10 @@ function* watchGuestRegister(action) {
         }
     } catch (error) {
         message.destroy();
-        if (error.response?.data?.err?.status === "101") {
-            message.destroy();
+        console.log(error.response?.data?.err)
+        if (error.response?.data?.err?.status == 101) {
             message.error("Đường truyền bị gián đoạn, xin hãy thử lại sau vài giây!", 5);
         } else {
-            message.destroy();
             message.error(error.response?.data?.err ?? "Hệ thống quá tải!", 3);
         }
     } finally {

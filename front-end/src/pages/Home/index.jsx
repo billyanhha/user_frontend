@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import "./style.css"
 import Navbar from '../../components/Navbar';
 import Footer from '../../components/Footer';
-import { Row, Col, Tooltip, Rate } from 'antd';
+import { Row, Col, Tooltip, Rate, message } from 'antd';
 import clock from "../../assest/image/clock.png";
 import timeLine from "../../assest/image/time-line.png";
 import call from "../../assest/image/call.png";
@@ -18,6 +18,7 @@ const Home = (props) => {
 
     const dispatch = useDispatch();
     const service = useSelector(state => state.service);
+    const { currentUser } = useSelector(state => state.user);
     const doctor = useSelector(state => state.doctor);
     const { isLoad } = useSelector(state => state.ui);
 
@@ -77,7 +78,11 @@ const Home = (props) => {
     })
 
     const toBooking = () => {
-        props.history.push("/booking")
+        if (currentUser?.active === true) {
+            props.history.push("/booking");
+        } else {
+            message.info("Tài khoản của bạn chưa được phê duyệt! Xin hãy kiên nhẫn hoặc liên hệ với chúng tôi để được giải đáp thêm.", 5);
+        }
     }
 
 
