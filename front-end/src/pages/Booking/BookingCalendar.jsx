@@ -70,7 +70,7 @@ const BookingCalendar = () => {
 
         if (!_.isEmpty(slots)) {
             slots.forEach(element => {
-                text += " Slot " + element + " "
+                text += " Khung giờ " + element + " "
             });
             if (slots.length === 4) {
                 return (<Tooltip placement="leftTop" title={"Bác sĩ không có lịch trống"}>
@@ -117,7 +117,7 @@ const BookingCalendar = () => {
                 style={radioStyle}
                 disabled={disable}
                 value={value.id}>
-                Slot {value.id} -
+                Khung giờ {value.id} -
                 { moment(value.hour_from, 'HH:mm').format('HH:mm')} đến {moment(value.hour_to, 'HH:mm').format('HH:mm')}
             </Radio.Button>
         )
