@@ -4,7 +4,7 @@ import { useForm, Controller, ErrorMessage } from "react-hook-form";
 import Countdown from 'react-countdown';
 import InputMask from 'react-input-mask';
 
-import { changePhone, verifyChangePhone, cancelChangePhone, resetSettingStatus, cancelChangePhoneSuccessful } from '../../../../../../redux/user';
+import { changePhone, verifyChangePhone, cancelChangePhone, resetSettingStatus, cancelChangePhoneSuccessful, saveTimeOut } from '../../../../../../redux/user';
 
 import { message, Steps } from 'antd';
 import { LoadingOutlined } from '@ant-design/icons';
@@ -20,23 +20,24 @@ const ChangePhone = () => {
     const phoneNumber = useSelector(state => state.user.phoneNumber);
     const request_id = useSelector(state => state.user.requestID);
     const currentStep = useSelector(state => state.user.currentStep);
-    const [countTime, setCountTime] = useState(0);
-    const [startCountdown, setStartCountdown] = useState(false);
+    const timeOutSaved = useSelector(state => state.user.savedTimeOut);
+
+    // const [countTime, setCountTime] = useState(0);
+    // const [startCountdown, setStartCountdown] = useState(false);
+
+    //Each render → Compare time now with "timeOutSaved" state, if still have time to countdown then countdown.
+    let startCountdown = timeOutSaved > Date.now() ? true : false;
 
     const handleChangePhone = (data) => {
         let phone = data.phone.replace(/\s+/g, '').substring(1);    //clear space and "+"
         let reqData = { phone: phone, password: data.verify_password };
         dispatch(verifyChangePhone(token, reqData, currentUser?.customer_id));
-        setCountTime(Date.now())
-        setStartCountdown(true)
     }
 
     const handleVerifyOTP = (data) => {
         if (phoneNumber && request_id) {
             let reqData = { phone: phoneNumber, request_id: request_id, code: data.otp };
             dispatch(changePhone(token, reqData, currentUser?.customer_id));
-            setStartCountdown(false);
-            setCountTime(0);
         } else {
             message.warning("Lỗi gửi xác nhận OTP", 3);
         }
@@ -45,8 +46,6 @@ const ChangePhone = () => {
     const cancelRequest = () => {
         if (request_id) {
             dispatch(cancelChangePhone(request_id));
-            setStartCountdown(false);
-            setCountTime(0);
         } else {
             message.warning("Không thể huỷ yêu cầu!", 3);
         }
@@ -58,7 +57,7 @@ const ChangePhone = () => {
         } else {
             return (
                 <span>
-                    OTP gửi đến SĐT của bạn sẽ hết hạn trong {minutes * 60 + seconds} giây
+                    OTP gửi đến SĐT cũ của bạn sẽ hết hạn trong {minutes} phút {seconds} giây
                 </span>
             );
         }
@@ -89,6 +88,7 @@ const ChangePhone = () => {
                             mask="+84 999 999 999"
                             placeholder="+84 912 345 678"
                             autoComplete="off"
+                            defaultValue=""
                             autoFocus
                             maskChar={null}
                             rules={{ required: "Bạn hãy điền số điện thoại " }}
@@ -133,7 +133,7 @@ const ChangePhone = () => {
             content:
                 <div>
                     <div className="OTP-status">
-                        {startCountdown && (<Countdown date={countTime + 120000} renderer={renderer} />)}
+                        {currentStep === 1 && startCountdown && request_id && (<Countdown date={timeOutSaved} renderer={renderer} />)}
                     </div>
                     <form onSubmit={handleSubmit(handleVerifyOTP)}>
                         <div className="profile-form-field">
@@ -161,7 +161,7 @@ const ChangePhone = () => {
                         </div>
                         <div className="setting-submit custom-display-flex">
                             {currentStep === 1 &&
-                                startCountdown && (<Countdown date={countTime + 30000} renderer={renderer2} />)
+                                startCountdown && request_id && (<Countdown date={timeOutSaved - 270000} renderer={renderer2} />)
                             }
                             <button disabled={isLoad} type="submit">{isLoad ? <LoadingOutlined /> : ""} Cập nhật</button>
                         </div>
@@ -172,18 +172,22 @@ const ChangePhone = () => {
     ];
 
     useEffect(() => {
-        console.log(settingStatus)
         if (settingStatus) {
             dispatch(resetSettingStatus());
         }
     }, [settingStatus])
-    useEffect(() => {
-        if (currentStep != 0) {
-            dispatch(cancelChangePhoneSuccessful());
 
-        }
-        if (request_id) {
-            dispatch(cancelChangePhone(request_id));
+    useEffect(() => {
+        if (!request_id){
+            if (currentStep !== 0 ){
+                dispatch(cancelChangePhone(null));    //also set timeOutSaved = 0
+            }
+        } else {
+            if (currentStep > 0) {
+                if(timeOutSaved <= Date.now()) {
+                    dispatch(cancelChangePhone(request_id));
+                }
+            }
         }
     }, [])
 

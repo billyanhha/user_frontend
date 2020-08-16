@@ -1,22 +1,35 @@
-.footer{
-    background-color :#00BC9A;
+.footer {
+    background-color: #00bc9a;
     padding: 2% calc(10% + 10px);
     color: #fff;
     font-size: 13px;
     font-weight: 400;
 }
 
-.footer-logo{
-    font-size: 30px;
-    font-weight: 600;
+.footer-logo {
+    margin-bottom: 40px;
 }
 
-.footer-link{
+.footer-logo img {
+    height: 50px;
+}
+
+.footer-link {
     color: #fff;
-    transition: all .2s ease-in-out;
+    transition: all 0.2s ease-in-out;
 }
 
-.footer-link:hover{
-    color: #fff; 
+.footer-link:hover {
+    color: #fff;
     /* #160B38 */
+}
+
+@media screen and (max-width: 1280px) {
+    .footer-logo {
+        margin-bottom: 20px;
+    }
+
+    .footer-logo img {
+        height: 40px;
+    }
 }

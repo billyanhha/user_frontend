@@ -16,12 +16,12 @@
 
 .nav-logo {
     height: 60px;
-    /* width: 80px; */
     overflow: hidden;
 }
 
 .nav-logo img {
-    height: 100%;
+    margin-top: 8%;
+    height: 70%;
 }
 
 .nav-userInfo-user-name{
@@ -92,6 +92,15 @@
     font-size: 18px;
 }
 
+.nav-alert-banner{
+    position: sticky;
+    background-color: #fffbe6;
+}
+
+.nav-alert-controlled{
+    width: 50%;
+    margin: 0 auto;
+}
 
 @media screen and (max-width: 1280px) {
     .nav-logo {

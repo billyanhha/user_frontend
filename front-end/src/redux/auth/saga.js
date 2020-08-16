@@ -10,7 +10,7 @@ import {
 import {
     userLogout, userLoginSuccessful,
     guestSendPhoneSuccessful, guestRegisterSuccessful, guestSendOTPSuccessful,
-    forgotPasswordSendPhoneSuccessful, forgotPasswordCancelDone, resetPasswordDone, forgotPasswordSendOTPSuccessful
+    forgotPasswordSendPhoneSuccessful, forgotPasswordCancelDone, resetPasswordDone, forgotPasswordSendOTPSuccessful, saveTimeOutOTP
 } from '.';
 import authService from '../../service/authService'
 import { openLoading, closeLoading } from '../ui';
@@ -66,17 +66,16 @@ function* watchForgotPasswordSendPhone(action) {
         const result = yield authService.handleForgotPasswordSendPhone(action.phone);
         if (result) {
             yield put(forgotPasswordSendPhoneSuccessful(result));
+            yield put(saveTimeOutOTP(Date.now()+300000));
             message.destroy();
             message.success('Mã OTP đang được gửi đến', 3);
         }
     } catch (error) {
         message.destroy();
         if (error.response?.data?.status === "10") {
-            message.destroy();
             message.error("SĐT này cần chờ 5 phút để gửi lại yêu cầu!", 4);
         } else {
-            message.destroy();
-            message.error(error.response?.data?.err ?? "Hệ thống quá tải!", 3);
+            message.error(error.response?.data?.err ?? "Hệ thống quá tải!", 4);
         }
     } finally {
         yield put(closeLoading())
@@ -91,11 +90,15 @@ function* watchForgotPasswordSendOTP(action) {
         if (result) {
             yield put(forgotPasswordSendOTPSuccessful());
             message.destroy();
-            message.success('Xác thực thành công!', 3);
+            message.success('Xác thực thành công!', 4);
         }
     } catch (error) {
         message.destroy();
-        message.error(error.response?.data?.err || error.response?.data?.error_text	||  "Hệ thống quá tải!", 3);
+        if (error.response?.data?.status === "16") {
+            message.error("Mã OTP không chính xác!", 4);
+        }else{
+            message.error(error.response?.data?.err ?? "Hệ thống quá tải!", 4);
+        }
     } finally {
         yield put(closeLoading())
     }
@@ -105,11 +108,10 @@ function* watchResetPassword(action) {
     try {
         yield put(openLoading())
         message.loading('Đang gửi yêu cầu');
-        console.log(action)
         const result = yield authService.handleResetPassword(action);
-        console.log(result)
         if (result) {
             yield put(resetPasswordDone());
+            yield put(saveTimeOutOTP(0));
             message.destroy();
             message.success('Mật khẩu mới đã được áp dụng!', 3);
         }
@@ -130,18 +132,25 @@ function* watchResetPassword(action) {
 function* watchForgotPasswordCancelRequest(action) {
     try {
         yield put(openLoading())
-        message.loading('Đang gửi yêu cầu');
-        const result = yield authService.handleForgotPasswordCancelRequest(action.requestID);
-        console.log(result)
-        if (result) {
-            // yield delay(2000);
-            yield put(forgotPasswordCancelDone());
-            message.destroy();
-            message.success('Đã huỷ mã OTP!', 3);
+
+        /*  100% Cancel Request Successfully after force user wait 30s minimum.
+
+            Checked case: before 5 minutes (since lastest time user sent Change pass request (step 1)) → cancel req → re-request step 1
+            SO, no need to worry if our backend request cancel that "request_id" (otpID) to Nexmo server failed (error status 3).
+        */
+        message.destroy();
+        yield put(forgotPasswordCancelDone());
+        yield put(saveTimeOutOTP(0));
+        message.info('Đã huỷ yêu cầu!', 3);
+
+        if(action.requestID){
+            yield authService.handleForgotPasswordCancelRequest(action.requestID);
         }
     } catch (error) {
-        message.destroy();
-        message.error(error.response?.data?.err ?? "Hệ thống quá tải!", 3);
+        if(error.response?.data?.err){
+            message.destroy();
+            message.error(error.response?.data?.err, 4);
+        }
     } finally {
         yield put(closeLoading())
     }
@@ -154,6 +163,7 @@ function* watchGuestSendPhone(action) {
         const result = yield authService.handleGuestSendPhone(action);
         if (result && result.request_id) {
             yield put(guestSendPhoneSuccessful(result.request_id, result.phone, result.fullName, result.dob, result.gender));
+            yield put(saveTimeOutOTP(Date.now() + 300000));
             message.destroy();
             message.success('Mã OTP đang được gửi đến', 3);
         }
@@ -193,14 +203,14 @@ function* watchGuestRegister(action) {
             message.destroy();
             message.success('Tạo tài khoản thành công!');
             yield put(guestRegisterSuccessful());
+            yield put(saveTimeOutOTP(0));
         }
     } catch (error) {
         message.destroy();
-        if (error.response?.data?.err?.status === "101") {
-            message.destroy();
+        console.log(error.response?.data?.err)
+        if (error.response?.data?.err?.status == 101) {
             message.error("Đường truyền bị gián đoạn, xin hãy thử lại sau vài giây!", 5);
         } else {
-            message.destroy();
             message.error(error.response?.data?.err ?? "Hệ thống quá tải!", 3);
         }
     } finally {

@@ -169,7 +169,7 @@ const FilterDoctor = (props) => {
                             </div>
                             <Dropdown overlay={menu}>
                                 <Button onClick={e => e.preventDefault()}>
-                                    Sắp xếp theo <DownOutlined />
+                                    Sắp xếp theo {sortBy === "average_rating" ? "đánh giá" : "tên đầy đủ"} <DownOutlined />
                                 </Button>
                             </Dropdown>
                         </div>

@@ -8,7 +8,7 @@ import detailLanguages from "../../assest/image/Doctor_detail_Languages.png";
 import detailLicense from "../../assest/image/Doctor_detail_license.png";
 
 import "./style.css"
-import { Timeline, Rate, Pagination, Spin } from 'antd';
+import { Timeline, Rate, Pagination, Spin, message } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import { getDoctorDetail } from '../../redux/doctor';
 import { saveBookingDoctor } from '../../redux/booking';
@@ -17,6 +17,7 @@ const DetailDoctor = (props) => {
 
     const dispatch = useDispatch();
     const { isLoad } = useSelector(state => state.ui);
+    const { currentUser } = useSelector(state => state.user);
     const { doctorDetail } = useSelector(state => state.doctor);
     const [currentPage, setcurrentPage] = useState(1);
     const doctorId = props.match.params.id;
@@ -94,9 +95,12 @@ const DetailDoctor = (props) => {
     });
 
     const toBooking = () => {
-        dispatch(saveBookingDoctor(doctorDetail?.doctor));
-        props.history.push("/booking");
-
+        if (currentUser?.active === true) {
+            dispatch(saveBookingDoctor(doctorDetail?.doctor));
+            props.history.push("/booking");
+        } else {
+            message.info("Tài khoản của bạn chưa được phê duyệt! Xin hãy kiên nhẫn hoặc liên hệ với chúng tôi để được giải đáp thêm.", 5);
+        }
     }
 
 

@@ -2,11 +2,13 @@ import React from 'react';
 import './style.css';
 import { Row, Col } from 'antd';
 import { Link } from 'react-router-dom';
+import logo from '../../assest/logo/IkemenHHS_w.png';
 
 const Footer = () => {
     return (
         <div className="footer">
-            <p className="footer-logo">Logo</p>
+            {/* <div className="nav-logo"><img alt='logo' src={logoxz} /></div> */}
+            <p className="footer-logo"><img alt='logo' src={logo} /></p>
             <Row gutter={[3, 12]} >
                 <Col xs={24} sm={12} md={12}>
                     <p><b>Điện thoại</b> 02838409652</p>

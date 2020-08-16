@@ -12,9 +12,19 @@ import Navbar from '../../components/Navbar';
 import { guestSendPhone, guestSendOTP, guestRegister, setProcessRegister } from '../../redux/auth';
 import vi from 'date-fns/locale/vi'
 import { message } from 'antd';
+
 import "./style.css";
 
 const Register = () => {
+
+    /*
+        ===============================================================
+        CAUTION: Read code of this Register component can cause cancer.
+
+                                        Word of farewell by. Author K
+        ===============================================================
+    */
+
     const dispatch = useDispatch();
     const { isLoad } = useSelector(state => state.ui);
     const step = useSelector(state => state.auth.stepRegister);
@@ -24,30 +34,25 @@ const Register = () => {
     const dob = useSelector(state => state.auth.dob);
     const gender = useSelector(state => state.auth.gender);
     const isRegisterSuccessful = useSelector(state => state.auth.isRegisterSuccess);
+    const timeOutSaved = useSelector(state => state.auth.savedTimeOut);
+
     const [disable, setdisable] = useState(false);
-    const [timeOut, setTimeOut] = useState(0);
-    const [isTimeOut, setIsTimeOut] = useState(false);
+
+    //Each render → Compare time now with "timeOutSaved" state, if still have time to countdown then countdown.
+    let isTimeOut = timeOutSaved > Date.now() ? true : false;
 
 
-    //==========  Handle Countdown Button ==========
-    // const Completionist = () => <span></span>
-
+    //==========  Handle Countdown Component ==========
     // Renderer callback with condition for Timeout OTP
     const renderer = ({ hours, minutes, seconds, completed }) => {
         if (completed) {
-            message.destroy();
-            message.warning("Mã OTP đã hết hạn")
-            if (isTimeOut) {
-                backButton()
-            }
-            // dispatch(setProcessRegister(0));       //send guest back to step 1 (set redux state stepRegister = 0)
             // Render a complete state
-            return <span></span>;
+            return <button style={{ display: "none" }} onClick={cancelRequest()}></button>;     //trigged (fired) cancelRequest function when btn rendered
         } else {
             // Render a countdown
             return (
                 <span>
-                    Mã sẽ hết hạn trong {seconds} giây
+                    OTP gửi đến SĐT của bạn sẽ hết hạn sau {minutes} phút {seconds} giây.
                 </span>
             );
         }
@@ -56,7 +61,7 @@ const Register = () => {
     // Renderer callback with condition for Back button
     const renderer2 = ({ hours, minutes, seconds, completed }) => {
         if (completed) {
-            return <span><button className="register-back-button" onClick={backButton}>🢤 Tôi muốn sử dụng SĐT khác</button>Mã OTP đã hết hạn!</span>;
+            return <span><button className="register-back-button" onClick={() => cancelRequest()}>🢤 Tôi muốn đăng kí SĐT khác</button></span>;
         } else {
             // Render a countdown
             return (
@@ -67,15 +72,10 @@ const Register = () => {
 
     //==========  Handle Submit form ==========
     const onSubmit = (data) => {
-        /*Known ISSUE: Step 3 backend response: status: "101", error_text: "No response found"
-            Its force user submit pass 1 more time
-         */
-
         switch (step) {
             //0: submit phone
             case 0: {
                 setdisable(true)
-                console.log(data.phone.replace(/\s+/g, '').substring(1));
                 axios.post("/api/customer/user/phone", {
                     // phone: "84" + data.phone.substring(1)
                     phone: data.phone.replace(/\s+/g, '').substring(1)
@@ -83,19 +83,16 @@ const Register = () => {
                     .then((res) => {
                         if (res.data.exist == true) {
                             message.destroy();
-                            message.warning("SĐT này đã được đăng kí");
+                            message.warning("SĐT này đã được đăng kí",5);
                             setdisable(false);
                         } else {
                             let basicData = {
                                 phone: data.phone.replace(/\s+/g, '').substring(1),
-                                // phone: "84" + data.phone.substring(1),
                                 fullName: data.fullname,
                                 gender: data.gender.value,
                                 dob: moment(data.Datepicker).format('YYYY/MM/DD')
                             }
                             dispatch(guestSendPhone(basicData));
-                            setTimeOut(Date.now())
-                            setIsTimeOut(true)
                             setTimeout(() => {
                                 setdisable(false);
                             }, 1000);
@@ -106,11 +103,6 @@ const Register = () => {
                         message.destroy();
                         message.warning("Hệ thống quá tải, xin thử lại sau!");
                     });
-
-                // Test parse string to date and format it.
-                // let testTime = moment("20/5/2012", "YYYY-MM-DD")
-                // console.log("test parst 20/5/2012 string to moment: " + testTime);
-                // console.log(moment(testTime).format('YYYY/MM/DD'));
 
                 setTimeout(() => {
                     setdisable(false)
@@ -142,8 +134,6 @@ const Register = () => {
                     dob: dob
                 }
                 dispatch(guestRegister(registerData));
-                setTimeOut(Date.now())
-                setIsTimeOut(true)
                 setTimeout(() => {
                     setdisable(false)
                 }, 1000);
@@ -151,33 +141,46 @@ const Register = () => {
             }
 
             default: {
-                console.log("Step is: " + step)
                 break;
             }
         }
     };
 
-    const backButton = () => {
+    const cancelRequest = () => {
         //Call api cancel request
-        if (!isLoad) {
+        if (!isLoad && otpID) {
+            dispatch(setProcessRegister(0));
+            message.destroy();
+            message.info('Đã huỷ yêu cầu, vô hiệu hoá mã OTP!', 5);
+
             axios.post("/api/auth/verifyCancel", {
                 request_id: otpID
             })
-                .then((res) => {
-                    dispatch(setProcessRegister(0));
-                    setTimeOut(0)
-                    setIsTimeOut(false)
-                })
+                .then((res) => {})
                 .catch(err => {
                     message.destroy();
-                    message.warning("Không thể thực hiện yêu cầu")
+                    message.warning(err.response?.data?.err??"Không thể thực hiện yêu cầu")
                 });
         }
     }
 
+    useEffect(() => {
+        if (!otpID){
+            if (step !== 0 ){
+                dispatch(setProcessRegister(0));    //also set timeOutSaved = 0
+            }
+        } else {
+            if (step > 0) {
+                if(timeOutSaved <= Date.now()) {
+                    dispatch(setProcessRegister(0));
+                }
+            }
+        }
+    }, []);
+
     //Input phone number
     const StepOne = (props) => {
-        const { register, handleSubmit, watch, errors, control } = useForm({ validateCriteriaMode: "all" });
+        const { register, handleSubmit, errors, control } = useForm({ validateCriteriaMode: "all" });
         const options = [
             { value: "Male", label: "Nam" },
             { value: "Female", label: "Nữ" }
@@ -208,6 +211,7 @@ const Register = () => {
                                 placeholder="+84 912 345 678"
                                 autoComplete="off"
                                 autoFocus
+                                defaultValue=""
                                 maskChar={null}
                                 rules={{ required: "Bạn hãy điền số điện thoại " }}
                             />
@@ -227,7 +231,8 @@ const Register = () => {
                                     minLength: {
                                         value: 6,
                                         message: "Họ Tên quá ngắn, bạn có chắc mình nhập đúng? "
-                                    }
+                                    },
+                                    pattern: /[^\d\][$&+,:;=?@#|'<>.^*{}()%!-]+/g
                                 })}
                             />
                             <ErrorMessage errors={errors} name="fullname">
@@ -254,7 +259,6 @@ const Register = () => {
                                 })}
                                 rules={{ required: true }}
                                 onChange={([selected]) => {
-                                    // Place your logic here
                                     return selected;
                                 }}
                                 defaultValue={{ value: "Male", label: "Nam" }}
@@ -310,8 +314,7 @@ const Register = () => {
             <div className="register-form-content">
                 <h2>Xác nhận mã OTP</h2>
                 <div>OTP đã gửi đến SĐT của bạn.<br />
-                    {/* <Countdown date={Date.now() + 60000} renderer={renderer} /> */}
-                    {isTimeOut && (<Countdown date={timeOut + 60000} renderer={renderer} />)}
+                    {isTimeOut && otpID && (<Countdown date={timeOutSaved} renderer={renderer} />)}
                 </div>
                 <div className="register-form-custom">
                     <form onSubmit={handleSubmit(onSubmit)}>
@@ -345,7 +348,7 @@ const Register = () => {
                     </form>
 
                     <div className="register-form-field register-div-button-disabled">
-                        {isTimeOut && (<Countdown date={timeOut + 30000} renderer={renderer2} />)}
+                        {isTimeOut && otpID && (<Countdown date={timeOutSaved - 270000} renderer={renderer2} />)}
                     </div>
                 </div>
             </div>
@@ -419,7 +422,7 @@ const Register = () => {
                         </div>
                     </form>
                     <div className="register-form-field">
-                        {isTimeOut && (<Countdown date={timeOut + 30000} renderer={renderer2} />)}
+                        {isTimeOut && otpID && (<Countdown date={timeOutSaved - 270000} renderer={renderer2} />)}
                     </div>
                 </div>
             </div>
