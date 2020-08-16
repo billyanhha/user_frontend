@@ -227,7 +227,7 @@ const BookingReason = (props) => {
                                     {errors.patient && <span className="error-text">Xin vui lòng không bỏ trống</span>} */}
                                 </div>
                                 <div className="form-field-booking">
-                                    <p className="form-booking-label">Địa chỉ</p>
+                                    <p className="form-booking-label">Địa chỉ khám</p>
                                     <div className="search-map-div">
                                         <Combobox onSelect={handleSelect} className="combobox-map-div">
                                             <ComboboxInput
@@ -268,7 +268,7 @@ const BookingReason = (props) => {
                                 </div>
                                 <div className="form-field-booking">
 
-                                    <p className="form-booking-label">Lý do</p>
+                                    <p className="form-booking-label">Lý do/Ghi chú địa chỉ</p>
                                     <textarea defaultValue={infos?.reason ?? ''} name="reason" className="form-text-area" ref={register({ required: true })} />
                                     {errors.reason && <span className="error-text">Xin vui lòng không bỏ trống</span>}
                                 </div>

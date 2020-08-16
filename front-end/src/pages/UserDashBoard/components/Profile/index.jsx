@@ -430,7 +430,7 @@ const Profile = (props) => {
                                 </div>
                             </div>
 
-                            <p className="profile-form-label">Địa chỉ</p>
+                            <p className="profile-form-label">Nơi sinh sống</p>
                             <input type="text" className="profile-form-input" name="address" defaultValue={profileInfo?.address ?? userProfile?.address ?? null}
                                 ref={register({
                                     // required: "Bạn hãy điền địa chỉ "

@@ -79,7 +79,7 @@ const Appointment = (props) => {
                 </div>
 
                 <p className="hightlight package-appointment-date">{moment(value?.date).format("DD - MM - YYYY")}</p>
-                <p> Slot : {value?.slot_id} từ ( {slot?.[`${value?.slot_id}`]?.from} - {slot?.[`${value?.slot_id}`]?.to}  ) </p>
+                <p> Khung giờ : {value?.slot_id} từ ( {slot?.[`${value?.slot_id}`]?.from} - {slot?.[`${value?.slot_id}`]?.to}  ) </p>
                 <div className="package-service-item">
                     Dịch vụ sử dụng : {renderServices(value?.appointment_service)}
                 </div>
