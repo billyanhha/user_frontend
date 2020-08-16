@@ -266,7 +266,7 @@ function* watchSubcribeEmail(action) {
         yield put(openLoading());
         const {token} = yield select(state => state.auth);
         const { currentUser } = yield select(state => state.user)
-        if(action.type === 0){
+        if(action.typeEmail === 0){
             const result = yield userService.subscribeEmail(token, currentUser?.cusId, action.data);
             if (result?.customerUpdated) {
                 message.destroy();
@@ -275,9 +275,7 @@ function* watchSubcribeEmail(action) {
             }
         }else{
             const result = yield userService.unSubscribeEmail(action.data);
-            console.log(result)
-
-            if(result){
+            if(result?.userUpdated){
                 message.destroy();
                 yield put(verifyEmailSuccessful(true));
                 message.success('Huỷ đăng kí email thành công!', 4);

@@ -25,8 +25,8 @@ const UnSubsEmail = props => {
     useEffect(() => {
         if (tokenMail) {
             dispatch(subcribeEmail(tokenMail, 1));
-        }else{
-            history.replace("/404");    //to NoMatch page
+        } else {
+            history.replace("/404"); //to NoMatch page
         }
     }, []);
 
