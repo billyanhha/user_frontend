@@ -21,7 +21,6 @@ const FloatingButton = (props) => {
             if (io) {
                 io.on('server-send-notification-chat', data => {
                     dispatch(getUnreadGroup({ id: currentDoctor?.id }))
-
                 })
             }
         }
