@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import "../style.css"
 import { Avatar, MessageBox } from 'react-chat-elements'
 import { Input, Spin } from 'antd';
@@ -6,7 +6,7 @@ import { Upload, Button } from 'antd';
 import { FolderAddFilled, CloseCircleFilled } from '@ant-design/icons';
 import { withRouter } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { getThreadChat, getMoreThreadChat, sendMessage, updateIsRead } from '../../../redux/chat';
+import { getThreadChat, getMoreThreadChat, sendMessage, updateIsRead, getChat } from '../../../redux/chat';
 import moment from "moment";
 import { LoadingOutlined } from '@ant-design/icons';
 import _ from "lodash"
@@ -16,6 +16,7 @@ const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
 
 const Chat = (props) => {
 
+    const ref = useRef(null)
     const [fileList, setFileList] = useState([]);
     const [file, setfile] = useState({});
     const [openUploadFile, setopenUploadFile] = useState(false);
@@ -42,6 +43,8 @@ const Chat = (props) => {
             io.emit("chat", `chat&&${currentUser?.cusId}&&${doctor_id}`)
             io.on('chat-thread', data => {
                 getChatThreadData()
+                const payload = { page: 1, cusId: currentUser?.cusId }
+                dispatch(getChat(payload))
             })
         }
 
@@ -140,6 +143,7 @@ const Chat = (props) => {
         if (newFileList[0]) {
             setfile(newFileList[0].originFileObj)
         }
+        ref.current.focus()
     };
 
     const onPreviewImage = async file => {
@@ -267,6 +271,7 @@ const Chat = (props) => {
                             </div>
                             <Input.TextArea
                                 // autoSize={false}
+                                ref = {ref}
                                 allowClear={true}
                                 autoFocus
                                 loading={threadLoad}

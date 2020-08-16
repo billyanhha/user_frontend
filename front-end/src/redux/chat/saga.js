@@ -182,6 +182,6 @@ export function* chatSaga() {
     yield takeLatest(GET_USER_RELATE_DOCTOR, watchUserRelateDoctorWorker);
     yield takeLatest(GET_UNREAD_GROUP, watchGetUnreadWorker);
     yield takeEvery(SEND_MESSAGE, watchSendMessageWorker);
-    yield takeEvery(UPDATE_IS_READ, watchUpdateIsReadWorker);
+    yield takeLatest(UPDATE_IS_READ, watchUpdateIsReadWorker);
 
 }
