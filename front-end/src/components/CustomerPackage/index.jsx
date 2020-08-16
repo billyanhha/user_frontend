@@ -77,7 +77,7 @@ const CustomerPackage = (props) => {
                             </div>
                             <div className="cp-info-content">
                                 BS.<span><Link to={`/doctor/${value?.doctor_id}`} target='_blank'>{value?.doctor_name}</Link></span>
-                                <br /><span className="cp-address">Địa chỉ khám: {value?.doctor_address}</span>
+                                <br /><span className="cp-address">Địa chỉ: {value?.doctor_address}</span>
                                 <br /><span className="primary-color"><MobileTwoTone twoToneColor="#47c7be" /> {value?.doctor_phone}</span>
                             </div>
                         </div>
