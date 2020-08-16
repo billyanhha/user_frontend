@@ -14,7 +14,9 @@ body {
     /* background-color: #F8F9FA !important; */
 }
 
-/* #00BC9A */
+:root {
+    --shadow-color: #d0d0d0;
+}
 
 .default-container {
     padding: 0 10%;

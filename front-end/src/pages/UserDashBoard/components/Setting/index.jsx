@@ -46,7 +46,7 @@ const Setting = () => {
 
     const handelSubcribeEmail = () => {
         let data = {mail_subscribe: currentUser?.mail_subscribe ? "false" : "true"};
-        dispatch(subcribeEmail(data));
+        dispatch(subcribeEmail(data, 0));
     };
 
     const handleCancelModal = () => {

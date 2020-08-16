@@ -222,10 +222,11 @@ export const verifyEmailSuccessful = result => {
     };
 };
 
-export const subcribeEmail = data => {
+export const subcribeEmail = (data, typeEmail) => {
     return {
         type: SUBCRIBE_EMAIL,
-        data
+        data,
+        typeEmail
     };
 };
 

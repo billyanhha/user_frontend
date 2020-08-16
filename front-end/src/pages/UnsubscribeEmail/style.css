@@ -1,0 +1,70 @@
+.unsub-email-page {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+
+    background: linear-gradient(-45deg, #f5fffd, #cef9ff, #e0fff3, #d2fff7);
+    background-size: 400% 400%;
+    animation: gradient 20s ease infinite;
+}
+
+.unsub-email-wrapper {
+    padding: 40px 20px;
+    background-color: #fff;
+    border-radius: 10px;
+    min-height: 40vh;
+    width: 40vw;
+    box-shadow: 0 0 8px 1px #ececec;
+}
+
+.unsub-email-wrapper div {
+    text-align: center;
+}
+
+@media screen and (max-width: 1600px) {
+    .unsub-email-wrapper {
+        width: 50vw;
+    }
+}
+/* Ipad */
+@media screen and (max-width: 800px) {
+    .verify-email-title {
+        font-size: 1.5rem;
+    }
+
+    .unsub-email-wrapper {
+        width: 60vw;
+    }
+
+    .forgot-msg {
+        font-size: 0.8rem;
+    }
+
+    .verify-email-logo {
+        height: 50px;
+    }
+}
+
+/* Phone */
+@media screen and (max-width: 600px) {
+    .unsub-email-wrapper {
+        width: 90vw;
+        padding: 40px 10px;
+    }
+
+    .verify-email-title {
+        font-size: 1.2rem;
+    }
+
+    .verify-email-logo {
+        height: 40px;
+    }
+}
+
+/* Smaller phone */
+@media screen and (max-width: 320px) {
+    .verify-email-title {
+        font-size: 1rem;
+    }
+}

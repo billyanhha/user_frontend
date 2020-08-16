@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { isEmpty } from 'lodash';
 
 import Navbar from '../../components/Navbar';
 import Footer from '../../components/Footer';
@@ -95,12 +96,19 @@ const DetailDoctor = (props) => {
     });
 
     const toBooking = () => {
-        if (currentUser?.active === true) {
-            dispatch(saveBookingDoctor(doctorDetail?.doctor));
-            props.history.push("/booking");
+        if(!isEmpty(currentUser)) {
+            if (currentUser?.active === true) {
+                dispatch(saveBookingDoctor(doctorDetail?.doctor));
+                props.history.push("/booking");
+            } else {
+                message.destroy();
+                message.info("Tài khoản của bạn chưa được phê duyệt! Xin hãy kiên nhẫn hoặc liên hệ với chúng tôi để được giải đáp thêm.", 5);
+            }
         } else {
-            message.info("Tài khoản của bạn chưa được phê duyệt! Xin hãy kiên nhẫn hoặc liên hệ với chúng tôi để được giải đáp thêm.", 5);
-        }
+            message.destroy();
+            message.info("Xin hãy đăng nhập để đặt lịch.", 3);
+            props.history.push("/booking");
+        } 
     }
 
 

@@ -31,7 +31,7 @@ const EditPackage = (props) => {
     return (
         <form onSubmit={handleSubmit(onSubmit)} disabled = {true}>
             <div className="form-field-booking">
-                <p className="form-booking-label">Địa chỉ</p>
+                <p className="form-booking-label">Địa chỉ khám</p>
                 <input defaultValue={infos?.address} className="form-field-input" name="address" ref={register({ required: true })} />
                 {errors.address && <span className="error-text">Xin vui lòng không bỏ trống</span>}
             </div>
@@ -51,7 +51,7 @@ const EditPackage = (props) => {
                 {errors.phone && <span className="error-text">Số điện thoại sai</span>}
             </div>
             <div className="form-field-booking">
-                <p className="form-booking-label">Lý do</p>
+                <p className="form-booking-label">Lý do/Ghi chú địa chỉ</p>
                 <textarea defaultValue={infos?.reason ?? ''} name="reason" className="form-text-area" ref={register({ required: true })} />
                 {errors.reason && <span className="error-text">Xin vui lòng không bỏ trống</span>}
             </div>

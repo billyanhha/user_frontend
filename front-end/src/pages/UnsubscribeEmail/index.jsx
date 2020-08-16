@@ -4,12 +4,12 @@ import {useHistory, withRouter} from "react-router-dom";
 
 import {LoadingOutlined} from "@ant-design/icons";
 
-import {verifyEmail} from "../../redux/user";
+import {subcribeEmail} from "../../redux/user";
 
-import logo from "../../assest/logo/IkemenHHS_w.png";
+import logo from "../../assest/logo/IKEMEN.png";
 import "./style.css";
 
-const VerifyEmail = props => {
+const UnSubsEmail = props => {
     const {isLoad} = useSelector(state => state.ui);
     const verifyStatus = useSelector(state => state.user.verifyEmail);
 
@@ -24,23 +24,23 @@ const VerifyEmail = props => {
 
     useEffect(() => {
         if (tokenMail) {
-            dispatch(verifyEmail(tokenMail));
-        }else{
-            history.replace("/404");    //to NoMatch page
+            dispatch(subcribeEmail(tokenMail, 1));
+        } else {
+            history.replace("/404"); //to NoMatch page
         }
     }, []);
 
     return (
-        <div className="verify-email-page">
+        <div className="unsub-email-page">
             <div className="verify-email-logo" onClick={() => redirectToHomepage()}>
                 <img alt="logo" src={logo} />
             </div>
-            <div className="verify-email-wrapper">
+            <div className="unsub-email-wrapper">
                 <div>
                     {isLoad ? (
                         <>
                             <div className="verify-email-img">
-                                <img src="https://img.icons8.com/cotton/100/000000/-message-exchange.png" />
+                                <img src="https://img.icons8.com/cotton/100/000000/refresh-mail.png" />
                             </div>
                             <div className="verify-email-msg">
                                 <LoadingOutlined /> Đang gửi yêu cầu...
@@ -52,20 +52,20 @@ const VerifyEmail = props => {
                                 <img
                                     src={
                                         verifyStatus === true
-                                            ? "https://img.icons8.com/cotton/100/000000/like-message.png"
+                                            ? "https://img.icons8.com/cotton/100/000000/reading-confirmation.png"
                                             : "https://img.icons8.com/cotton/100/000000/mail-error.png"
                                     }
                                 />
                             </div>
                             {verifyStatus === true ? (
                                 <>
-                                    <div className="verify-email-title">Đã xác thực Email của bạn!</div>
-                                    <div>Những cập nhật, thông báo mới nhất sẽ được gửi đến Email của bạn.</div>
+                                    <div className="verify-email-title">Đã huỷ đăng kí Email của bạn!</div>
+                                    <div>Hệ thống sẽ không gửi những cập nhật, thông báo mới đến Email của bạn.</div>
                                 </>
                             ) : (
                                 <>
-                                    <div className="verify-email-title verify-email-error">{verifyStatus ?? "Có lỗi khi xác thực Email"}</div>
-                                    <div>{!verifyStatus ? "Xin hãy vào lại link trong Email, hoặc liên hệ với hệ thống qua tin nhắn" : ""}</div>
+                                    <div className="verify-email-title verify-email-error">{verifyStatus ?? "Có lỗi khi huỷ đăng kí Email."}</div>
+                                    <div>{!verifyStatus ? "Xin hãy vào lại link trong Email, hoặc liên hệ với chúng tôi để nhận hỗ trợ." : ""}</div>
                                 </>
                             )}
                         </>
@@ -81,4 +81,4 @@ const VerifyEmail = props => {
     );
 };
 
-export default withRouter(VerifyEmail);
+export default withRouter(UnSubsEmail);
