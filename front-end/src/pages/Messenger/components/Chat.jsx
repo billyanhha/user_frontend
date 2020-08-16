@@ -40,11 +40,16 @@ const Chat = (props) => {
         updateThreadIsReadFunc()
         setpage(1)
         if (io && currentUser?.cusId && doctor_id) {
+            io.emit("disconnect-chat", "")
             io.emit("chat", `chat&&${currentUser?.cusId}&&${doctor_id}`)
             io.on('chat-thread', data => {
                 getChatThreadData()
-                const payload = { page: 1, cusId: currentUser?.cusId }
-                dispatch(getChat(payload))
+                if (doctor_id === data?.doctor_id) { // if doctor chat is exactly the one just send the message
+                    const payloadThread = { cusId: data?.customer_id, doctor_id: data?.doctor_id }
+                    dispatch(getThreadChat(payloadThread))
+                    const payloadUpdate = { cusId: data?.customer_id, doctor_id:  data?.doctor_id, socketId: io?.id }
+                    dispatch(updateIsRead(payloadUpdate))
+                }
             })
         }
 

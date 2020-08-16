@@ -19,7 +19,7 @@ const Navbar = props => {
     // const [redirect, setRedirect] = useState(false);
     const [menu_class, setMenu_class] = useState('');
     const [drawerVisible, setdrawerVisible] = useState(false);
-    const { unreadNotifyNumber } = useSelector(state => state.notify);
+    const { unreadNotifyNumber, io } = useSelector(state => state.notify);
     const { currentUser } = useSelector(state => state.user);
     const { nonReadGroupNumber } = useSelector(state => state.chat);
 
@@ -31,11 +31,14 @@ const Navbar = props => {
     }
 
     useEffect(() => {
-        if (auth.isLoggedIn && auth.token) {
-            dispatch(getUser(auth.token));
+        if (auth.token) {
+            dispatch(getUser(auth?.token));
         }
     }, []);
 
+    useEffect(() => {
+
+    }, [io]);
     // if (redirect) {
     //     return <Redirect to="/login" />;
     // }
@@ -80,7 +83,11 @@ const Navbar = props => {
 
     const handleUserMenuClick = e => {
         if (e.key === "logout") {
+            if(io) {
+
+            }
             dispatch(userLogout());
+
         } else if (e.key === 'profile') {
             history.push('/profile');
         } else if (e.key === 'notify') {

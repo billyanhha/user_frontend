@@ -18,7 +18,6 @@ import { message } from 'antd';
 import { clearUserInfo, saveIoInstance } from '../user';
 import _ from 'lodash'
 import { resetPackageForm } from '../booking';
-import io from 'socket.io-client';
 import { clearIoInstance } from '../notification';
 
 function* watchUserLoginWorker(action) {
@@ -46,15 +45,16 @@ function* watchUserLoginWorker(action) {
 function* watchUserLogout(action) {
     try {
         yield put(showLoading())
+        const { io } = yield select(state => state.notify)
+        if(io){
+            io.emit("logout", "");
+        }
         yield put(clearUserInfo())
         yield put(clearIoInstance())
         yield put(resetPackageForm())
     } catch (error) {
         console.log(error);
     } finally {
-        setTimeout(() => {
-            window.location.pathname = "/login";
-        }, 1000);
         yield put(hideLoading())
     }
 }

@@ -25,6 +25,7 @@ const EditAppointment = (props) => {
 
     useEffect(() => {
         
+        reset(infos)
 
     }, [infos]);
 

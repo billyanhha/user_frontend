@@ -17,20 +17,27 @@ const MessChatList = (props) => {
     const { chatList, isOutOfChatListData } = useSelector(state => state.chat);
     const { isLoad } = useSelector(state => state.ui);
     const { currentUser } = useSelector(state => state.user);
+    const { io } = useSelector(state => state.notify);
 
     const [disable, setdisable] = useState(false);
     const [page, setpage] = useState(1);
 
+
     useEffect(() => {
 
         getChatData()
+        if (io) {
+            io.on('server-send-notification-chat', data => {
+                getChatData()
+            })
+        }
 
-    }, [currentUser]);
+    }, [currentUser, io]);
 
 
     const getChatData = () => {
         if(currentUser?.cusId){
-            const data = { page: page, cusId: currentUser?.cusId }
+            const data = { page: 1, cusId: currentUser?.cusId }
             dispatch(getChat(data))
         }
     }

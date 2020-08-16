@@ -73,23 +73,6 @@ packageService.updateRatingDoctor = (data, token) => new Promise((reslove, rejec
 })
 
 
-packageService.addAppointmentPackage = (data, token) => new Promise((reslove, reject) => {
-    const api = `/api/package/${data?.packageId}/appointments`;
-    axios.post(api, data, {
-        headers: {
-            authorization: "Bearer " + token,
-            Accept: '*/*'
-        }
-    })
-        .then(result => {
-            if (!_.isEmpty(result?.data?.appointmentCreated?.appointment)) {
-                const { id } = result?.data?.appointmentCreated?.appointment;
-                packageService.addServiceAppointment(id, data.services, token)
-            }
-            reslove(result.data)
-        })
-        .catch(err => reject(err))
-})
 
 packageService.updateAppointmentPackage = (patientId, appointmentId, data) => new Promise((reslove, reject) => {
     const api = `/api/patient/${patientId}/appointments/${appointmentId}`;
@@ -101,29 +84,7 @@ packageService.updateAppointmentPackage = (patientId, appointmentId, data) => ne
             Accept: '*/*'
         },
     })
-        .then(result => {
-
-            if (!_.isEmpty(result?.data)) {
-                packageService.addServiceAppointment(appointmentId, data.services, data?.token)
-            }
-            reslove(result.data)
-        })
-        .catch(err => reject(err))
-})
-
-
-packageService.addServiceAppointment = (id, services, token) => new Promise((reslove, reject) => {
-    const api = `/api/appointment/${id}/services `;
-
-    axios.post(api, {
-        services: services,
-    }, {
-        headers: {
-            authorization: "Bearer " + token,
-            Accept: '*/*'
-        },
-    })
-        .then(result => {
+        .then(result =>  {
             reslove(result.data)
         })
         .catch(err => reject(err))
@@ -133,48 +94,6 @@ packageService.addServiceAppointment = (id, services, token) => new Promise((res
 
 
 
-
-
-packageService.addServicePackage = (data, token) => new Promise((reslove, reject) => {
-    const api = `/api/package/${data?.packageId}/services/${data?.serviceId}`;
-
-    axios.post(api, data, {
-        headers: {
-            authorization: "Bearer " + token,
-            Accept: '*/*'
-        }
-    })
-        .then(result => reslove(result.data))
-        .catch(err => reject(err))
-})
-
-packageService.editServicePackage = (data, token) => new Promise((reslove, reject) => {
-
-    const api = `/api/package/${data?.packageId}/services/${data?.package_service_id}`;
-
-    axios.put(api, data, {
-        headers: {
-            authorization: "Bearer " + token,
-            Accept: '*/*'
-        }
-    })
-        .then(result => reslove(result.data))
-        .catch(err => reject(err))
-})
-
-packageService.deleteServicePackage = (id, token) => new Promise((reslove, reject) => {
-
-    const api = `/api/package-service/${id}`;
-
-    axios.delete(api, {
-        headers: {
-            authorization: "Bearer " + token,
-            Accept: '*/*'
-        }
-    })
-        .then(result => reslove(result.data))
-        .catch(err => reject(err))
-})
 
 
 
@@ -221,118 +140,7 @@ packageService.getPackageStatus = (id, token) => new Promise((reslove, reject) =
 })
 
 
-packageService.doctorAcceptPackage = (doctorId, packageId, token) => new Promise((reslove, reject) => {
-    axios.post(`/api/doctor/${doctorId}/packages/${packageId}/accept`,
-        {
-            headers: {
-                authorization: "Bearer " + token,
-                Accept: '*/*'
-            },
-        }
-    )
-        .then(result => reslove(result.data))
-        .catch(err => reject(err))
-})
 
-
-packageService.doctorRejectPackage = (doctorId, packageId, token) => new Promise((reslove, reject) => {
-    axios.post(`/api/doctor/${doctorId}/packages/${packageId}/reject`,
-        {
-            headers: {
-                authorization: "Bearer " + token,
-                Accept: '*/*'
-            },
-        }
-    )
-        .then(result => reslove(result.data))
-        .catch(err => reject(err))
-})
-
-
-packageService.getNotAssignPackageQuery = (doctorId, query, token) => new Promise((reslove, reject) => {
-    let order = 'asc'
-    if (query.sortBy === 'created_at') {
-        order = 'desc'
-    } else {
-        order = 'asc'
-    }
-    if (query?.searchBy === "name") {
-        axios.get(`/api/doctor/${doctorId}/packages/not-assign`, {
-            params: {
-                itemsPage: 3,
-                page: query?.page,
-                sort: query?.sortBy,
-                order: order,
-                patient_name: query?.query
-            },
-            headers: {
-                authorization: "Bearer " + token,
-                Accept: '*/*'
-            },
-        })
-            .then(result => reslove(result.data))
-            .catch(err => reject(err))
-    } else {
-        axios.get(`/api/doctor/${doctorId}/packages/not-assign`, {
-            params: {
-                itemsPage: 3,
-                page: query?.page,
-                sort: query?.sortBy,
-                order: order,
-                address: query?.query
-            },
-            headers: {
-                authorization: "Bearer " + token,
-                Accept: '*/*'
-            },
-        })
-            .then(result => reslove(result.data))
-            .catch(err => reject(err))
-    }
-});
-
-packageService.getAssignPackageQuery = (doctorId, query, token) => new Promise((reslove, reject) => {
-    let order = 'asc'
-    if (query.sortBy === 'created_at') {
-        order = 'desc'
-    } else {
-        order = 'asc'
-    }
-
-    if (query?.searchBy === "name") {
-        axios.get(`/api/doctor/${doctorId}/packages/request-doctor`, {
-            params: {
-                itemsPage: 3,
-                page: query?.page,
-                sort: query?.sortBy,
-                order: order,
-                patient_name: query?.query
-            },
-            headers: {
-                authorization: "Bearer " + token,
-                Accept: '*/*'
-            },
-        })
-            .then(result => reslove(result.data))
-            .catch(err => reject(err))
-    } else {
-        axios.get(`/api/doctor/${doctorId}/packages/request-doctor`, {
-            params: {
-                itemsPage: 3,
-                page: query?.page,
-                sort: query?.sortBy,
-                order: order,
-                address: query?.query
-            },
-            headers: {
-                authorization: "Bearer " + token,
-                Accept: '*/*'
-            },
-        })
-            .then(result => reslove(result.data))
-            .catch(err => reject(err))
-    }
-});
 
 
 packageService.editPackage = (data, token) => new Promise((reslove, reject) => {

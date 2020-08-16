@@ -241,7 +241,6 @@ export function* packageSaga() {
     yield takeLatest(CHANGE_PACKAGE_STATUS, watchChangePackageStatusWorker);
     yield takeLatest(UPDATE_APPOINTMENT_PACKAGE, watchUpdateAppointmentPackageWorker);
     yield takeLatest(GET_ALL_APPOINTMENT, watchGetAllAppointmentByPackageId);
-    
     yield takeLatest(RATING_DOCTOR, watchRatingDoctorWorker);
     yield takeLatest(UPDATE_RATING_DOCTOR, watchUpdateRatingDoctorWorker);
 
