@@ -176,7 +176,7 @@ userService.verifyEmail = token =>
             .catch(err => reject(err));
     });
 
-userService.subcribeEmail = (token, id, data) =>
+userService.subscribeEmail = (token, id, data) =>
     new Promise((resolve, reject) => {
         const api = `/api/customer/${id}/mail-subscribe`;
         axios
@@ -186,6 +186,17 @@ userService.subcribeEmail = (token, id, data) =>
                     Accept: "*/*"
                 }
             })
+            .then(result => {
+                resolve(result.data);
+            })
+            .catch(err => reject(err));
+    });
+
+userService.unSubscribeEmail = (token) =>
+    new Promise((resolve, reject) => {
+        const api = `/api/auth/unsubscribe/${token} `;
+        axios
+            .put(api)
             .then(result => {
                 resolve(result.data);
             })

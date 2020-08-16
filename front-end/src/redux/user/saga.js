@@ -8,8 +8,8 @@ import {
 import {
     getUserSuccessful, getUserProfile,
     getUserProfileSuccessful, editUserProfileSuccessful, changePasswordSuccessful, changeEmailSuccessful,
-    verifyChangePhone, verifyChangePhoneSuccessful, changePhoneSuccessful, cancelChangePhoneSuccessful,
-    getPatientSuccessful, getUserPackageSuccessful, subcribeEmailSuccessful, getUser, verifyEmailSuccessful, saveTimeOut
+    verifyChangePhoneSuccessful, changePhoneSuccessful, cancelChangePhoneSuccessful,
+    getPatientSuccessful, getUserPackageSuccessful, getUser, verifyEmailSuccessful, saveTimeOut
 } from '.'
 import { userLogout } from '../auth';
 import { message } from 'antd';
@@ -255,7 +255,7 @@ function* watchVerifyEmail(action) {
     } catch (error) {
         yield put(verifyEmailSuccessful(error?.response?.data?.err??false));
         message.destroy();
-        message.error(error?.response?.data?.err, 3)
+        message.error(error?.response?.data?.err, 4)
     } finally {
         yield put(closeLoading())
     }
@@ -266,15 +266,29 @@ function* watchSubcribeEmail(action) {
         yield put(openLoading());
         const {token} = yield select(state => state.auth);
         const { currentUser } = yield select(state => state.user)
-        const result = yield userService.subcribeEmail(token, currentUser?.cusId, action.data);
-        if (result?.customerUpdated) {
-            message.destroy();
-            message.success(action.data.mail_subscribe==="true"?'Đăng kí email thành công! Giờ bạn có thể nhận email từ hệ thống':'Huỷ đăng kí email thành công!', 4)
-            yield put(getUser(token));
-        }
+        if(action.type === 0){
+            const result = yield userService.subscribeEmail(token, currentUser?.cusId, action.data);
+            if (result?.customerUpdated) {
+                message.destroy();
+                message.success(action.data.mail_subscribe==="true"?'Đăng kí email thành công! Giờ bạn có thể nhận email từ hệ thống':'Huỷ đăng kí email thành công!', 4)
+                yield put(getUser(token));
+            }
+        }else{
+            const result = yield userService.unSubscribeEmail(action.data);
+            console.log(result)
+
+            if(result){
+                message.destroy();
+                yield put(verifyEmailSuccessful(true));
+                message.success('Huỷ đăng kí email thành công!', 4);
+            } 
+        } 
     } catch (error) {
+        if(action.type === 1){
+            yield put(verifyEmailSuccessful(error?.response?.data?.err ?? false));
+        }
         message.destroy();
-        message.error(error?.response?.data?.err, 3)
+        message.error(error?.response?.data?.err, 4)
     } finally {
         yield put(closeLoading())
     }
