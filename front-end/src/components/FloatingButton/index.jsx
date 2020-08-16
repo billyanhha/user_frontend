@@ -12,14 +12,21 @@ const FloatingButton = (props) => {
     const { currentUser } = useSelector(state => state.user);
     const { token } = useSelector(state => state.auth);
     const { nonReadGroupNumber } = useSelector(state => state.chat);
+    const { io } = useSelector(state => state.notify);
 
     useEffect(() => {
 
         if(currentUser?.cusId){
             dispatch(getUnreadGroup({ cusId: currentUser?.cusId }))
+            if (io) {
+                io.on('server-send-notification-chat', data => {
+                    dispatch(getUnreadGroup({ id: currentDoctor?.id }))
+
+                })
+            }
         }
 
-    }, [currentUser]);
+    }, [currentUser, io]);
 
     const toMessenger = () => {
         props.history.push("/messenger/t")
