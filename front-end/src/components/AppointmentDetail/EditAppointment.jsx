@@ -44,7 +44,7 @@ const EditAppointment = (props) => {
         <div>
             <form onSubmit={handleSubmit(onSubmit)} disabled={true}>
                 <div className="form-field-booking">
-                    <p className="form-booking-label">Địa chỉ</p>
+                    <p className="form-booking-label">Địa chỉ khám</p>
                     <input defaultValue={infos?.address} className="form-field-input" name="address" ref={register({ required: true })} />
                     {errors.address && <span className="error-text">Xin vui lòng không bỏ trống</span>}
                 </div>

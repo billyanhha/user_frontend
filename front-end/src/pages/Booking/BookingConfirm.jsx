@@ -57,11 +57,11 @@ const BookingConfirm = () => {
                             </div>
                             <div className="booking-guide">
                                 <p><b>Bệnh nhân :   </b> {infos?.fullname} - {(infos?.type === 'INDEPENDENT' ? ' Tôi ' : infos?.type)}</p>
-                                <p><b>Địa chỉ :     </b> {infos?.address}</p>
+                                <p><b>Địa chỉ khám:     </b> {infos?.address}</p>
                                 <p><b>Số điện thoại :</b> {infos?.phone}</p>
-                                <p><b>Nguyên nhân : </b> {infos?.reason}</p>
+                                <p><b>Lý do/Ghi chú địa chỉ: </b> {infos?.reason}</p>
                                 <p><b>Bác sĩ :      </b> {doctorInfo?.fullname ? doctorInfo?.fullname : "Không chọn bác sĩ"}</p>
-                                <p><b>Thời gian :   </b> {bookingTime?.date} - vào slot {bookingTime?.slot_id}</p>
+                                <p><b>Thời gian :   </b> {bookingTime?.date} - vào khung giờ {bookingTime?.slot_id}</p>
                             </div>
                         </div>
                     </div>
