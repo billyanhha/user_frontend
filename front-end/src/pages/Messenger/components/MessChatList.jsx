@@ -14,8 +14,7 @@ const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
 const MessChatList = (props) => {
 
     const dispatch = useDispatch();
-    const { chatList, isOutOfChatListData } = useSelector(state => state.chat);
-    const { isLoad } = useSelector(state => state.ui);
+    const { chatList, isOutOfChatListData, getChatLoad } = useSelector(state => state.chat);
     const { currentUser } = useSelector(state => state.user);
     const { io } = useSelector(state => state.notify);
 
@@ -45,7 +44,7 @@ const MessChatList = (props) => {
 
 
     const getMoreChatData = () => {
-        if (!isOutOfChatListData && !isLoad) {
+        if (!isOutOfChatListData && !getChatLoad) {
 
             setdisable(true)
             const nextPage = page + 1;
@@ -84,14 +83,14 @@ const MessChatList = (props) => {
     return (
         <div>
             {
-                (chatList?.length === 0 && !isLoad) ?
+                (chatList?.length === 0 && !getChatLoad) ?
                     (<center><h4>Bạn chưa có cuộc hội thoại nào</h4></center>) : ''
             }
             <div>
                 {renderChatList}
                 <center>
                     <Button
-                        loading={disable || isLoad}
+                        loading={disable || getChatLoad}
                         style={{ display: `${isOutOfChatListData ? 'none' : ''}` }}
                         type="link" onClick={getMoreChatData} >Tải thêm</Button>
                 </center>
