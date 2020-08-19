@@ -2,15 +2,17 @@ import React, { useState, useEffect, useRef } from 'react';
 import "../style.css"
 import { Avatar, MessageBox } from 'react-chat-elements'
 import { Input, Spin } from 'antd';
-import { Upload, Button } from 'antd';
+import { Upload, Button, Tooltip, message } from 'antd';
 import { FolderAddFilled, CloseCircleFilled } from '@ant-design/icons';
 import { withRouter } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { getThreadChat, getMoreThreadChat, sendMessage, updateIsRead, getChat } from '../../../redux/chat';
 import moment from "moment";
-import { LoadingOutlined } from '@ant-design/icons';
+import { LoadingOutlined, VideoCameraOutlined } from '@ant-design/icons';
 import _ from "lodash"
 import { animateScroll } from 'react-scroll'
+import Portal from "./VideoCall/Portal";
+
 
 const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
 
@@ -24,6 +26,7 @@ const Chat = (props) => {
     const [page, setpage] = useState(1);
     const [chatText, setchatText] = useState('');
     const [isLoadMore, setisLoadMore] = useState(false);
+    const [openVideoCall, setOpenVideoCall] = useState(false);
 
     const dispatch = useDispatch();
     const { currentUser } = useSelector(state => state.user);
@@ -233,6 +236,17 @@ const Chat = (props) => {
         
     }
 
+    const toggleVideoCall = () => {
+        if(openVideoCall) setOpenVideoCall(false)
+        else {
+            setOpenVideoCall(true);
+        }
+    }
+
+    const closeWindowPortal = () => {
+        if(openVideoCall) setOpenVideoCall(false);
+    }
+
     return (doctor_id === 't') ?
 
         (
@@ -246,13 +260,22 @@ const Chat = (props) => {
             <div className="messenger-content-wrapper" >
                 <div className="messenger-content" id="messenger-chat-content-list-13" >
                     <div className="messenger-chat" >
+                        {openVideoCall && <Portal url={`${process.env.PUBLIC_URL}/call/video/${doctor_id?doctor_id:"cancel"}`} closeWindowPortal={closeWindowPortal} />}
+                        {/* <VideoCall toggleVideoCall={toggleVideoCall} isOpen={openVideoCall} /> */}
                         <div className="messenger-chat-header">
-                            <Avatar
-                                src={getdocAva()}
-                                alt={getdocName()}
-                                size="large"
-                                type="circle flexible" />
-                            <b>{getdocName()}</b>
+                            <div>
+                                <Avatar
+                                    src={getdocAva()}
+                                    alt={getdocName()}
+                                    size="large"
+                                    type="circle flexible" />
+                                <b>{getdocName()}</b>
+                            </div>
+                            <Tooltip title="Bắt đầu gọi video" placement="bottom">
+                                <div className="messenger-chat-video" onClick={toggleVideoCall}>
+                                    <VideoCameraOutlined style={{fontSize:"1.2rem", color:"#00BC9A"}} />
+                                </div>
+                            </Tooltip>
                         </div>
                         <div className="messenger-chat-content" >
                             <div className="messenger-chat-content-list">

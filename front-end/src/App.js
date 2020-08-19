@@ -23,6 +23,7 @@ import PackageDetail from './pages/PackageDetail';
 import Notify from './components/Notify';
 import FloatingButton from './components/FloatingButton';
 import Messenger from './pages/Messenger';
+import VideoCall from './pages/VideoCall';
 require('dotenv').config()
 
 const App = () => {
@@ -47,6 +48,9 @@ const App = () => {
         </PrivateRoute>
         <PrivateRoute exact path="/messenger/:id">
           <Messenger />
+        </PrivateRoute>
+        <PrivateRoute exact path="/call/video/:direct">
+          <VideoCall />
         </PrivateRoute>
         <PrivateRoute exact path="/profile">
           <Dashboard />
