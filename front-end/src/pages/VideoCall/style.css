@@ -4,10 +4,52 @@
     background-color: #141414;
 }
 
+.call-my-camera {
+    z-index: 2;
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 20%;
+    height: 20%;
+    background-color: #252525;
+    border-bottom-left-radius: 10px;
+    border-left: 2px solid #252525;
+    border-bottom: 2px solid #252525;
+    cursor: pointer;
+    transition: 0.4s ease-in;
+}
+
+.call-my-camera-full {
+    background-color: #141414;
+    width: 100%;
+    height: 100%;
+}
+
+.call-my-camera-full:hover .call-hover-action {
+    visibility: visible;
+    opacity: 0.5;
+    transition: visibility 0s linear, opacity 0.5s ease-in;
+}
+
+.call-hover-action {
+    z-index: 3;
+    position: fixed;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 90%;
+    background-color: #252525;
+    visibility: hidden;
+    opacity: 0;
+    transition: visibility 0s linear 0.5s, opacity 0.5s ease;
+}
+
 .call-action-bar {
+    z-index: 4;
     position: fixed;
     bottom: 0;
-
     display: flex;
     justify-content: center;
     align-items: center;
@@ -18,7 +60,8 @@
 }
 
 .call-action-image {
-    background-color: #141414;
+    /* background-color: #141414; */
+    background-color: #666666;
     width: 50px;
     height: 50px;
     border-radius: 50%;
@@ -45,6 +88,7 @@
 }
 
 .call-action-off-image {
+    border: 2px solid #fff;
     background-color: #ff6347;
 }
 
