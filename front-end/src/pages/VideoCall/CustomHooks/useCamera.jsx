@@ -1,8 +1,8 @@
 import {useEffect, useState, useRef} from "react";
-// import {isEmpty} from "lodash";
+import {isEmpty} from "lodash";
 
 /**
- * @Caution Plz dont touch this cútom Hook, the changes may crash the app.
+ * @Caution Plz dont touch this cútom Hook, the changes may crash the "VideoCall" component.
  *
  * This component will open camera & mic then "streaming" by exporting/passing 2 tracks channel (audio and video) to ref that corresponding to @param videoRef.
  * Besides, useCamera allow to set some specific state from outside for changing the streaming properties.
@@ -26,8 +26,14 @@ const useCleanup = val => {
     }, []);
 };
 
-export const useCamera = videoRef => {
+/**
+ *
+ * @param videoRef video element
+ * @param sourceFrom null: source from your device, 1: source from other peer
+ */
+export const useCamera = (videoRef, sourceFrom) => {
     const [isCameraInitialised, setIsCameraInitialised] = useState(false);
+    const [streamData, setStreamData] = useState({});
     const [video, setVideo] = useState(null);
     const [error, setError] = useState("");
     const [streaming, setStreaming] = useState(true);
@@ -43,12 +49,9 @@ export const useCamera = videoRef => {
         if (video) {
             return;
         }
-        console.log(videoRef);
-        const videoElement = videoRef.current;
 
         //check if videoRef is a actual video element or not
-        if (videoElement instanceof HTMLVideoElement) {
-            console.log("sdvdf;k")
+        if (videoRef.current instanceof HTMLVideoElement) {
             setVideo(videoRef.current);
         }
     }, [videoRef, video]);
@@ -58,21 +61,32 @@ export const useCamera = videoRef => {
             return;
         }
 
-        initialiseCamera()
-            .then(stream => {
-                video.srcObject = stream;
-                video.addEventListener("loadedmetadata", () => {
-                    // pretty useless tho
-                    video.play();
+        if (sourceFrom) {
+            console.log(streamData)
+            if (!isEmpty(streamData)) {
+                try {
+                    video.srcObject = streamData;
+                    setIsCameraInitialised(true);
+                } catch (error) {
+                    setError(error);
+                }
+            } else {
+                video.srcObject = null;
+                setError("Không nhận được video của đối phương!");
+            }
+        } else {
+            initialiseCamera()
+                .then(stream => {
+                    video.srcObject = stream;
+                    setStreamData(stream);
+                    setIsCameraInitialised(true);
+                })
+                .catch(e => {
+                    setError(e.message);
+                    setStreaming(false);
                 });
-                setIsCameraInitialised(true);
-                console.log("vào :/")
-            })
-            .catch(e => {
-                setError(e.message);
-                setStreaming(false);
-            });
-    }, [video, isCameraInitialised, streaming]);
+        }
+    }, [video, streamData, isCameraInitialised, streaming]);
 
     useEffect(() => {
         const getTrack = videoRef.current?.srcObject?.getTracks();
@@ -99,7 +113,6 @@ export const useCamera = videoRef => {
         if (!getTrack) {
             return;
         }
-
         if (mic) {
             getTrack[0].enabled = true;
         } else {
@@ -109,5 +122,5 @@ export const useCamera = videoRef => {
 
     useCleanup(video);
 
-    return [video, setVideo, camera, setCamera, mic, setMic, isCameraInitialised, streaming, setStreaming, error];
+    return [streamData, setStreamData, video, setVideo, camera, setCamera, mic, setMic, isCameraInitialised, streaming, setStreaming, error];
 };
