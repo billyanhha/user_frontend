@@ -38,6 +38,10 @@ const VideoCall = props => {
     // const oppFaceRef = useRef(null);
 
     /**
+     * ================================================================================================
+     *      WARNING: DO NOT edit or change the order of the variable/states on useCamera and below
+     * ================================================================================================
+     *
      * This lib/component will open camera/mic and "streaming" by passing data through react ref into @video tag.
      *
      * @ignore *** isCameraInitialised, streaming, setStreaming ***
@@ -128,7 +132,7 @@ const VideoCall = props => {
              *  @param receiverID = doctorID
              *  @param peerID of customer
              */
-            let senderData = {name: currentUser?.fullname, avatar: currentUser?.avatarurl};
+            let senderData = {id: currentUser?.cusId, name: currentUser?.fullname, avatar: currentUser?.avatarurl};
             io.emit("video-connect", senderData, receiverID + "doctor", peerID);
         }
     };
@@ -138,7 +142,7 @@ const VideoCall = props => {
 
         io.on("cancel-video", () => {
             message.destroy();
-            message.info("Bác sĩ đã huỷ cuộc gọi, cửa sổ này sẽ tự đóng sau 5 giây!", 5);
+            message.info("Bác sĩ đã huỷ cuộc gọi, cửa sổ này sẽ tự động đóng sau 5 giây!", 5);
             setToggleAction(false);
             setTimeout(() => {
                 closeWindow();
@@ -158,7 +162,7 @@ const VideoCall = props => {
         // Listen event other disconnected
         io.on("user-disconnected", userId => {
             setIsDisconnected(true);
-            message.info("Đối phương đã ngắt kết nối!" + userId, 4);
+            message.info("Đối phương đã ngắt kết nối!", 4);
         });
     };
 
@@ -168,13 +172,17 @@ const VideoCall = props => {
                 // history.replace("/");
                 setToggleAction(true);
                 // myFaceRef = createRef();
-                setStreaming(true);
+                // setStreaming(true);
                 break;
             case 1: //end call
+                if (io) {
+                    io.emit("cancel-video", receiverID + "customer");
+                }
                 closeWindow();
                 setToggleAction(false);
+
                 // myFaceRef.current = null;
-                setStreaming(false);
+                // setStreaming(false);
                 break;
 
             default:
@@ -206,7 +214,7 @@ const VideoCall = props => {
          */
         if (peerID && isCameraInitialised && !isCameraInitialisedDoc) {
             //wait until streaming data on doctor side is ready!
-            console.log("countdown 15s");
+            console.log("countdown 9s");
             setIsCallLoad(false);
             setTimeout(() => {
                 handlePeerCallDoctor(senderPeerID);
@@ -245,7 +253,6 @@ const VideoCall = props => {
 
         navigator.mediaDevices.getUserMedia({audio: true, video: true}).then(stream => {
             setMyStreamData(stream);
-            setMic(false);
             streamInit = stream;
         });
 
@@ -335,11 +342,11 @@ const VideoCall = props => {
                         </>
                     ) : (
                         <>
-                            <Tooltip title="Gọi lại">
+                            {/* <Tooltip title="Gọi lại">
                                 <div className="call-action-image" onClick={() => actionCall(0)}>
                                     <img src={calling} alt="calling" />
                                 </div>
-                            </Tooltip>
+                            </Tooltip> */}
                             <Tooltip title="Đóng">
                                 <div className="call-action-image call-action-close" onClick={() => closeWindow()}>
                                     <img src={close} alt="closeWindow" />

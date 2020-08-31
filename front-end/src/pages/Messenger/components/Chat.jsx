@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import "../style.css"
 import { Avatar, MessageBox } from 'react-chat-elements'
 import { Input, Spin } from 'antd';
-import { Upload, Button, Tooltip, message, Modal, Popconfirm } from 'antd';
+import { Upload, Button, Tooltip, Popconfirm } from 'antd';
 import { FolderAddFilled, CloseCircleFilled } from '@ant-design/icons';
 import { withRouter } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
@@ -11,7 +11,7 @@ import moment from "moment";
 import { LoadingOutlined, VideoCameraOutlined } from '@ant-design/icons';
 import _ from "lodash"
 import { animateScroll } from 'react-scroll'
-import Portal from "./VideoCall/Portal";
+import Portal from "../../../components/Portal/Portal";
 
 
 const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
@@ -28,9 +28,6 @@ const Chat = (props) => {
     const [isLoadMore, setisLoadMore] = useState(false);
 
     const [openVideoCall, setOpenVideoCall] = useState(false);
-    const [incomingCall, setIncomingCall] = useState(false);
-    const [senderData, setSenderData] = useState(null);
-    const [senderPeerID, setSenderPeerID] = useState(null);
     const [confirmVisiable, setConfirmVisiable] = useState(false);
     
     const dispatch = useDispatch();
@@ -41,27 +38,6 @@ const Chat = (props) => {
 
     const doctor_id = props.match.params.id;
     const params = new URLSearchParams(props.location.search);
-
-    const handleAcceptCall = () => {
-        if(senderPeerID){
-            setOpenVideoCall(true);
-        }else{
-            message.destroy();
-            message.error("Không thể kết nối với đối phương!",4);
-        }
-        setIncomingCall(false);
-    }
-
-    const handleCancelCall = () => {
-        if(io && doctor_id){
-            io.emit("cancel-video", doctor_id+"doctor")
-            message.destroy();
-            message.info("Đã huỷ cuộc gọi");
-            setIncomingCall(false);
-            setSenderData(null);
-            setSenderPeerID(null);
-        }  
-    }
 
     useEffect(() => {
 
@@ -82,15 +58,6 @@ const Chat = (props) => {
                     dispatch(updateIsRead(payloadUpdate))
                 }
             })
-
-            //listen when someone call, this func should move to component that exist on everywhere to listen.
-            io.on("connect-video-room", (getSenderPeerID, getSenderData) => {
-                if(getSenderPeerID && !_.isEmpty(getSenderData)){
-                    setSenderData(getSenderData);
-                    setSenderPeerID(getSenderPeerID);
-                    setIncomingCall(true);
-                }
-            });
         }
 
     }, [currentUser, doctor_id, io]);
@@ -285,7 +252,6 @@ const Chat = (props) => {
         if(openVideoCall) {
             setOpenVideoCall(false);
             setConfirmVisiable(false);
-            handleCancelCall();
         }
     }
 
@@ -302,26 +268,7 @@ const Chat = (props) => {
             <div className="messenger-content-wrapper" >
                 <div className="messenger-content" id="messenger-chat-content-list-13" >
                     <div className="messenger-chat" >
-                        {openVideoCall && <Portal url={`${process.env.PUBLIC_URL}/call/video/${doctor_id?doctor_id:"cancel"}?name=${senderData?.name??getdocName()}&avatar=${senderData?.avatar??getdocAva()}${senderPeerID?"&distract="+senderPeerID:""}`} closeWindowPortal={closeWindowPortal} />}
-                        <Modal
-                            title="Cuộc gọi đến"
-                            visible={incomingCall}
-                            style={{ top: 20 }}
-                            closable={false}
-                            footer={[
-                                <Button key="accept" type="primary" loading={isLoad} onClick={()=>handleAcceptCall()}>
-                                    Trả lời
-                                </Button>,
-                                <Button key="decline" onClick={()=>handleCancelCall()} danger>
-                                    Từ chối
-                                </Button>,
-                            ]}
-                            >
-                            <div>
-                                <Avatar src={senderData?.avatar} alt={senderData?.name??"customerName"} size="large" type="circle flexible" /> 
-                                {senderData?.name} gọi video cho bạn.
-                            </div>
-                        </Modal>
+                        {openVideoCall && <Portal url={`${process.env.PUBLIC_URL}/call/video/${doctor_id}?name=${getdocName()}&avatar=${getdocAva()}`} closeWindowPortal={closeWindowPortal} />}
                         <div className="messenger-chat-header">
                             <div>
                                 <Avatar
@@ -332,7 +279,7 @@ const Chat = (props) => {
                                 <b>{getdocName()}</b>
                             </div>
                             <Tooltip title="Bắt đầu gọi video" placement="bottom">
-                                <Popconfirm visible={confirmVisiable} placement="left" title={"Xác nhận kết thúc cuộc gọi video?"} onConfirm={closeWindowPortal} onCancel={()=>setConfirmVisiable(false)} okText="Xác nhận" cancelText="Huỷ">
+                                <Popconfirm visible={confirmVisiable} placement="left" title={"Xác nhận kết thúc cuộc gọi video hiện tại?"} onConfirm={closeWindowPortal} onCancel={()=>setConfirmVisiable(false)} okText="Xác nhận" cancelText="Huỷ">
                                     <div className="messenger-chat-video" onClick={actionVideoCall}>
                                         <VideoCameraOutlined style={{fontSize:"1.2rem", color:"#00BC9A"}} />
                                     </div>

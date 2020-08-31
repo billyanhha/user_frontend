@@ -1,8 +1,8 @@
-import React, {useState, useEffect} from "react";
+import React, {useState, useEffect, useRef} from "react";
 import {UnorderedListOutlined} from "@ant-design/icons";
 import "./style.css";
 import {Link, withRouter, Redirect, useHistory} from "react-router-dom";
-import {Menu, Dropdown, Button, Badge, Avatar, message, Alert} from "antd";
+import {Menu, Dropdown, Button, Badge, Avatar, message, Alert, Modal} from "antd";
 import {useDispatch, useSelector} from "react-redux";
 import {getUser} from "../../redux/user";
 import _ from "lodash";
@@ -10,25 +10,39 @@ import {userLogout} from "../../redux/auth";
 // import logoMin from '../../assest/logo/IKEMEN.png';      //Logo "IKEMEN" only
 import logoFull from "../../assest/logo/Ikemen_full.png"; //Logo "IKEMEN" with Home Health Service
 import TextLoop from "react-text-loop";
-import Notification from '../Notification';
-import { countUnreadNotify } from '../../redux/notification';
+import Notification from "../Notification";
+import {countUnreadNotify} from "../../redux/notification";
+import Portal from "../Portal/Portal";
+
+import defaultRingtone from "../../assest/ringtone/HHS.wav";
 
 const Navbar = props => {
     const {location} = props;
+    const audioRef = useRef();
+
     const history = useHistory();
     // const [redirect, setRedirect] = useState(false);
-    const [menu_class, setMenu_class] = useState('');
+    const [menu_class, setMenu_class] = useState("");
     const [drawerVisible, setdrawerVisible] = useState(false);
-    const { unreadNotifyNumber, io } = useSelector(state => state.notify);
-    const { currentUser } = useSelector(state => state.user);
-    const { nonReadGroupNumber } = useSelector(state => state.chat);
+    const {unreadNotifyNumber, io} = useSelector(state => state.notify);
+    const {currentUser} = useSelector(state => state.user);
+    const {nonReadGroupNumber} = useSelector(state => state.chat);
+    const {isLoad} = useSelector(state => state.ui);
 
     const auth = useSelector(state => state.auth);
+    const {ringtone} = useSelector(state => state.call);
+
     const dispatch = useDispatch();
 
+    const [openVideoCall, setOpenVideoCall] = useState(false);
+    const [incomingCall, setIncomingCall] = useState(false);
+    const [senderData, setSenderData] = useState(null);
+    const [senderPeerID, setSenderPeerID] = useState(null);
+    const [playRingtone, setPlayRingtone] = useState(false);
+
     const closeDrawer = () => {
-        setdrawerVisible(false)
-    }
+        setdrawerVisible(false);
+    };
 
     useEffect(() => {
         if (auth.token) {
@@ -37,19 +51,38 @@ const Navbar = props => {
     }, []);
 
     useEffect(() => {
+        if (io) {
+            //listen when someone call.
+            io.on("connect-video-room", (getDoctorID, getSenderData) => {
+                if (getDoctorID && !_.isEmpty(getSenderData)) {
+                    setSenderData(getSenderData);
+                    setSenderPeerID(getDoctorID);
+                    setPlayRingtone(true);
+                    setIncomingCall(true);
+                }
+            });
+        }
+    }, [currentUser, io]);
 
-    }, [io]);
     // if (redirect) {
     //     return <Redirect to="/login" />;
     // }
 
     useEffect(() => {
         if (currentUser?.cusId) {
-            const data = { receiver_id: currentUser?.cusId }
-            dispatch(countUnreadNotify(data))
+            const data = {receiver_id: currentUser?.cusId};
+            dispatch(countUnreadNotify(data));
         }
     }, [currentUser]);
 
+    useEffect(() => {
+        if (playRingtone) {
+            audioRef.current.play();
+        } else {
+            audioRef.current.pause();
+            audioRef.current.load();
+        }
+    }, [playRingtone]);
 
     const CustomLink = (to, name) => {
         return (
@@ -83,61 +116,134 @@ const Navbar = props => {
 
     const handleUserMenuClick = e => {
         if (e.key === "logout") {
-            if(io) {
-
+            if (io) {
             }
             dispatch(userLogout());
-
-        } else if (e.key === 'profile') {
-            history.push('/profile');
-        } else if (e.key === 'notify') {
-            setdrawerVisible(true)
-        } else if (e.key === 'messenger') {
-            history.push('/messenger/t');
+        } else if (e.key === "profile") {
+            history.push("/profile");
+        } else if (e.key === "notify") {
+            setdrawerVisible(true);
+        } else if (e.key === "messenger") {
+            history.push("/messenger/t");
         }
     };
 
     const userMenu = (
         <Menu onClick={handleUserMenuClick}>
-            <Menu.Item key="profile">
-                Trang quản lý của tôi
-            </Menu.Item>
+            <Menu.Item key="profile">Trang quản lý của tôi</Menu.Item>
             <Menu.Item key="notify">
                 <span className="hightlight">{unreadNotifyNumber} </span>Thông báo mới
             </Menu.Item>
             <Menu.Item key="messenger">
                 <span className="hightlight">{nonReadGroupNumber}</span> Tin nhắn
             </Menu.Item>
-            <Menu.Item key="logout">
-                Đăng xuất
-            </Menu.Item>
+            <Menu.Item key="logout">Đăng xuất</Menu.Item>
         </Menu>
     );
 
-    const renderAuth = auth.isLoggedIn ?
-        (
-            <div className="nav-user-div nav-userInfo">
-                <Dropdown overlay={userMenu} className="nav-userInfo-user">
-                    <span className="nav-userInfo-user-name" >
-                        <span className="avatar-item">
-                            <Badge count={unreadNotifyNumber} showZero>
-                                <Avatar size="large" shape={"square"} src={currentUser?.avatarurl} />
-                            </Badge>
-                        </span>
-                        {currentUser?.fullname}
+    const renderAuth = auth.isLoggedIn ? (
+        <div className="nav-user-div nav-userInfo">
+            <Dropdown overlay={userMenu} className="nav-userInfo-user">
+                <span className="nav-userInfo-user-name">
+                    <span className="avatar-item">
+                        <Badge count={unreadNotifyNumber} showZero>
+                            <Avatar size="large" shape={"square"} src={currentUser?.avatarurl} />
+                        </Badge>
                     </span>
-                </Dropdown>
-                <button onClick={toBookingPage} className="fancyButton-background">Đặt lịch</button>
-            </div>
+                    {currentUser?.fullname}
+                </span>
+            </Dropdown>
+            <button onClick={toBookingPage} className="fancyButton-background">
+                Đặt lịch
+            </button>
+        </div>
+    ) : (
+        <button onClick={toLoginPage} className="fancyButton">
+            Đăng nhập
+        </button>
+    );
 
-        )
-        : (
-            <button onClick={toLoginPage} className="fancyButton">Đăng nhập</button>
-        )
+    const delayLoopRingtone = () => {
+        setTimeout(() => {
+            audioRef.current.play();
+        }, 2000);
+    };
+
+    const handleAcceptCall = () => {
+        if (senderPeerID) {
+            setOpenVideoCall(true);
+        } else {
+            message.destroy();
+            message.error("Không thể kết nối với đối phương!", 4);
+        }
+        setPlayRingtone(false);
+        setIncomingCall(false);
+    };
+
+    const handleCancelCall = () => {
+        if (io && senderData) {
+            io.emit("cancel-video", senderData?.id + "doctor");
+            message.destroy();
+            message.info("Đã từ chối cuộc gọi");
+            setPlayRingtone(false);
+            setIncomingCall(false);
+            setSenderData(null);
+            setSenderPeerID(null);
+        }
+    };
+
+    const closeWindowPortal = () => {
+        if (openVideoCall) {
+            setOpenVideoCall(false);
+            setIncomingCall(false);
+            setSenderData(null);
+            setSenderPeerID(null);
+        }
+    };
+
+    window.onbeforeunload = e => {
+        //cancel call if user reload page when a call is coming.
+        if (incomingCall && io && senderData) {
+            handleCancelCall();
+        }
+    };
 
     return (
         <div>
             <Notification visible={drawerVisible} closeDrawer={closeDrawer} />
+            {openVideoCall && (
+                <Portal
+                    url={`${process.env.PUBLIC_URL}/call/video/${senderData?.id}?name=${senderData?.name}&avatar=${senderData?.avatar}&distract=${senderPeerID}`}
+                    closeWindowPortal={closeWindowPortal}
+                />
+            )}
+            <audio
+                ref={audioRef}
+                src={ringtone ? "../../assest/ringtone/HHS.wav" + ringtone : defaultRingtone}
+                // loop
+                onEnded={delayLoopRingtone}
+                style={{display: "none"}}
+            />
+            <Modal
+                title="Cuộc gọi đến"
+                visible={incomingCall}
+                style={{top: 20}}
+                width={450}
+                closable={false}
+                footer={[
+                    <Button key="accept" type="primary" loading={isLoad} onClick={() => handleAcceptCall()}>
+                        Trả lời
+                    </Button>,
+                    <Button key="decline" onClick={() => handleCancelCall()} danger>
+                        Từ chối
+                    </Button>
+                ]}
+            >
+                <div className="video-call-incoming">
+                    <Avatar src={senderData?.avatar} alt={senderData?.name ?? "doctor_name"} size="large" type="circle flexible" />
+                    <b>Bác sĩ {senderData?.name} gọi video cho bạn.</b>
+                </div>
+            </Modal>
             <div className={top_menu_class}>
                 <Link to="/" className="top-menu-lead primary-color">
                     <div className="nav-logo">
@@ -153,7 +259,7 @@ const Navbar = props => {
                 </div>
                 <UnorderedListOutlined className="top-menu-icon" onClick={setToggleTopMenuClass} />
             </div>
-            {auth.isLoggedIn && currentUser?.active === false ? (
+            {auth.isLoggedIn && currentUser?.active === false && (
                 <div className="nav-alert-banner">
                     <div className="nav-alert-controlled">
                         <Alert
@@ -175,8 +281,6 @@ const Navbar = props => {
                         />
                     </div>
                 </div>
-            ) : (
-                ""
             )}
         </div>
     );
