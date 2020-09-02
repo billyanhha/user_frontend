@@ -1,8 +1,7 @@
-import { SET_RINGTONE, SET_CALL_STATUS } from "./action";
+import { SET_RINGTONE } from "./action";
 
 const initialState = {
-    ringtone: null,
-    status: false
+    ringtone: null
 };
 
 export const callReducer = (state = initialState, action) => {
@@ -11,10 +10,10 @@ export const callReducer = (state = initialState, action) => {
             state = {...state, ringtone: action.name};
             return state;
         }
-        case SET_CALL_STATUS: {
-            state = {...state, status: action.status};
-            return state;
-        }
+        // case SET_CALL_STATUS: {
+        //     state = {...state, status: action.status};
+        //     return state;
+        // }
         default: {
             return state;
         }

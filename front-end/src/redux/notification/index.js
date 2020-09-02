@@ -1,4 +1,4 @@
-import { SAVE_IO_INSTANCE, CLEAR_IO_INSTANCE, GET_USER_NOTIFICATION, GET_USER_NOTIFICATION_SUCCESSFUL, GET_MORE_USER_NOTIFICATION, GET_MORE_USER_NOTIFICATION_SUCCESSFUL, MARK_READ_NOTIFY, MARK_ALL_READ, COUNT_UNREAD_NOTIFY, COUNT_UNREAD_NOTIFY_SUCCESSFUL } from "./action"
+import { SAVE_IO_INSTANCE, CLEAR_IO_INSTANCE, GET_USER_NOTIFICATION, GET_USER_NOTIFICATION_SUCCESSFUL, GET_MORE_USER_NOTIFICATION, GET_MORE_USER_NOTIFICATION_SUCCESSFUL, MARK_READ_NOTIFY, MARK_ALL_READ, COUNT_UNREAD_NOTIFY, COUNT_UNREAD_NOTIFY_SUCCESSFUL, SET_CALL_STATUS } from "./action"
 
 export const saveIoInstance = (data) => {
     return {
@@ -68,5 +68,13 @@ export const countUnreadNotifySuccessful = (data) => {
     return {
         type: COUNT_UNREAD_NOTIFY_SUCCESSFUL,
         data
+    }
+}
+
+export const setCallStatus = (status) => {
+    console.log("call status change "+status)
+    return {
+        type: SET_CALL_STATUS,
+        status
     }
 }

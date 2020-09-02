@@ -1,8 +1,9 @@
-import React, {useState, useEffect, useRef} from "react";
-import {UnorderedListOutlined} from "@ant-design/icons";
+import React, {useState, useEffect} from "react";
 import "./style.css";
-import {Link, withRouter, Redirect, useHistory} from "react-router-dom";
-import {Menu, Dropdown, Button, Badge, Avatar, message, Alert, Modal} from "antd";
+import {Link, withRouter, useHistory} from "react-router-dom";
+import {Menu, Dropdown, Badge, Avatar, message, Alert} from "antd";
+import {UnorderedListOutlined} from "@ant-design/icons";
+
 import {useDispatch, useSelector} from "react-redux";
 import {getUser} from "../../redux/user";
 import _ from "lodash";
@@ -12,13 +13,9 @@ import logoFull from "../../assest/logo/Ikemen_full.png"; //Logo "IKEMEN" with H
 import TextLoop from "react-text-loop";
 import Notification from "../Notification";
 import {countUnreadNotify} from "../../redux/notification";
-import Portal from "../Portal/Portal";
-
-import defaultRingtone from "../../assest/ringtone/HHS.wav";
 
 const Navbar = props => {
     const {location} = props;
-    const audioRef = useRef();
 
     const history = useHistory();
     // const [redirect, setRedirect] = useState(false);
@@ -27,18 +24,10 @@ const Navbar = props => {
     const {unreadNotifyNumber, io} = useSelector(state => state.notify);
     const {currentUser} = useSelector(state => state.user);
     const {nonReadGroupNumber} = useSelector(state => state.chat);
-    const {isLoad} = useSelector(state => state.ui);
 
     const auth = useSelector(state => state.auth);
-    const {ringtone} = useSelector(state => state.call);
 
     const dispatch = useDispatch();
-
-    const [openVideoCall, setOpenVideoCall] = useState(false);
-    const [incomingCall, setIncomingCall] = useState(false);
-    const [senderData, setSenderData] = useState(null);
-    const [senderPeerID, setSenderPeerID] = useState(null);
-    const [playRingtone, setPlayRingtone] = useState(false);
 
     const closeDrawer = () => {
         setdrawerVisible(false);
@@ -50,20 +39,6 @@ const Navbar = props => {
         }
     }, []);
 
-    useEffect(() => {
-        if (io) {
-            //listen when someone call.
-            io.on("connect-video-room", (getDoctorID, getSenderData) => {
-                if (getDoctorID && !_.isEmpty(getSenderData)) {
-                    setSenderData(getSenderData);
-                    setSenderPeerID(getDoctorID);
-                    setPlayRingtone(true);
-                    setIncomingCall(true);
-                }
-            });
-        }
-    }, [currentUser, io]);
-
     // if (redirect) {
     //     return <Redirect to="/login" />;
     // }
@@ -74,15 +49,6 @@ const Navbar = props => {
             dispatch(countUnreadNotify(data));
         }
     }, [currentUser]);
-
-    useEffect(() => {
-        if (playRingtone) {
-            audioRef.current.play();
-        } else {
-            audioRef.current.pause();
-            audioRef.current.load();
-        }
-    }, [playRingtone]);
 
     const CustomLink = (to, name) => {
         return (
@@ -163,87 +129,9 @@ const Navbar = props => {
         </button>
     );
 
-    const delayLoopRingtone = () => {
-        setTimeout(() => {
-            audioRef.current.play();
-        }, 2000);
-    };
-
-    const handleAcceptCall = () => {
-        if (senderPeerID) {
-            setOpenVideoCall(true);
-        } else {
-            message.destroy();
-            message.error("Không thể kết nối với đối phương!", 4);
-        }
-        setPlayRingtone(false);
-        setIncomingCall(false);
-    };
-
-    const handleCancelCall = () => {
-        if (io && senderData) {
-            io.emit("cancel-video", senderData?.id + "doctor");
-            message.destroy();
-            message.info("Đã từ chối cuộc gọi");
-            setPlayRingtone(false);
-            setIncomingCall(false);
-            setSenderData(null);
-            setSenderPeerID(null);
-        }
-    };
-
-    const closeWindowPortal = () => {
-        if (openVideoCall) {
-            setOpenVideoCall(false);
-            setIncomingCall(false);
-            setSenderData(null);
-            setSenderPeerID(null);
-        }
-    };
-
-    window.onbeforeunload = e => {
-        //cancel call if user reload page when a call is coming.
-        if (incomingCall && io && senderData) {
-            handleCancelCall();
-        }
-    };
-
     return (
         <div>
             <Notification visible={drawerVisible} closeDrawer={closeDrawer} />
-            {openVideoCall && (
-                <Portal
-                    url={`${process.env.PUBLIC_URL}/call/video/${senderData?.id}?name=${senderData?.name}&avatar=${senderData?.avatar}&distract=${senderPeerID}`}
-                    closeWindowPortal={closeWindowPortal}
-                />
-            )}
-            <audio
-                ref={audioRef}
-                src={ringtone ? "../../assest/ringtone/HHS.wav" + ringtone : defaultRingtone}
-                // loop
-                onEnded={delayLoopRingtone}
-                style={{display: "none"}}
-            />
-            <Modal
-                title="Cuộc gọi đến"
-                visible={incomingCall}
-                style={{top: 20}}
-                width={450}
-                closable={false}
-                footer={[
-                    <Button key="accept" type="primary" loading={isLoad} onClick={() => handleAcceptCall()}>
-                        Trả lời
-                    </Button>,
-                    <Button key="decline" onClick={() => handleCancelCall()} danger>
-                        Từ chối
-                    </Button>
-                ]}
-            >
-                <div className="video-call-incoming">
-                    <Avatar src={senderData?.avatar} alt={senderData?.name ?? "doctor_name"} size="large" type="circle flexible" />
-                    <b>Bác sĩ {senderData?.name} gọi video cho bạn.</b>
-                </div>
-            </Modal>
             <div className={top_menu_class}>
                 <Link to="/" className="top-menu-lead primary-color">
                     <div className="nav-logo">

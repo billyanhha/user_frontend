@@ -1,4 +1,4 @@
-import { SET_RINGTONE, SET_CALL_STATUS } from "./action"
+import { SET_RINGTONE } from "./action"
 
 export const setRingtone = (name) => {
     return {
@@ -7,9 +7,9 @@ export const setRingtone = (name) => {
     }
 }
 
-export const setCallStatus = (status) => {
-    return {
-        type: SET_CALL_STATUS,
-        status
-    }
-}
+// export const setCallStatus = (status) => {
+//     return {
+//         type: SET_CALL_STATUS,
+//         status
+//     }
+// }

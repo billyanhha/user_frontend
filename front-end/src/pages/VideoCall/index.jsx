@@ -1,5 +1,5 @@
 import React, {useState, useEffect, createRef} from "react";
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {withRouter} from "react-router-dom";
 import Peer from "peerjs";
 
@@ -7,6 +7,7 @@ import {message, Tooltip, Avatar} from "antd";
 import {LoadingOutlined} from "@ant-design/icons";
 
 import {useCamera} from "./CustomHooks/useCamera";
+import {setCallStatus} from "../../redux/notification";
 
 import calling from "../../assest/image/call/call.png";
 import endCall from "../../assest/image/call/call-disconnected.png";
@@ -29,6 +30,7 @@ const VideoCall = props => {
     const params = new URLSearchParams(props.location.search);
     const senderPeerID = params.get("distract"); //null: this call is a call away (NOT an incomming call).
 
+    const dispatch = useDispatch();
     const {io} = useSelector(state => state.notify);
     const {currentUser} = useSelector(state => state.user);
 
@@ -143,6 +145,7 @@ const VideoCall = props => {
         io.on("cancel-video", () => {
             message.destroy();
             message.info("Bác sĩ đã huỷ cuộc gọi, cửa sổ này sẽ tự động đóng sau 5 giây!", 5);
+            dispatch(setCallStatus(false));
             setToggleAction(false);
             setTimeout(() => {
                 closeWindow();
@@ -267,7 +270,16 @@ const VideoCall = props => {
                 if (isCallLoad) setIsCallLoad(false);
             });
         }
+
+        return () => {
+            //on unmount this component
+            dispatch(setCallStatus(false));
+        };
     }, []);
+
+    window.addEventListener("beforeunload", event => {
+        dispatch(setCallStatus(false));
+    });
 
     return (
         <div className="video-call-wrapper">

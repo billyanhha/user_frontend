@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import "../style.css"
 import { Avatar, MessageBox } from 'react-chat-elements'
-import { Input, Spin } from 'antd';
+import { Input, Spin, message } from 'antd';
 import { Upload, Button, Tooltip, Popconfirm } from 'antd';
 import { FolderAddFilled, CloseCircleFilled } from '@ant-design/icons';
 import { withRouter } from 'react-router-dom';
@@ -34,7 +34,7 @@ const Chat = (props) => {
     const { currentUser } = useSelector(state => state.user);
     const { currenThreadChat, threadLoad, sendChatLoad } = useSelector(state => state.chat);
     const { isLoad } = useSelector(state => state.ui);
-    const { io } = useSelector(state => state.notify);
+    const { io, callStatus } = useSelector(state => state.notify);
 
     const doctor_id = props.match.params.id;
     const params = new URLSearchParams(props.location.search);
@@ -240,11 +240,20 @@ const Chat = (props) => {
         
     }
 
+    useEffect(() => {
+        console.log("videocall status "+ callStatus)
+    }, [callStatus])
+
     const actionVideoCall = () => {
         if(openVideoCall) {
             setConfirmVisiable(true);
         }else {
-            setOpenVideoCall(true);
+            if(callStatus){
+                message.destroy();
+                message.info("Bạn đang trong một cuộc gọi video, xin hãy kết thúc cuộc gọi hiện tại trước!", 4);
+            }else{
+                setOpenVideoCall(true);
+            }
         }
     }
 
