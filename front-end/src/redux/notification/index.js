@@ -70,11 +70,3 @@ export const countUnreadNotifySuccessful = (data) => {
         data
     }
 }
-
-export const setCallStatus = (status) => {
-    console.log("call status change "+status)
-    return {
-        type: SET_CALL_STATUS,
-        status
-    }
-}

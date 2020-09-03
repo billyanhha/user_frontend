@@ -1,4 +1,4 @@
-import {  SAVE_IO_INSTANCE, CLEAR_IO_INSTANCE, GET_MORE_USER_NOTIFICATION_SUCCESSFUL, GET_USER_NOTIFICATION_SUCCESSFUL,COUNT_UNREAD_NOTIFY_SUCCESSFUL, SET_CALL_STATUS } from "./action";
+import {  SAVE_IO_INSTANCE, CLEAR_IO_INSTANCE, GET_MORE_USER_NOTIFICATION_SUCCESSFUL, GET_USER_NOTIFICATION_SUCCESSFUL,COUNT_UNREAD_NOTIFY_SUCCESSFUL } from "./action";
 
 
 
@@ -6,8 +6,7 @@ const initialState = {
     io: null,
     notifications: [],
     isOutOfData: false,
-    unreadNotifyNumber: 0,
-    callStatus: false
+    unreadNotifyNumber: 0
 }
 
 export const notifyReducer = (state = initialState, action) => {
@@ -31,10 +30,6 @@ export const notifyReducer = (state = initialState, action) => {
         case COUNT_UNREAD_NOTIFY_SUCCESSFUL : {
             state = {...state , unreadNotifyNumber: action.data};
             return state
-        }
-        case SET_CALL_STATUS: {
-            state = {...state, callStatus: action.status};
-            return state;
         }
         default:  {
             return state;

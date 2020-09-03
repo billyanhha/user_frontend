@@ -1,5 +1,5 @@
 import React, {useState, useEffect, createRef} from "react";
-import {useDispatch, useSelector} from "react-redux";
+import {useSelector} from "react-redux";
 import {withRouter} from "react-router-dom";
 import Peer from "peerjs";
 
@@ -7,9 +7,8 @@ import {message, Tooltip, Avatar} from "antd";
 import {LoadingOutlined} from "@ant-design/icons";
 
 import {useCamera} from "./CustomHooks/useCamera";
-import {setCallStatus} from "../../redux/notification";
 
-import calling from "../../assest/image/call/call.png";
+// import calling from "../../assest/image/call/call.png";
 import endCall from "../../assest/image/call/call-disconnected.png";
 import micOn from "../../assest/image/call/microphone.png";
 import micOff from "../../assest/image/call/block-microphone.png";
@@ -30,23 +29,21 @@ const VideoCall = props => {
     const params = new URLSearchParams(props.location.search);
     const senderPeerID = params.get("distract"); //null: this call is a call away (NOT an incomming call).
 
-    const dispatch = useDispatch();
     const {io} = useSelector(state => state.notify);
     const {currentUser} = useSelector(state => state.user);
+    const videoCallStatus = useSelector(state => state.notify.callStatus);
 
-    // const history = useHistory();
     const myFaceRef = createRef();
     const oppFaceRef = createRef();
-    // const oppFaceRef = useRef(null);
 
     /**
      * ================================================================================================
      *      WARNING: DO NOT edit or change the order of the variable/states on useCamera and below
      * ================================================================================================
      *
-     * This lib/component will open camera/mic and "streaming" by passing data through react ref into @video tag.
+     * This lib/component (useCamera) will open camera/mic and "streaming" by passing data through react ref into @video tag.
      *
-     * @ignore *** isCameraInitialised, streaming, setStreaming ***
+     * @ignore *** streaming, setStreaming ***
      *
      * @exports camera true/false: turn on/off webcam/camera
      * @exports micro true/false: turn on/off micro
@@ -90,15 +87,12 @@ const VideoCall = props => {
 
     const peer = new Peer({host: "peerjs-server.herokuapp.com", secure: true, port: 443});
 
-    peer.on("error", err => {
-        message.info(err.message);
-    });
-
     const [peerID, setPeerID] = useState(null);
     const [toggleAction, setToggleAction] = useState(true); //true: calling || call again, false: end call
     const [viewMyFace, setViewMyFace] = useState(false);
     const [isCallLoad, setIsCallLoad] = useState(true);
     const [isDisconnected, setIsDisconnected] = useState(false);
+    const [cancelCallRequest, setCancelCallRequest] = useState(true);   //true: still detect nothing from doctor (respond for socket call request), false: doctor responded
 
     const getOppositeName = () => {
         return params.get("name");
@@ -145,7 +139,6 @@ const VideoCall = props => {
         io.on("cancel-video", () => {
             message.destroy();
             message.info("Bác sĩ đã huỷ cuộc gọi, cửa sổ này sẽ tự động đóng sau 5 giây!", 5);
-            dispatch(setCallStatus(false));
             setToggleAction(false);
             setTimeout(() => {
                 closeWindow();
@@ -153,8 +146,6 @@ const VideoCall = props => {
         });
 
         io.on("connect-video-room-offline", data => {
-            console.log("-video-room-offline", data);
-
             if (data === true) {
                 setIsCallLoad(false);
                 setIsDisconnected(true);
@@ -172,20 +163,18 @@ const VideoCall = props => {
     const actionCall = action => {
         switch (action) {
             case 0: //call again
-                // history.replace("/");
                 setToggleAction(true);
-                // myFaceRef = createRef();
-                // setStreaming(true);
                 break;
             case 1: //end call
                 if (io) {
-                    io.emit("cancel-video", receiverID + "customer");
+                    if (cancelCallRequest) {
+                        io.emit("caller-cancel-call", receiverID + "doctor");
+                    } else {
+                        io.emit("cancel-video", receiverID + "doctor");
+                    }
                 }
                 closeWindow();
                 setToggleAction(false);
-
-                // myFaceRef.current = null;
-                // setStreaming(false);
                 break;
 
             default:
@@ -207,7 +196,7 @@ const VideoCall = props => {
             setDocStreamData(senderVideoStream);
         });
     };
-
+    
     useEffect(() => {
         //only (senderPeerID != null/false) mean: → only incomming call will trigger this func
         if (!senderPeerID) return;
@@ -217,7 +206,6 @@ const VideoCall = props => {
          */
         if (peerID && isCameraInitialised && !isCameraInitialisedDoc) {
             //wait until streaming data on doctor side is ready!
-            console.log("countdown 9s");
             setIsCallLoad(false);
             setTimeout(() => {
                 handlePeerCallDoctor(senderPeerID);
@@ -248,6 +236,12 @@ const VideoCall = props => {
     }, [io, peerID, currentUser]);
 
     useEffect(() => {
+        if (!videoCallStatus && peerID) {
+            closeWindow();
+        }
+    }, [videoCallStatus]);
+
+    useEffect(() => {
         let streamInit;
 
         peer.on("open", id => {
@@ -263,6 +257,7 @@ const VideoCall = props => {
             //senderPeerID = null if Doctor requests a call to Doctor (to socket)
 
             peer.on("call", call => {
+                setCancelCallRequest(false);
                 call.answer(streamInit);
                 call.on("stream", senderVideoStream => {
                     setDocStreamData(senderVideoStream);
@@ -271,15 +266,10 @@ const VideoCall = props => {
             });
         }
 
-        return () => {
-            //on unmount this component
-            dispatch(setCallStatus(false));
-        };
+        peer.on("error", err => {
+            message.info(err.message);
+        });
     }, []);
-
-    window.addEventListener("beforeunload", event => {
-        dispatch(setCallStatus(false));
-    });
 
     return (
         <div className="video-call-wrapper">
