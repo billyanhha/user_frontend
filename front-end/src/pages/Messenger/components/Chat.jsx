@@ -7,12 +7,11 @@ import { FolderAddFilled, CloseCircleFilled } from '@ant-design/icons';
 import { withRouter } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { getThreadChat, getMoreThreadChat, sendMessage, updateIsRead, getChat } from '../../../redux/chat';
+import { setOpenVideoCall, setOpponentData, setCallStatus } from '../../../redux/call';
 import moment from "moment";
 import { LoadingOutlined, VideoCameraOutlined } from '@ant-design/icons';
 import _ from "lodash"
 import { animateScroll } from 'react-scroll'
-import Portal from "../../../components/Portal/Portal";
-
 
 const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
 
@@ -26,15 +25,14 @@ const Chat = (props) => {
     const [page, setpage] = useState(1);
     const [chatText, setchatText] = useState('');
     const [isLoadMore, setisLoadMore] = useState(false);
-
-    const [openVideoCall, setOpenVideoCall] = useState(false);
     const [confirmVisiable, setConfirmVisiable] = useState(false);
     
     const dispatch = useDispatch();
     const { currentUser } = useSelector(state => state.user);
     const { currenThreadChat, threadLoad, sendChatLoad } = useSelector(state => state.chat);
     const { isLoad } = useSelector(state => state.ui);
-    const { io, callStatus } = useSelector(state => state.notify);
+    const { io } = useSelector(state => state.notify);
+    const {openVideoCall, callStatus} = useSelector(state => state.call);
 
     const doctor_id = props.match.params.id;
     const params = new URLSearchParams(props.location.search);
@@ -240,10 +238,6 @@ const Chat = (props) => {
         
     }
 
-    useEffect(() => {
-        console.log("videocall status "+ callStatus)
-    }, [callStatus])
-
     const actionVideoCall = () => {
         if(openVideoCall) {
             setConfirmVisiable(true);
@@ -252,14 +246,21 @@ const Chat = (props) => {
                 message.destroy();
                 message.info("Bạn đang trong một cuộc gọi video, xin hãy kết thúc cuộc gọi hiện tại trước!", 4);
             }else{
-                setOpenVideoCall(true);
+                let oppData = {id: doctor_id, name: getdocName(), avatar: getdocAva()}
+                dispatch(setOpponentData(oppData))
+                dispatch(setOpenVideoCall(true));
             }
         }
     }
 
     const closeWindowPortal = () => {
         if(openVideoCall) {
-            setOpenVideoCall(false);
+            if (io && doctor_id) {
+                io.emit("cancel-video", doctor_id + "doctor");
+            }
+            dispatch(setOpponentData(null));
+            dispatch(setOpenVideoCall(false));
+            dispatch(setCallStatus(false));
             setConfirmVisiable(false);
         }
     }
@@ -277,7 +278,6 @@ const Chat = (props) => {
             <div className="messenger-content-wrapper" >
                 <div className="messenger-content" id="messenger-chat-content-list-13" >
                     <div className="messenger-chat" >
-                        {openVideoCall && <Portal url={`${process.env.PUBLIC_URL}/call/video/${doctor_id}?name=${getdocName()}&avatar=${getdocAva()}`} closeWindowPortal={closeWindowPortal} />}
                         <div className="messenger-chat-header">
                             <div>
                                 <Avatar
