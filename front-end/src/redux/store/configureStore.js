@@ -16,11 +16,12 @@ import { slotReducer } from '../slot/reducer';
 import { packageReducer } from '../package/reducer';
 import { notifyReducer } from '../notification/reducer';
 import { chatReducer } from '../chat/reducer';
+import { callReducer } from '../call/reducer';
 
 const persistConfig = {
   key: 'root',
   storage,
-  whitelist: ['auth', 'user'] // only navigation will be persisted
+  whitelist: ['auth', 'user', 'call'] // only navigation will be persisted
 };
 
 const rootReducers = combineReducers({
@@ -36,7 +37,8 @@ const rootReducers = combineReducers({
   userPackage: userPackageReducer,
   package: packageReducer,
   notify: notifyReducer,
-  chat: chatReducer
+  chat: chatReducer,
+  call: callReducer
 });
 
 const saga = createSagaMiddleware();
