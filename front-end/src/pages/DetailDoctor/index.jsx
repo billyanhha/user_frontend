@@ -53,7 +53,7 @@ const DetailDoctor = (props) => {
         return (
             <div className="doctor_rating_item" key={value.id}>
                 <h3>{value?.patient_name}</h3>
-                <Rate className="doctor-rate" disabled value={value?.star} />
+                <Rate disabled value={value?.star} />
                 <h4><i>{value?.comment}</i></h4>
             </div>
         )
@@ -128,7 +128,7 @@ const DetailDoctor = (props) => {
                                 {doctorDetail?.doctor?.average_rating == 0
                                     ? <span className="rate-average">Chưa có đánh giá</span>
                                     : <>
-                                        <Rate className="doctor-rate" disabled value={doctorDetail?.doctor?.average_rating} />
+                                        <Rate disabled value={doctorDetail?.doctor?.average_rating} />
                                         <span className="rate-average"> ­ {doctorDetail?.doctor?.average_rating} / 5</span>
                                     </>
                                 }

@@ -69,7 +69,7 @@ const Home = (props) => {
                             {value?.fullname}
                         </div>
                         <center>
-                            <Rate className="doctor-rate" disabled value={value?.average_rating} />
+                            <Rate  disabled value={value?.average_rating} />
                         </center>
                     </div>
                 </Link>
