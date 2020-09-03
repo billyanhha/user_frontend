@@ -315,8 +315,7 @@ const ChartCurrentHealth = (props) => {
                     </div>
                 </div> :
                 <div>
-                    <h2>Hiện tại, bạn đang chưa trong quá trình sử dụng dịch vụ nào.
-                    <br/>Thông tin sức khoẻ đo được của gói dịch vụ mới nhất của bạn sẽ được hiển thị ở đây!</h2>
+                    
                 </div>}
 
         </div>
