@@ -251,7 +251,7 @@ const VideoCall = props => {
         navigator.mediaDevices.getUserMedia({audio: true, video: true}).then(stream => {
             setMyStreamData(stream);
             streamInit = stream;
-        });
+        }).catch(err =>console.log(err));
 
         if (!senderPeerID) {
             //senderPeerID = null if Doctor requests a call to Doctor (to socket)

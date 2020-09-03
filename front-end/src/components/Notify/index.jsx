@@ -127,6 +127,9 @@ const Notify = props => {
 
     const closeWindowPortal = () => {
         if (openVideoCall) {
+            if (notify?.io && opponentData){
+                notify.io.emit("cancel-video", opponentData?.id + "doctor");
+            }
             dispatch(setOpenVideoCall(false));
             dispatch(setOpponentData(null));
             dispatch(setCallStatus(false));
