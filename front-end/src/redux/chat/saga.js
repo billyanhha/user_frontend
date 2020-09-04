@@ -4,13 +4,13 @@ import _ from 'lodash';
 import { openLoading, closeLoading } from '../ui';
 import { message } from 'antd';
 import chatService from '../../service/chatService';
-import { getChatSuccessful, getMoreChatSuccessful, getChat,getThreadChatSuccessful, getMoreThreadChatSuccessful, getUserRelateDoctorSuccessful, getUnreadGroupSuccessful, getThreadChat, closeThreadLoad, openThreadLoad, sendChatLoad, getChatLoad } from '.';
+import { getChatSuccessful, getMoreChatSuccessful, getChat, getThreadChatSuccessful, getMoreThreadChatSuccessful, getUserRelateDoctorSuccessful, getUnreadGroupSuccessful, getThreadChat, closeThreadLoad, openThreadLoad, sendChatLoad, getChatLoad } from '.';
 
 
 function* watchGetChatWorker(action) {
     try {
         yield put(getChatLoad(true))
-        const {token} = yield select(state => state.auth)
+        const { token } = yield select(state => state.auth)
         const result = yield chatService.getChat(action.payload, token);
         if (!_.isEmpty(result?.result)) {
 
@@ -31,8 +31,8 @@ function* watchGetChatWorker(action) {
 function* watchGetMoreChatWorker(action) {
     try {
         yield put(getChatLoad(true))
-        const {token} = yield select(state => state.auth)
-        const result = yield chatService.getMoreChat(action.payload , token);
+        const { token } = yield select(state => state.auth)
+        const result = yield chatService.getMoreChat(action.payload, token);
         if (!_.isEmpty(result?.result)) {
 
             yield put(getMoreChatSuccessful(result?.result));
@@ -51,10 +51,11 @@ function* watchGetMoreChatWorker(action) {
 
 function* watchGetThreadChatWorker(action) {
     try {
-        
+
         yield put(openThreadLoad())
-        const {token} = yield select(state => state.auth)
-        const result = yield chatService.getThreadChat(action.payload , token);
+        yield put(getThreadChatSuccessful([]));
+        const { token } = yield select(state => state.auth)
+        const result = yield chatService.getThreadChat(action.payload, token);
         if (!_.isEmpty(result?.result)) {
 
             yield put(getThreadChatSuccessful(result?.result));
@@ -74,8 +75,8 @@ function* watchGetThreadChatWorker(action) {
 function* watchGetMoreThreadChatWorker(action) {
     try {
         yield put(openThreadLoad())
-        const {token} = yield select(state => state.auth)
-        const result = yield chatService.getMoreThreadChat(action.payload , token);
+        const { token } = yield select(state => state.auth)
+        const result = yield chatService.getMoreThreadChat(action.payload, token);
         if (!_.isEmpty(result?.result)) {
 
             yield put(getMoreThreadChatSuccessful(result?.result));
@@ -95,8 +96,8 @@ function* watchGetMoreThreadChatWorker(action) {
 function* watchUserRelateDoctorWorker(action) {
     try {
         yield put(openLoading())
-        const {token} = yield select(state => state.auth)
-        const result = yield chatService.getUserRelateDoctor(action.payload , token);
+        const { token } = yield select(state => state.auth)
+        const result = yield chatService.getUserRelateDoctor(action.payload, token);
         if (!_.isEmpty(result?.doctors)) {
 
             yield put(getUserRelateDoctorSuccessful(result?.doctors));
@@ -116,8 +117,8 @@ function* watchUserRelateDoctorWorker(action) {
 
 function* watchGetUnreadWorker(action) {
     try {
-        const {token} = yield select(state => state.auth)
-        const result = yield chatService.getUnreadGroup(action.payload , token);
+        const { token } = yield select(state => state.auth)
+        const result = yield chatService.getUnreadGroup(action.payload, token);
         if (!_.isEmpty(result?.result?.num_group_unread)) {
 
             yield put(getUnreadGroupSuccessful(result?.result?.num_group_unread));
@@ -137,9 +138,9 @@ function* watchGetUnreadWorker(action) {
 function* watchSendMessageWorker(action) {
     try {
         yield put(sendChatLoad(true))
-        const {token} = yield select(state => state.auth)
-        const result = yield chatService.sendMessage(action.payload, action.cusId , token);
-        if(!_.isEmpty(result?.result?.id)){
+        const { token } = yield select(state => state.auth)
+        const result = yield chatService.sendMessage(action.payload, action.cusId, token);
+        if (!_.isEmpty(result?.result?.id)) {
             const payloadThread = { cusId: action.cusId, doctor_id: action.doctor_id }
             yield put(getThreadChat(payloadThread))
             const payloadChat = { page: 1, cusId: action.cusId }
@@ -157,9 +158,9 @@ function* watchSendMessageWorker(action) {
 
 function* watchUpdateIsReadWorker(action) {
     try {
-        const {token} = yield select(state => state.auth)
-        const result = yield chatService.updateIsRead(action.payload , token);
-        if(!_.isEmpty(result?.result)){
+        const { token } = yield select(state => state.auth)
+        const result = yield chatService.updateIsRead(action.payload, token);
+        if (!_.isEmpty(result?.result)) {
             const payloadChat = { page: 1, cusId: action.payload.cusId }
             yield put(getChat(payloadChat))
         }

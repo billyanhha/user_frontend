@@ -1,18 +1,17 @@
 import React, { useState, useEffect, useRef } from 'react';
 import "../style.css"
 import { Avatar, MessageBox } from 'react-chat-elements'
-import { Input, Spin } from 'antd';
-import { Upload, Button, Tooltip, message } from 'antd';
+import { Input, Spin, message } from 'antd';
+import { Upload, Button, Tooltip, Popconfirm } from 'antd';
 import { FolderAddFilled, CloseCircleFilled } from '@ant-design/icons';
 import { withRouter } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { getThreadChat, getMoreThreadChat, sendMessage, updateIsRead, getChat } from '../../../redux/chat';
+import { setOpenVideoCall, setOpponentData, setCallStatus } from '../../../redux/call';
 import moment from "moment";
 import { LoadingOutlined, VideoCameraOutlined } from '@ant-design/icons';
 import _ from "lodash"
 import { animateScroll } from 'react-scroll'
-import Portal from "./VideoCall/Portal";
-
 
 const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
 
@@ -26,13 +25,14 @@ const Chat = (props) => {
     const [page, setpage] = useState(1);
     const [chatText, setchatText] = useState('');
     const [isLoadMore, setisLoadMore] = useState(false);
-    const [openVideoCall, setOpenVideoCall] = useState(false);
-
+    const [confirmVisiable, setConfirmVisiable] = useState(false);
+    
     const dispatch = useDispatch();
     const { currentUser } = useSelector(state => state.user);
     const { currenThreadChat, threadLoad, sendChatLoad } = useSelector(state => state.chat);
     const { isLoad } = useSelector(state => state.ui);
     const { io } = useSelector(state => state.notify);
+    const {openVideoCall, callStatus} = useSelector(state => state.call);
 
     const doctor_id = props.match.params.id;
     const params = new URLSearchParams(props.location.search);
@@ -46,6 +46,8 @@ const Chat = (props) => {
             io.emit("disconnect-chat", "")
             io.emit("chat", `chat&&${currentUser?.cusId}&&${doctor_id}`)
             io.on('chat-thread', data => {
+                console.log('chat-thread')
+                console.log(data)
                 getChatThreadData()
                 if (doctor_id === data?.doctor_id) { // if doctor chat is exactly the one just send the message
                     const payloadThread = { cusId: data?.customer_id, doctor_id: data?.doctor_id }
@@ -236,15 +238,32 @@ const Chat = (props) => {
         
     }
 
-    const toggleVideoCall = () => {
-        if(openVideoCall) setOpenVideoCall(false)
-        else {
-            setOpenVideoCall(true);
+    const actionVideoCall = () => {
+        if(openVideoCall) {
+            setConfirmVisiable(true);
+        }else {
+            if(callStatus){
+                message.destroy();
+                message.info("Bạn đang trong một cuộc gọi video, xin hãy kết thúc cuộc gọi hiện tại trước!", 4);
+            }else{
+                let oppData = {id: doctor_id, name: getdocName(), avatar: getdocAva()}
+                dispatch(setOpponentData(oppData))
+                dispatch(setOpenVideoCall(true));
+                dispatch(setCallStatus(true));
+            }
         }
     }
 
-    const closeWindowPortal = () => {
-        if(openVideoCall) setOpenVideoCall(false);
+    const handleEndCall = () => {
+        if(openVideoCall) {
+            if (io && doctor_id) {
+                io.emit("cancel-video", doctor_id + "doctor");
+            }
+            dispatch(setOpponentData(null));
+            dispatch(setOpenVideoCall(false));
+            dispatch(setCallStatus(false));
+            setConfirmVisiable(false);
+        }
     }
 
     return (doctor_id === 't') ?
@@ -260,8 +279,6 @@ const Chat = (props) => {
             <div className="messenger-content-wrapper" >
                 <div className="messenger-content" id="messenger-chat-content-list-13" >
                     <div className="messenger-chat" >
-                        {openVideoCall && <Portal url={`${process.env.PUBLIC_URL}/call/video/${doctor_id?doctor_id:"cancel"}`} closeWindowPortal={closeWindowPortal} />}
-                        {/* <VideoCall toggleVideoCall={toggleVideoCall} isOpen={openVideoCall} /> */}
                         <div className="messenger-chat-header">
                             <div>
                                 <Avatar
@@ -272,9 +289,11 @@ const Chat = (props) => {
                                 <b>{getdocName()}</b>
                             </div>
                             <Tooltip title="Bắt đầu gọi video" placement="bottom">
-                                <div className="messenger-chat-video" onClick={toggleVideoCall}>
-                                    <VideoCameraOutlined style={{fontSize:"1.2rem", color:"#00BC9A"}} />
-                                </div>
+                                <Popconfirm visible={confirmVisiable} placement="left" title={"Xác nhận kết thúc cuộc gọi video hiện tại?"} onConfirm={()=>handleEndCall()} onCancel={()=>setConfirmVisiable(false)} okText="Xác nhận" cancelText="Huỷ">
+                                    <div className="messenger-chat-video" onClick={actionVideoCall}>
+                                        <VideoCameraOutlined style={{fontSize:"1.2rem", color:"#00BC9A"}} />
+                                    </div>
+                                </Popconfirm>
                             </Tooltip>
                         </div>
                         <div className="messenger-chat-content" >
