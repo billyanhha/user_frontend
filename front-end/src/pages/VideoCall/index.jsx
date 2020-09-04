@@ -31,7 +31,7 @@ const VideoCall = props => {
 
     const {io} = useSelector(state => state.notify);
     const {currentUser} = useSelector(state => state.user);
-    const videoCallStatus = useSelector(state => state.notify.callStatus);
+    const videoCallStatus = useSelector(state => state.call.callStatus);
 
     const myFaceRef = createRef();
     const oppFaceRef = createRef();
@@ -236,6 +236,7 @@ const VideoCall = props => {
     }, [io, peerID, currentUser]);
 
     useEffect(() => {
+        console.log(videoCallStatus)
         if (!videoCallStatus && peerID) {
             closeWindow();
         }

@@ -249,11 +249,12 @@ const Chat = (props) => {
                 let oppData = {id: doctor_id, name: getdocName(), avatar: getdocAva()}
                 dispatch(setOpponentData(oppData))
                 dispatch(setOpenVideoCall(true));
+                dispatch(setCallStatus(true));
             }
         }
     }
 
-    const closeWindowPortal = () => {
+    const handleEndCall = () => {
         if(openVideoCall) {
             if (io && doctor_id) {
                 io.emit("cancel-video", doctor_id + "doctor");
@@ -288,7 +289,7 @@ const Chat = (props) => {
                                 <b>{getdocName()}</b>
                             </div>
                             <Tooltip title="Bắt đầu gọi video" placement="bottom">
-                                <Popconfirm visible={confirmVisiable} placement="left" title={"Xác nhận kết thúc cuộc gọi video hiện tại?"} onConfirm={closeWindowPortal} onCancel={()=>setConfirmVisiable(false)} okText="Xác nhận" cancelText="Huỷ">
+                                <Popconfirm visible={confirmVisiable} placement="left" title={"Xác nhận kết thúc cuộc gọi video hiện tại?"} onConfirm={()=>handleEndCall()} onCancel={()=>setConfirmVisiable(false)} okText="Xác nhận" cancelText="Huỷ">
                                     <div className="messenger-chat-video" onClick={actionVideoCall}>
                                         <VideoCameraOutlined style={{fontSize:"1.2rem", color:"#00BC9A"}} />
                                     </div>
