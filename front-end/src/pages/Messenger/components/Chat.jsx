@@ -6,7 +6,7 @@ import { Upload, Button, Tooltip, Popconfirm } from 'antd';
 import { FolderAddFilled, CloseCircleFilled } from '@ant-design/icons';
 import { withRouter } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { getThreadChat, getMoreThreadChat, sendMessage, updateIsRead, getChat } from '../../../redux/chat';
+import { getThreadChat, getMoreThreadChat, sendMessage, updateIsRead, getChat, getThreadChatSuccessful } from '../../../redux/chat';
 import moment from "moment";
 import { LoadingOutlined, VideoCameraOutlined } from '@ant-design/icons';
 import _ from "lodash"
@@ -41,6 +41,8 @@ const Chat = (props) => {
 
     useEffect(() => {
 
+        dispatch(getThreadChatSuccessful([]));
+
         getChatThreadData();
         updateThreadIsReadFunc()
         setpage(1)
@@ -48,7 +50,6 @@ const Chat = (props) => {
             io.emit("disconnect-chat", "")
             io.emit("chat", `chat&&${currentUser?.cusId}&&${doctor_id}`)
             io.on('chat-thread', data => {
-                console.log('chat-thread')
                 console.log(data)
                 getChatThreadData()
                 if (doctor_id === data?.doctor_id) { // if doctor chat is exactly the one just send the message
