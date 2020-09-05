@@ -4,12 +4,13 @@ import _ from "lodash";
 import {notification, Button, Modal, Tooltip, message, Badge, Avatar} from "antd";
 import {SoundOutlined} from "@ant-design/icons";
 
-import {Link, withRouter} from "react-router-dom";
+import {withRouter} from "react-router-dom";
 import io from "socket.io-client";
 import {saveIoInstance, clearIoInstance, countUnreadNotify, markReadNotify, getUserNotification} from "../../redux/notification";
+import {setCallStatus, setOpponentData, setOpenVideoCall} from "../../redux/call";
+
 import Portal from "../Portal/Portal";
 import defaultRingtone from "../../assest/ringtone/HHS.wav";
-import {setCallStatus} from "../../redux/notification";
 
 const Notify = props => {
     const audioRef = useRef();
@@ -17,14 +18,12 @@ const Notify = props => {
     const notify = useSelector(state => state.notify);
     const user = useSelector(state => state.user);
     const {token} = useSelector(state => state.auth);
-    const ringtone = useSelector(state => state.call.ringtone);
-    const videoCallStatus = useSelector(state => state.notify.callStatus);
+    const {ringtone} = useSelector(state => state.ringtone);
+    const {openVideoCall, opponentData} = useSelector(state => state.call);
     const {isLoad} = useSelector(state => state.ui);
 
     const dispatch = useDispatch();
-    const [openVideoCall, setOpenVideoCall] = useState(false);
     const [incomingCall, setIncomingCall] = useState(false);
-    const [senderData, setSenderData] = useState(null);
     const [senderPeerID, setSenderPeerID] = useState(null);
     const [playRingtone, setPlayRingtone] = useState(false);
 
@@ -101,7 +100,7 @@ const Notify = props => {
     const handleAcceptCall = () => {
         if (senderPeerID) {
             dispatch(setCallStatus(true));
-            setOpenVideoCall(true);
+            dispatch(setOpenVideoCall(true));
         } else {
             message.destroy();
             message.error("Không thể kết nối với đối phương!", 4);
@@ -110,41 +109,49 @@ const Notify = props => {
         setIncomingCall(false);
     };
 
-    const handleCancelCall = () => {
-        if (notify?.io && senderData) {
-            notify.io.emit("cancel-video", senderData?.id + "doctor");
-            message.destroy();
-            message.info("Đã từ chối cuộc gọi");
-            setPlayRingtone(false);
-            setIncomingCall(false);
-            setSenderData(null);
-            setSenderPeerID(null);
+    const handleCancelCall = type => {
+        message.destroy();
+        if (type !== null) {
+            message.info("Bác sĩ đã huỷ cuộc gọi", 4);
+        } else {
+            if (notify?.io && opponentData) {
+                notify.io.emit("cancel-video", opponentData?.id + "doctor");
+                message.info("Đã từ chối cuộc gọi");
+            }
         }
+        setPlayRingtone(false);
+        setIncomingCall(false);
+        dispatch(setOpponentData(null));
+        setSenderPeerID(null);
     };
 
     const closeWindowPortal = () => {
         if (openVideoCall) {
-            setOpenVideoCall(false);
+            if (notify?.io && opponentData){
+                notify.io.emit("cancel-video", opponentData?.id + "doctor");
+            }
+            dispatch(setOpenVideoCall(false));
+            dispatch(setOpponentData(null));
+            dispatch(setCallStatus(false));
             setIncomingCall(false);
-            setSenderData(null);
             setSenderPeerID(null);
         }
     };
-
-    useEffect(() => {
-        console.log("call status " + videoCallStatus);
-    }, [videoCallStatus]);
 
     useEffect(() => {
         if (notify?.io) {
             //listen when someone call.
             notify.io.on("connect-video-room", (getDoctorID, getSenderData) => {
                 if (getDoctorID && !_.isEmpty(getSenderData)) {
-                    setSenderData(getSenderData);
+                    dispatch(setOpponentData(getSenderData));
                     setSenderPeerID(getDoctorID);
                     setPlayRingtone(true);
                     setIncomingCall(true);
                 }
+            });
+
+            notify.io.on("caller-cancel-call", () => {
+                handleCancelCall(1);
             });
         }
     }, [user?.currentUser, notify?.io]);
@@ -162,19 +169,18 @@ const Notify = props => {
 
     window.addEventListener("beforeunload", event => {
         //cancel call if user reload page when a call is coming.
-        if (incomingCall && io && senderData) {
-            if (videoCallStatus) {
-                dispatch(setCallStatus(false));
-            }
-            handleCancelCall();
+        if (incomingCall && io && opponentData) {
+            handleCancelCall(null);
         }
     });
 
-    return !_.isEmpty(token) ? (
+    return !_.isEmpty(token) && !props.location.pathname.includes("/call/") ? (
         <div>
             {openVideoCall && (
                 <Portal
-                    url={`${process.env.PUBLIC_URL}/call/video/${senderData?.id}?name=${senderData?.name}&avatar=${senderData?.avatar}&distract=${senderPeerID}`}
+                    url={`${process.env.PUBLIC_URL}/call/video/${opponentData?.id}?name=${opponentData?.name}&avatar=${opponentData?.avatar}${
+                        senderPeerID ? "&distract=" + senderPeerID : ""
+                    }`}
                     closeWindowPortal={closeWindowPortal}
                 />
             )}
@@ -204,14 +210,14 @@ const Notify = props => {
                     >
                         Trả lời
                     </Button>,
-                    <Button key="decline" onClick={() => handleCancelCall()} danger>
+                    <Button key="decline" onClick={() => handleCancelCall(null)} danger>
                         Từ chối
                     </Button>
                 ]}
             >
                 <div className="video-call-incoming">
-                    <Avatar src={senderData?.avatar} alt={senderData?.name ?? "doctor_name"} size="large" type="circle flexible" />
-                    <b>Bác sĩ {senderData?.name} gọi video cho bạn.</b>
+                    <Avatar src={opponentData?.avatar} alt={opponentData?.name ?? "doctor_name"} size="large" type="circle flexible" />
+                    <b>Bác sĩ {opponentData?.name} gọi video cho bạn.</b>
                 </div>
             </Modal>
             {getMessage()}

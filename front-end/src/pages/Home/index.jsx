@@ -114,7 +114,7 @@ const Home = (props) => {
                     </div>
                 </div>
                 <div className="home-process">
-                    <div className="home-process-title">
+                    <div className="home-process-title" id="hhsprocess">
                         Quy trình hoạt động
                     </div>
                     <div className="home-process-content">
