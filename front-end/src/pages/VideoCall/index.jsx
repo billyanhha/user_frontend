@@ -236,7 +236,6 @@ const VideoCall = props => {
     }, [io, peerID, currentUser]);
 
     useEffect(() => {
-        console.log(videoCallStatus)
         if (!videoCallStatus && peerID) {
             closeWindow();
         }
@@ -310,7 +309,7 @@ const VideoCall = props => {
                                     <LoadingOutlined /> Đang khởi tạo...
                                 </div>
                             )}
-                            <video ref={myFaceRef} id="myVideo" autoPlay muted/>
+                            <video ref={myFaceRef} id="myVideo" muted autoPlay />
                         </div>
                     </>
                 ) : (

@@ -17,22 +17,23 @@ const Footer = () => {
                 </Col>
                 <Col xs={24} sm={12} md={4}>
                     <p><b>Dịch vụ</b></p>
-                    <p><Link className="footer-link">Đặt lịch dịch vụ</Link></p>
-                    <p><Link className="footer-link">Nhận xét của khách hàng</Link></p>
+                    <p><Link className="footer-link" to="/booking">Đặt lịch điều dưỡng</Link></p>
+                    {/* <p><Link className="footer-link" to="/">Nhận xét của khách hàng</Link></p> */}
                 </Col>
                 <Col xs={24} sm={12} md={4} >
                     <p><b>Tìm hiểu thêm</b></p>
-                    <p><Link className="footer-link">Đội ngũ bác sĩ</Link></p>
-                    <p><Link className="footer-link">Chi tiết quy trình</Link></p>
-                    <p><Link className="footer-link">Tuyển dụng</Link></p>
+                    <p><Link className="footer-link" to="/doctors">Đội ngũ bác sĩ</Link></p>
+                    <p><Link className="footer-link" to="/service">Danh sách dịch vụ</Link></p>
+                    <p><a className="footer-link" href={"/#hhsprocess"}>Quy trình hoạt động</a></p>
+                    {/* <p><Link className="footer-link">Tuyển dụng</Link></p> */}
                 </Col>
                 <Col xs={24} sm={12} md={4} >
-                    <p><b>Hỗ trợ khách hàng</b></p>
-                    <p><Link className="footer-link">Câu hỏi thường gặp</Link></p>
-                    <p><Link className="footer-link">Chính sách bảo mật</Link></p>
+                    <p><b>Hỗ trợ</b></p>
+                    <p><Link className="footer-link" to="/qa">Câu hỏi thường gặp</Link></p>
+                    {/* <p><Link className="footer-link">Chính sách bảo mật</Link></p>
                     <p> <Link className="footer-link">Điều khoản</Link></p>
                     <p><Link className="footer-link">Liên hệ</Link></p>
-                    <p> <Link className="footer-link">Chính sách giải quyết khiếu nại</Link></p>
+                    <p> <Link className="footer-link">Chính sách giải quyết khiếu nại</Link></p> */}
                 </Col>
             </Row>
         </div>
